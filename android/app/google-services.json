@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "445822723528",
+    "project_id": "flutter-app-notes",
+    "storage_bucket": "flutter-app-notes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445822723528:android:dd1289ae2c1fb6893f0cfd",
+        "android_client_info": {
+          "package_name": "miguel.martin.taskii"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445822723528-5ve0looph5i4um61spni0mnftggk2uue.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-JdthhYSINLKK1tPHjlrq1FhAnmnuRHw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445822723528-5ve0looph5i4um61spni0mnftggk2uue.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

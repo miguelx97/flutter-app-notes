@@ -1,4 +1,4 @@
-package com.example.flutter_app_notas
+package miguel.martin.taskii
 
 import io.flutter.embedding.android.FlutterActivity
 

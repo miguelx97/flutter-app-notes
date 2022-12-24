@@ -6,8 +6,11 @@ import 'package:flutter_app_notas/screens/home.screen.dart';
 import 'package:flutter_app_notas/screens/login.screen.dart';
 import 'global/utils.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   initializeDateFormatting();
   runApp(const MyApp());
 }
