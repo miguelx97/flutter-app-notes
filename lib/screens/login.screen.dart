@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
           child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 250),
+            const SizedBox(height: 250),
             CardContainer(
               child: Column(
                 children: [
@@ -61,10 +61,25 @@ class _LoginForm extends StatelessWidget {
               validator: ((value) {
                 String pattern =
                     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                RegExp regExp = new RegExp(pattern);
+                RegExp regExp = RegExp(pattern);
                 return regExp.hasMatch(value ?? '') ? null : 'Correo inválido';
               }),
             ),
+            TextFormField(
+              autocorrect: false,
+              obscureText: true,
+              onChanged: (value) => loginForm.password = value,
+              decoration: const InputDecoration(
+                  hintText: '********',
+                  labelText: 'Contraseña',
+                  prefixIcon: Icon(Icons.password_outlined)),
+              validator: ((value) {
+                return (value ?? '').length < 6
+                    ? 'La contraseña debe tener 6 caracteres'
+                    : null;
+              }),
+            ),
+
             const SizedBox(height: 20),
             // Text(loginForm.isLoading.toString()),
             MaterialButton(
@@ -77,7 +92,7 @@ class _LoginForm extends StatelessWidget {
                   : () async {
                       if (!loginForm.isValidForm()) return;
                       FocusScope.of(context).unfocus();
-                      loginForm.sendLink();
+                      loginForm.loginOrRegister();
                     },
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 50),

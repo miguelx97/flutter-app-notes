@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/colors.dart';
 import 'package:flutter_app_notas/global/mockups.dart';
 import 'package:flutter_app_notas/global/utils.dart';
+import 'package:flutter_app_notas/screens/login.screen.dart';
+import 'package:flutter_app_notas/services/auth.service.dart';
 import 'package:flutter_app_notas/widgets/category-item.dart';
 import 'package:flutter_app_notas/widgets/note-item.dart';
 
@@ -10,8 +11,24 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
+    return StreamBuilder(
+      stream: AuthService().authStateChanges,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Home();
+        } else {
+          return const LoginScreen();
+        }
+      },
+    );
+  }
+}
 
+class Home extends StatelessWidget {
+  final DateTime now = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -26,10 +43,6 @@ class HomeScreen extends StatelessWidget {
           //     icon: const Icon(Icons.calendar_today_outlined),
           //     color: Colors.white),
           IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.delete_outline),
-              color: Colors.white),
-          IconButton(
               onPressed: () =>
                   Navigator.pushNamed(context, 'categories', arguments: null),
               icon: const Icon(Icons.folder_outlined),
@@ -38,6 +51,29 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {},
               icon: const Icon(Icons.search_outlined),
               color: Colors.white),
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: ItemName.deleted,
+                child:
+                    MenuItem(label: "Eliminados", icon: Icons.delete_outline),
+              ),
+              PopupMenuItem(
+                value: ItemName.logout,
+                child: MenuItem(
+                    label: "Cerrar sesión", icon: Icons.logout_outlined),
+              ),
+            ],
+            onSelected: (value) {
+              switch (value) {
+                case ItemName.logout:
+                  AuthService().signOut();
+                  break;
+                default:
+              }
+            },
+          )
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -63,6 +99,10 @@ class HomeScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Body(),
     );
+  }
+
+  Row MenuItem({required String label, required IconData icon}) {
+    return Row(children: [Icon(icon), SizedBox(width: 5), Text(label)]);
   }
 }
 
@@ -133,3 +173,5 @@ class FloatingButtons extends StatelessWidget {
     ]);
   }
 }
+
+enum ItemName { deleted, logout }
