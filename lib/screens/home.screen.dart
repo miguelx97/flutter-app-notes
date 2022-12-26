@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/mockups.dart';
 import 'package:flutter_app_notas/global/utils.dart';
+import 'package:flutter_app_notas/providers/categories.provider.dart';
+import 'package:flutter_app_notas/providers/notes.provider.dart';
 import 'package:flutter_app_notas/screens/login.screen.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
 import 'package:flutter_app_notas/widgets/category-item.dart';
 import 'package:flutter_app_notas/widgets/note-item.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -26,7 +28,6 @@ class HomeScreen extends StatelessWidget {
 
 class Home extends StatelessWidget {
   final DateTime now = DateTime.now();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,8 +110,11 @@ class Home extends StatelessWidget {
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final notes = Mockups.notes;
-    final categories = Mockups.categories;
+    final notesProvider = Provider.of<NotesProvider>(context);
+    final categoriesProvider = Provider.of<CategoriesProvider>(context);
+    final notes = notesProvider.getAll();
+    final categories = categoriesProvider.getAll();
+
     return Container(
         child: ListView.builder(
       itemCount: notes.length + 1,
