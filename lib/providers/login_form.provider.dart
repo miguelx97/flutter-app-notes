@@ -11,6 +11,11 @@ class LoginFormProvider extends ChangeNotifier {
   bool isLoading = false;
   bool isLogin = true;
 
+  swipeLoginAmdRegister() {
+    isLogin = !isLogin;
+    notifyListeners();
+  }
+
   bool isValidForm() => formKey.currentState?.validate() ?? false;
 
   loginOrRegister() {

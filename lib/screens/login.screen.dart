@@ -11,39 +11,71 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => LoginFormProvider(),
+      child: Login(),
+    );
+  }
+}
+
+class Login extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final loginForm = Provider.of<LoginFormProvider>(context);
     return Scaffold(
-      body: AuthBackground(
-          child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 250),
-            CardContainer(
+      body: Stack(
+        children: [
+          AuthBackground(
+            child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 10),
-                  Text("Magic Link",
-                      style: Theme.of(context).textTheme.headline5),
-                  const SizedBox(height: 30),
-                  ChangeNotifierProvider(
-                    create: (_) => LoginFormProvider(),
-                    child: _LoginForm(),
+                  const SizedBox(height: 250),
+                  CardContainer(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        Text(
+                            loginForm.isLogin
+                                ? 'Iniciar Sesión'
+                                : 'Nueva Cuenta',
+                            style: Theme.of(context).textTheme.headline5),
+                        const SizedBox(height: 30),
+                        _LoginForm(loginForm: loginForm),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      )),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height - 60,
+            left: 0,
+            right: 0,
+            child: TextButton(
+                onPressed: () => loginForm.swipeLoginAmdRegister(),
+                child: Text(
+                  loginForm.isLogin
+                      ? 'Crear una nueva cuenta'
+                      : 'Ya tengo una cuenta',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w300),
+                )),
+          ),
+        ],
+      ),
     );
   }
 }
 
 class _LoginForm extends StatelessWidget {
-  const _LoginForm({super.key});
+  final loginForm;
+  const _LoginForm({super.key, this.loginForm});
 
   @override
   Widget build(BuildContext context) {
-    final loginForm = Provider.of<LoginFormProvider>(context);
     return Container(
       child: Form(
         key: loginForm.formKey,
@@ -78,6 +110,22 @@ class _LoginForm extends StatelessWidget {
                     ? 'La contraseña debe tener 6 caracteres'
                     : null;
               }),
+            ),
+            Visibility(
+              visible: !loginForm.isLogin,
+              child: TextFormField(
+                autocorrect: false,
+                obscureText: true,
+                decoration: const InputDecoration(
+                    hintText: '********',
+                    labelText: 'Repetir contraseña',
+                    prefixIcon: Icon(Icons.password_outlined)),
+                validator: ((value) {
+                  return (value != loginForm.password)
+                      ? 'Las contraseñas no coinciden'
+                      : null;
+                }),
+              ),
             ),
 
             const SizedBox(height: 20),

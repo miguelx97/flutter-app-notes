@@ -2,32 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/utils.dart';
 import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/providers/notes.provider.dart';
-import 'package:flutter_app_notas/screens/login.screen.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
 import 'package:flutter_app_notas/widgets/category-item.dart';
 import 'package:flutter_app_notas/widgets/note-item.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: AuthService().authStateChanges,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Home();
-        } else {
-          return const LoginScreen();
-        }
-      },
-    );
-  }
-}
-
-class Home extends StatelessWidget {
   final DateTime now = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,10 +83,10 @@ class Home extends StatelessWidget {
       body: Body(),
     );
   }
+}
 
-  Row MenuItem({required String label, required IconData icon}) {
-    return Row(children: [Icon(icon), SizedBox(width: 5), Text(label)]);
-  }
+Row MenuItem({required String label, required IconData icon}) {
+  return Row(children: [Icon(icon), SizedBox(width: 5), Text(label)]);
 }
 
 class Body extends StatelessWidget {
