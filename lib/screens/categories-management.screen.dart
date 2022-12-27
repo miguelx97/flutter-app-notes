@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/colors.dart';
+import 'package:flutter_app_notas/providers/categories.provider.dart';
+import 'package:flutter_app_notas/widgets/category-form.dart';
+import 'package:provider/provider.dart';
 
-import '../global/mockups.dart';
 import '../models/category.dart';
+import '../providers/notes.provider.dart';
 import '../widgets/category-management-item.dart';
 
 class CategoriesManagement extends StatelessWidget {
@@ -10,8 +13,9 @@ class CategoriesManagement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notes = Mockups.notes;
-    final categories = Mockups.categories;
+    final categoriesProvider = Provider.of<CategoriesProvider>(context);
+    final categories = categoriesProvider.getAll();
+    bool hasSelectedCategory = categoriesProvider.selectedCategory != null;
 
     return Scaffold(
       appBar: AppBar(
@@ -24,19 +28,34 @@ class CategoriesManagement extends StatelessWidget {
       ),
       body: Container(
           child: ListView.builder(
-        itemCount: categories.length,
-        itemBuilder: (_, index) =>
-            CategoryManagementItem(category: categories[index]),
+        itemCount: categories.length + 1,
+        itemBuilder: (_, index) {
+          if (index == 0) {
+            return CategoryForm();
+          } else {
+            return CategoryManagementItem(category: categories[index - 1]);
+          }
+        },
         scrollDirection: Axis.vertical,
         padding: const EdgeInsets.all(10),
       )),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          if (hasSelectedCategory) {
+            categoriesProvider.selectedCategory = null;
+          } else {
+            categoriesProvider.selectedCategory =
+                Category(title: '', emoji: null);
+          }
+        },
         heroTag: 'main-floating-button',
-        child: const Icon(
-          Icons.add_rounded,
-          size: 35,
-          color: Colors.white,
+        child: RotationTransition(
+          turns: AlwaysStoppedAnimation((hasSelectedCategory ? 45 : 0) / 360),
+          child: const Icon(
+            Icons.add_rounded,
+            size: 35,
+            color: Colors.white,
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

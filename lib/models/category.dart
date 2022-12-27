@@ -4,12 +4,12 @@ class Category {
   Category({
     this.id,
     required this.title,
-    required this.emoji,
+    this.emoji,
   });
 
   String? id;
   String title;
-  String emoji;
+  String? emoji;
 
   factory Category.fromJson(String str) => Category.fromMap(json.decode(str));
 

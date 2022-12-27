@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_app_notas/global/colors.dart';
 import 'package:flutter_app_notas/models/category.dart';
 
@@ -23,7 +20,7 @@ class CategoryManagementItem extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(category.emoji),
+                  Text(category.emoji ?? ' '),
                   const SizedBox(width: 10),
                   Text(category.title),
                 ],

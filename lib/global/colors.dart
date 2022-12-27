@@ -10,4 +10,5 @@ class ThemeColors {
   static const danger = Color(0xffd32f26);
   static const success = Color(0xff26d386);
   static const tertiary = Color(0xff2674d3);
+  static const lightGrey = Color(0xffD7D7D7);
 }
