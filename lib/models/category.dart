@@ -21,6 +21,12 @@ class Category {
         emoji: json["emoji"],
       );
 
+  factory Category.fromObject(Category oldCategory) => Category(
+        id: oldCategory.id,
+        title: oldCategory.title,
+        emoji: oldCategory.emoji,
+      );
+
   Map<String, dynamic> toMap() => {
         "id": id,
         "title": title,

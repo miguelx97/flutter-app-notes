@@ -25,6 +25,11 @@ class CategoriesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  update(Category category) {
+    int index = _categories.indexWhere((item) => item.id == category.id);
+    _categories[index] = category;
+  }
+
   set selectedCategory(Category? selectedCategory) {
     _selectedCategory = selectedCategory;
     notifyListeners();

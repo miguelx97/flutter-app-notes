@@ -4,7 +4,14 @@ import 'package:flutter_app_notas/models/category.dart';
 
 class CategoryManagementItem extends StatelessWidget {
   final Category category;
-  const CategoryManagementItem({super.key, required this.category});
+  final Function delete;
+  final Function update;
+  const CategoryManagementItem({
+    super.key,
+    required this.category,
+    required this.delete,
+    required this.update,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +35,11 @@ class CategoryManagementItem extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () => update(category),
                       icon: const Icon(Icons.edit_outlined),
                       color: ThemeColors.tertiary),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () => delete(category.id),
                       icon: const Icon(Icons.delete_outline),
                       color: ThemeColors.danger),
                 ],
