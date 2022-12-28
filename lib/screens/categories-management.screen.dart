@@ -31,6 +31,9 @@ class CategoriesManagement extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
         title: const Text(
           "Categorías",
           style: TextStyle(

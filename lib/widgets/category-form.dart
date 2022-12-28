@@ -8,14 +8,7 @@ import '../models/category.dart';
 import '../global/colors.dart';
 import '../providers/categories.provider.dart';
 
-class CategoryForm extends StatefulWidget {
-  const CategoryForm({super.key});
-
-  @override
-  State<CategoryForm> createState() => _CategoryFormState();
-}
-
-class _CategoryFormState extends State<CategoryForm> {
+class CategoryForm extends StatelessWidget {
   bool isShowSticker = true;
 
   @override
@@ -36,7 +29,10 @@ class _CategoryFormState extends State<CategoryForm> {
           child: Form(
             child: Column(
               children: [
-                const Text('Nueva Categoría',
+                Text(
+                    category.id.isEmpty
+                        ? 'Nueva Categoría'
+                        : 'Actualizar Categoría',
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 SizedBox(height: 10),
@@ -52,8 +48,8 @@ class _CategoryFormState extends State<CategoryForm> {
                           onEmojiSelected: (_, emojis.Emoji emoji) {
                             print(emoji);
                             category.emoji = emoji.emoji;
+                            categoriesProvider.selectedCategory = category;
                             Navigator.pop(context);
-                            setState(() {});
                           },
                         ),
                       ),
@@ -89,9 +85,22 @@ class _CategoryFormState extends State<CategoryForm> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   color: ThemeColors.pimary,
-                  child: Text(
-                    'Añadir ✔',
-                    style: TextStyle(color: Colors.white),
+                  child: SizedBox(
+                    width: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          category.id.isEmpty ? 'Añadir' : 'Actualizar',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        SizedBox(width: 10),
+                        Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        )
+                      ],
+                    ),
                   ),
                   onPressed: () {
                     if (category.id.isEmpty) {
