@@ -3,13 +3,13 @@ import '../models/note.dart';
 
 class Mockups {
   static final List<Category> categories = [
-    Category(id: "12345", title: "Salud", emoji: "🏥"),
-    Category(id: "12345", title: "Trabajo", emoji: "💾"),
-    Category(id: "12345", title: "Salud", emoji: "🏥"),
-    Category(id: "12345", title: "Trabajo", emoji: "💾"),
-    Category(id: "12345", title: "Salud", emoji: "🏥"),
-    Category(id: "12345", title: "Trabajo", emoji: "💾"),
-    Category(id: "12345", title: "Salud", emoji: "🏥"),
+    Category(id: "1qwde", title: "Salud", emoji: "🏥"),
+    Category(id: "3ewfa", title: "Trabajo", emoji: "💾"),
+    Category(id: "hfggg", title: "Salud", emoji: "🏥"),
+    Category(id: "fsdsf", title: "Trabajo", emoji: "💾"),
+    Category(id: "vsref", title: "Salud", emoji: "🏥"),
+    Category(id: "gfsfd", title: "Trabajo", emoji: "💾"),
+    Category(id: "fsdff", title: "Salud", emoji: "🏥"),
   ];
 
   static final Note note = Note(

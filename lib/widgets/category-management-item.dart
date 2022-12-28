@@ -20,7 +20,7 @@ class CategoryManagementItem extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(category.emoji ?? ' '),
+                  Text(category.emoji),
                   const SizedBox(width: 10),
                   Text(category.title),
                 ],

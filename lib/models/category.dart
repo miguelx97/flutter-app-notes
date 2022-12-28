@@ -2,14 +2,14 @@ import 'dart:convert';
 
 class Category {
   Category({
-    this.id,
+    required this.id,
     required this.title,
-    this.emoji,
+    required this.emoji,
   });
 
-  String? id;
+  String id;
   String title;
-  String? emoji;
+  String emoji;
 
   factory Category.fromJson(String str) => Category.fromMap(json.decode(str));
 

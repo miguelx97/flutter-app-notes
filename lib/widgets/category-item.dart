@@ -19,7 +19,7 @@ class CategoryItem extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                category.emoji ?? '',
+                category.emoji,
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(width: 6),

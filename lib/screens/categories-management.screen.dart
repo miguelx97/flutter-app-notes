@@ -45,7 +45,7 @@ class CategoriesManagement extends StatelessWidget {
             categoriesProvider.selectedCategory = null;
           } else {
             categoriesProvider.selectedCategory =
-                Category(title: '', emoji: null);
+                Category(title: '', emoji: '', id: '');
           }
         },
         heroTag: 'main-floating-button',
