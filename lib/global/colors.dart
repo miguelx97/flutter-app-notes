@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter_app_notas/global/utils.dart';
-
 class ThemeColors {
   // static final LightGrey = Utils.hexToColor('#F3F3F3');
   static const lightBlue = Color(0xffE9F9FA);

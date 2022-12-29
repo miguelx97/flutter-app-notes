@@ -6,6 +6,7 @@ import '../services/auth.service.dart';
 
 class NotesProvider extends ChangeNotifier {
   List<Note> _notes = [];
+  Note? _selectedNote;
 
   NotesProvider() {
     _notes = Mockups.notes;
@@ -23,5 +24,14 @@ class NotesProvider extends ChangeNotifier {
   delete(String noteId) {
     _notes.removeWhere((item) => item.nid == noteId);
     notifyListeners();
+  }
+
+  set selectedNote(Note? selectedNote) {
+    _selectedNote = selectedNote;
+    notifyListeners();
+  }
+
+  Note? get selectedNote {
+    return _selectedNote;
   }
 }

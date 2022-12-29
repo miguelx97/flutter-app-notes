@@ -6,26 +6,30 @@ import 'dart:convert';
 
 class Note {
   Note({
-    required this.nid,
+    this.nid,
     required this.title,
     this.description,
-    this.isFavourite,
+    this.isFavourite = false,
     this.date,
     this.categoryId,
     this.reminderTime,
+    this.status,
+    this.createionDate,
     this.position,
-    required this.uid,
+    this.uid,
   });
 
-  String nid;
+  String? nid;
   String title;
   String? description;
-  bool? isFavourite;
+  bool isFavourite;
   DateTime? date;
   String? categoryId;
   int? reminderTime;
+  int? status;
   int? position;
-  String uid;
+  DateTime? createionDate;
+  String? uid;
 
   factory Note.fromJson(String str) => Note.fromMap(json.decode(str));
 
@@ -39,7 +43,9 @@ class Note {
         date: DateTime.parse(json["date"]),
         categoryId: json["categoryId"],
         reminderTime: json["reminderTime"],
+        status: json["status"],
         position: json["position"],
+        createionDate: DateTime.parse(json["createionDate"]),
         uid: json["uid"],
       );
 
@@ -51,7 +57,9 @@ class Note {
         "date": date?.toIso8601String(),
         "categoryId": categoryId,
         "reminderTime": reminderTime,
+        "status": status,
         "position": position,
+        "createionDate": createionDate?.toIso8601String(),
         "uid": uid,
       };
 }
@@ -68,7 +76,9 @@ class Note {
     "date":"1944-06-06 02:00:00.000",
     "categoryId":"2",
     "reminderTime":897,
+    "status":2,
     "position":1
+    "createionDate":"1944-06-06 02:00:00.000",
     "uid":"dasdasdasdas"
 }
  */
