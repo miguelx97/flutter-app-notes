@@ -3,20 +3,20 @@ import '../models/note.dart';
 
 class Mockups {
   static final List<Category> categories = [
-    Category(id: "1qwde", title: "Salud", emoji: "🏥"),
-    Category(id: "3ewfa", title: "Trabajo", emoji: "💾"),
-    Category(id: "hfggg", title: "Salud", emoji: "🏥"),
-    Category(id: "fsdsf", title: "Trabajo", emoji: "💾"),
-    Category(id: "vsref", title: "Salud", emoji: "🏥"),
-    Category(id: "gfsfd", title: "Trabajo", emoji: "💾"),
-    Category(id: "fsdff", title: "Salud", emoji: "🏥"),
+    Category(cid: "1qwde", title: "Salud", emoji: "🏥"),
+    Category(cid: "3ewfa", title: "Trabajo", emoji: "💾"),
+    Category(cid: "hfggg", title: "Salud", emoji: "🏥"),
+    Category(cid: "fsdsf", title: "Trabajo", emoji: "💾"),
+    Category(cid: "vsref", title: "Salud", emoji: "🏥"),
+    Category(cid: "gfsfd", title: "Trabajo", emoji: "💾"),
+    Category(cid: "fsdff", title: "Salud", emoji: "🏥"),
   ];
 
   static final Note note = Note(
-    id: 'abcd',
+    nid: 'abcd',
     title: 'Ir al dentista',
     description: 'Tengo que ir al dentista',
-    userId: 'abcd',
+    uid: 'abcd',
     date: DateTime.now(),
   );
 

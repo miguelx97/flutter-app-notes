@@ -16,7 +16,7 @@ class CategoryForm extends StatelessWidget {
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
     if (categoriesProvider.selectedCategory == null) return Container();
     Category category = categoriesProvider.selectedCategory!;
-
+    bool isNew = category.cid == null || category.cid!.isEmpty;
     return Padding(
       padding: EdgeInsets.only(right: 30, left: 30, bottom: 5, top: 15),
       child: Container(
@@ -29,10 +29,7 @@ class CategoryForm extends StatelessWidget {
           child: Form(
             child: Column(
               children: [
-                Text(
-                    category.id.isEmpty
-                        ? 'Nueva Categoría'
-                        : 'Actualizar Categoría',
+                Text(isNew ? 'Nueva Categoría' : 'Actualizar Categoría',
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 SizedBox(height: 10),
@@ -46,7 +43,6 @@ class CategoryForm extends StatelessWidget {
                         height: 300,
                         child: emojis.EmojiPicker(
                           onEmojiSelected: (_, emojis.Emoji emoji) {
-                            print(emoji);
                             category.emoji = emoji.emoji;
                             categoriesProvider.selectedCategory = category;
                             Navigator.pop(context);
@@ -91,7 +87,7 @@ class CategoryForm extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          category.id.isEmpty ? 'Añadir' : 'Actualizar',
+                          isNew ? 'Añadir' : 'Actualizar',
                           style: TextStyle(color: Colors.white),
                         ),
                         SizedBox(width: 10),
@@ -103,8 +99,10 @@ class CategoryForm extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    if (category.id.isEmpty) {
-                      category.id = const Uuid().v1();
+                    if (category.title.isEmpty || category.emoji.isEmpty)
+                      return;
+                    if (isNew) {
+                      // category.id = const Uuid().v1();
                       categoriesProvider.insert(category);
                     } else {
                       categoriesProvider.update(category);

@@ -2,35 +2,49 @@ import 'dart:convert';
 
 class Category {
   Category({
-    required this.id,
+    this.cid,
     required this.title,
     required this.emoji,
+    this.position,
+    this.uid,
   });
 
-  String id;
+  String? cid;
   String title;
   String emoji;
+  int? position;
+  String? uid;
 
   factory Category.fromJson(String str) => Category.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
+  String toJson() => json.encode(toMapWithId());
 
   factory Category.fromMap(Map<String, dynamic> json) => Category(
-        id: json["id"],
+        cid: json["cid"],
         title: json["title"],
         emoji: json["emoji"],
+        position: json["position"],
+        uid: json["uid"],
       );
 
   factory Category.fromObject(Category oldCategory) => Category(
-        id: oldCategory.id,
-        title: oldCategory.title,
-        emoji: oldCategory.emoji,
-      );
+      cid: oldCategory.cid,
+      title: oldCategory.title,
+      emoji: oldCategory.emoji,
+      uid: oldCategory.uid,
+      position: oldCategory.position);
+
+  Map<String, dynamic> toMapWithId() {
+    final map = toMap();
+    map['cid'] = cid;
+    return map;
+  }
 
   Map<String, dynamic> toMap() => {
-        "id": id,
         "title": title,
         "emoji": emoji,
+        "position": position,
+        "uid": uid,
       };
 }
 
@@ -39,6 +53,7 @@ class Category {
 {
     "id":"1",
     "title":"dentista",
-    "emoji":"ir al dentista"
+    "emoji":"ir al dentista",
+    "position":1
 }
  */

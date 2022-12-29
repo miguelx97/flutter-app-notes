@@ -1,46 +1,58 @@
+// To parse this JSON data, do
+//
+//     final note = noteFromMap(jsonString);
+
 import 'dart:convert';
 
 class Note {
   Note({
-    required this.id,
+    required this.nid,
     required this.title,
     this.description,
+    this.isFavourite,
     this.date,
     this.categoryId,
     this.reminderTime,
-    required this.userId,
+    this.position,
+    required this.uid,
   });
 
-  String id;
+  String nid;
   String title;
   String? description;
+  bool? isFavourite;
   DateTime? date;
-  int? categoryId;
+  String? categoryId;
   int? reminderTime;
-  String userId;
+  int? position;
+  String uid;
 
   factory Note.fromJson(String str) => Note.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
   factory Note.fromMap(Map<String, dynamic> json) => Note(
-        id: json["id"],
+        nid: json["nid"],
         title: json["title"],
         description: json["description"],
+        isFavourite: json["isFavourite"],
         date: DateTime.parse(json["date"]),
         categoryId: json["categoryId"],
         reminderTime: json["reminderTime"],
-        userId: json["userId"],
+        position: json["position"],
+        uid: json["uid"],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
+        "nid": nid,
         "title": title,
         "description": description,
+        "isFavourite": isFavourite,
         "date": date?.toIso8601String(),
         "categoryId": categoryId,
         "reminderTime": reminderTime,
-        "userId": userId,
+        "position": position,
+        "uid": uid,
       };
 }
 
@@ -49,12 +61,14 @@ class Note {
 
 /**
 {
-    "id":"1",
+    "nid":"1",
     "title":"dentista",
     "description":"ir al dentista",
+    "isFavourite":false,
     "date":"1944-06-06 02:00:00.000",
-    "categoryId":2,
+    "categoryId":"2",
     "reminderTime":897,
-    "userId":"dasdasdasdas"
+    "position":1
+    "uid":"dasdasdasdas"
 }
  */

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/colors.dart';
 import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/widgets/category-form.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +19,7 @@ class CategoriesManagement extends StatelessWidget {
       if (hasSelectedCategory) {
         categoriesProvider.selectedCategory = null;
       } else {
-        categoriesProvider.selectedCategory =
-            Category(title: '', emoji: '', id: '');
+        categoriesProvider.selectedCategory = Category(title: '', emoji: '');
       }
     }
 

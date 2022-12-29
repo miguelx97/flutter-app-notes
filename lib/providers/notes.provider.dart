@@ -21,7 +21,7 @@ class NotesProvider extends ChangeNotifier {
   }
 
   delete(String noteId) {
-    _notes.removeWhere((item) => item.id == noteId);
+    _notes.removeWhere((item) => item.nid == noteId);
     notifyListeners();
   }
 }
