@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app_notas/global/mockups.dart';
 import 'package:flutter_app_notas/models/category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
@@ -21,8 +20,10 @@ class CategoriesProvider extends ChangeNotifier {
 
   load() async {
     final String? uid = AuthService().currentUser?.uid;
-    final QuerySnapshot categoriesSnapshot =
-        await firestoreCollection.where("uid", isEqualTo: uid).get();
+    final QuerySnapshot categoriesSnapshot = await firestoreCollection
+        .where("uid", isEqualTo: uid)
+        .orderBy("position", descending: true)
+        .get();
     for (var doc in categoriesSnapshot.docs) {
       final Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
       final Category category = Category.fromMap(data);
@@ -34,6 +35,7 @@ class CategoriesProvider extends ChangeNotifier {
 
   insert(Category category) async {
     category.uid = AuthService().currentUser?.uid;
+    category.position = DateTime.now().millisecondsSinceEpoch;
     DocumentReference doc = await firestoreCollection.add(category.toMap());
     category.cid = doc.id;
     _categories.insert(0, category);
@@ -51,6 +53,24 @@ class CategoriesProvider extends ChangeNotifier {
     int index = _categories.indexWhere((item) => item.cid == category.cid);
     _categories[index] = category;
     notifyListeners();
+  }
+
+  reorder(int oldIndex, int newIndex) {
+    late Category categoryToReorder;
+    if (newIndex == _categories.length) {
+      _categories[oldIndex].position = _categories.last.position! - 1;
+      categoryToReorder = _categories.removeAt(oldIndex);
+      _categories.add(categoryToReorder);
+    } else if (newIndex > _categories.length) {
+      return;
+    } else {
+      _categories[oldIndex].position = _categories[newIndex].position! + 1;
+      categoryToReorder = _categories.removeAt(oldIndex);
+      _categories.insert(newIndex, categoryToReorder);
+    }
+    firestoreCollection
+        .doc(categoryToReorder.cid)
+        .set(categoryToReorder.toMap());
   }
 
   set selectedCategory(Category? selectedCategory) {

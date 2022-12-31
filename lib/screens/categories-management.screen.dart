@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/widgets/category-form.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
 import '../models/category.dart';
 import '../widgets/category-management-item.dart';
@@ -40,27 +41,26 @@ class CategoriesManagement extends StatelessWidget {
         ),
       ),
       body: Container(
-          child: ListView.builder(
-        itemCount: categories.length + 1,
+          child: ReorderableListView.builder(
+        itemCount: categories.length,
+        header: CategoryForm(),
         itemBuilder: (_, index) {
-          if (index == 0) {
-            return CategoryForm();
-          } else {
-            return CategoryManagementItem(
-              category: categories[index - 1],
-              delete: categoriesProvider.delete,
-              update: updateCategory,
-            );
-          }
+          return CategoryManagementItem(
+            key: ValueKey(categories[index]),
+            category: categories[index],
+            delete: categoriesProvider.delete,
+            update: updateCategory,
+          );
         },
         scrollDirection: Axis.vertical,
         padding: const EdgeInsets.all(10),
+        onReorder: categoriesProvider.reorder,
       )),
       floatingActionButton: FloatingActionButton(
         onPressed: showHideForm,
         heroTag: 'main-floating-button',
-        child: RotationTransition(
-          turns: AlwaysStoppedAnimation((hasSelectedCategory ? 45 : 0) / 360),
+        child: Transform.rotate(
+          angle: hasSelectedCategory ? (pi / 4) : 0,
           child: const Icon(
             Icons.add_rounded,
             size: 35,

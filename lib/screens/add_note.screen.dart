@@ -102,130 +102,134 @@ class _AddNoteState extends State<AddNote> {
           color: Colors.white,
         ),
       )),
-      body: Container(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          child: Form(
-            key: notesProvider.formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  initialValue: note.title,
-                  onChanged: (value) => note.title = value,
-                  decoration: InputDecoration(
-                    labelText: 'Título',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                          note.isFavourite ? Icons.star : Icons.star_outline,
-                          color: Colors.amber),
-                      onPressed: swipeFavourite,
-                    ),
-                    contentPadding: EdgeInsets.only(left: 10),
-                  ),
-                  maxLength: 100,
-                  validator: ((value) {
-                    return (value == null || value.isEmpty)
-                        ? 'Introduce un título'
-                        : null;
-                  }),
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 3,
-                  maxLength: 400,
-                  initialValue: note.description,
-                  onChanged: (value) => note.description = value,
-                  decoration: const InputDecoration(
-                    labelText: 'Descripción',
-                    contentPadding: EdgeInsets.only(left: 10),
-                  ),
-                ),
-                SectionTitle('Categorías'),
-                CategoriesPickerSlider(),
-                SectionTitle('Fecha y hora'),
-                Padding(
-                  padding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
-                  child: Row(
-                    children: [
-                      TextButton(
-                        onPressed: selectDateTime,
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                side: BorderSide(color: ThemeColors.lightGrey),
-                              ),
-                            ),
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 18))),
-                        child: Text(
-                          selectedDate == null
-                              ? 'Selecciona fecha y hora'
-                              : Utils.dateTimeFormat(
-                                  selectedDate!, selectedTime),
-                          style: const TextStyle(
-                              fontSize: 18, color: ThemeColors.dark),
-                        ),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Form(
+              key: notesProvider.formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFormField(
+                    initialValue: note.title,
+                    onChanged: (value) => note.title = value,
+                    decoration: InputDecoration(
+                      labelText: 'Título',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                            note.isFavourite ? Icons.star : Icons.star_outline,
+                            color: Colors.amber),
+                        onPressed: swipeFavourite,
                       ),
-                      SizedBox(width: 20),
-                      Visibility(
-                        visible: selectedDate != null,
-                        child: IconButton(
-                          onPressed: resetDateTime,
-                          icon: Transform(
-                            transform: Matrix4.rotationY(pi),
-                            alignment: Alignment.center,
-                            child: Icon(Icons.refresh_outlined),
+                      contentPadding: EdgeInsets.only(left: 10),
+                    ),
+                    maxLength: 100,
+                    validator: ((value) {
+                      return (value == null || value.isEmpty)
+                          ? 'Introduce un título'
+                          : null;
+                    }),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 3,
+                    maxLength: 400,
+                    initialValue: note.description,
+                    onChanged: (value) => note.description = value,
+                    decoration: const InputDecoration(
+                      labelText: 'Descripción',
+                      contentPadding: EdgeInsets.only(left: 10),
+                    ),
+                  ),
+                  SectionTitle('Categorías'),
+                  CategoriesPickerSlider(),
+                  SectionTitle('Fecha y hora'),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
+                    child: Row(
+                      children: [
+                        TextButton(
+                          onPressed: selectDateTime,
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  side:
+                                      BorderSide(color: ThemeColors.lightGrey),
+                                ),
+                              ),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.symmetric(
+                                      horizontal: 30, vertical: 18))),
+                          child: Text(
+                            selectedDate == null
+                                ? 'Selecciona fecha y hora'
+                                : Utils.dateTimeFormat(
+                                    selectedDate!, selectedTime),
+                            style: const TextStyle(
+                                fontSize: 18, color: ThemeColors.dark),
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-                SectionTitle('Notificación'),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: ThemeColors.lightGrey)),
-                    child: Column(
-                      children: [
-                        CheckboxListTile(
-                          value: note.reminderTime == ReminderTime.oneDay,
-                          onChanged: ((isChecked) => updateReminderTime(
-                              isChecked!, ReminderTime.oneDay)),
-                          title: const Text('Un día antes'),
-                        ),
-                        CheckboxListTile(
-                          value: note.reminderTime == ReminderTime.oneHour,
-                          onChanged: ((isChecked) => updateReminderTime(
-                              isChecked!, ReminderTime.oneHour)),
-                          title: const Text('Una hora antes'),
-                        ),
-                        CheckboxListTile(
-                          value: note.reminderTime == ReminderTime.quarterHour,
-                          onChanged: ((isChecked) => updateReminderTime(
-                              isChecked!, ReminderTime.quarterHour)),
-                          title: const Text('15 minutos antes'),
-                        ),
+                        SizedBox(width: 20),
+                        Visibility(
+                          visible: selectedDate != null,
+                          child: IconButton(
+                            onPressed: resetDateTime,
+                            icon: Transform(
+                              transform: Matrix4.rotationY(pi),
+                              alignment: Alignment.center,
+                              child: Icon(Icons.refresh_outlined),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Center(
-                  child: ButtonCustom(
-                    text: isNew ? 'Añadir' : 'Actualizar',
-                    icon: Icons.check,
-                    onPressed: saveAndUpdate,
+                  SectionTitle('Notificación'),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: ThemeColors.lightGrey)),
+                      child: Column(
+                        children: [
+                          CheckboxListTile(
+                            value: note.reminderTime == ReminderTime.oneDay,
+                            onChanged: ((isChecked) => updateReminderTime(
+                                isChecked!, ReminderTime.oneDay)),
+                            title: const Text('Un día antes'),
+                          ),
+                          CheckboxListTile(
+                            value: note.reminderTime == ReminderTime.oneHour,
+                            onChanged: ((isChecked) => updateReminderTime(
+                                isChecked!, ReminderTime.oneHour)),
+                            title: const Text('Una hora antes'),
+                          ),
+                          CheckboxListTile(
+                            value:
+                                note.reminderTime == ReminderTime.quarterHour,
+                            onChanged: ((isChecked) => updateReminderTime(
+                                isChecked!, ReminderTime.quarterHour)),
+                            title: const Text('15 minutos antes'),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                )
-              ],
+                  SizedBox(height: 20),
+                  Center(
+                    child: ButtonCustom(
+                      text: isNew ? 'Añadir' : 'Actualizar',
+                      icon: Icons.check,
+                      onPressed: saveAndUpdate,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
