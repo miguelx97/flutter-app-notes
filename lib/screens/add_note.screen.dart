@@ -7,6 +7,7 @@ import 'package:flutter_app_notas/widgets/category_picker_slider.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
+import '../models/category.dart';
 import '../models/note.dart';
 import '../ui/button_custom.dart';
 
@@ -60,10 +61,10 @@ class _AddNoteState extends State<AddNote> {
       setState(() {});
     }
 
-    resetDateTime() {
+    resetDateTime({reload = true}) {
       selectedDate = null;
       selectedTime = null;
-      setState(() {});
+      if (reload) setState(() {});
     }
 
     updateReminderTime(bool isChecked, int minutesBefore) {
@@ -76,6 +77,7 @@ class _AddNoteState extends State<AddNote> {
     }
 
     saveAndUpdate() {
+      FocusScope.of(context).unfocus();
       note.date = selectedDate;
       if (selectedTime != null) {
         note.date = DateTime(
@@ -90,18 +92,22 @@ class _AddNoteState extends State<AddNote> {
 
       notesProvider.selectedNote = Note();
       notesProvider.formKey.currentState?.reset();
+      resetDateTime(reload: false);
 
       setState(() {});
     }
 
     return Scaffold(
       appBar: AppBar(
+          iconTheme: const IconThemeData(
+            color: Colors.white, //change your color here
+          ),
           title: const Text(
-        'Añadir nota',
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      )),
+            'Añadir nota',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )),
       body: SingleChildScrollView(
         child: SizedBox(
           width: double.infinity,
@@ -144,7 +150,13 @@ class _AddNoteState extends State<AddNote> {
                     ),
                   ),
                   SectionTitle('Categorías'),
-                  CategoriesPickerSlider(),
+                  CategoriesPickerSlider(
+                    idSelectedCategory: note.categoryId,
+                    onCategorySelected: (Category category) {
+                      note.categoryId = category.cid;
+                      setState(() {});
+                    },
+                  ),
                   SectionTitle('Fecha y hora'),
                   Padding(
                     padding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
@@ -198,10 +210,11 @@ class _AddNoteState extends State<AddNote> {
                       child: Column(
                         children: [
                           CheckboxListTile(
-                            value: note.reminderTime == ReminderTime.oneDay,
+                            value:
+                                note.reminderTime == ReminderTime.quarterHour,
                             onChanged: ((isChecked) => updateReminderTime(
-                                isChecked!, ReminderTime.oneDay)),
-                            title: const Text('Un día antes'),
+                                isChecked!, ReminderTime.quarterHour)),
+                            title: const Text('15 minutos antes'),
                           ),
                           CheckboxListTile(
                             value: note.reminderTime == ReminderTime.oneHour,
@@ -210,11 +223,10 @@ class _AddNoteState extends State<AddNote> {
                             title: const Text('Una hora antes'),
                           ),
                           CheckboxListTile(
-                            value:
-                                note.reminderTime == ReminderTime.quarterHour,
+                            value: note.reminderTime == ReminderTime.oneDay,
                             onChanged: ((isChecked) => updateReminderTime(
-                                isChecked!, ReminderTime.quarterHour)),
-                            title: const Text('15 minutos antes'),
+                                isChecked!, ReminderTime.oneDay)),
+                            title: const Text('Un día antes'),
                           ),
                         ],
                       ),

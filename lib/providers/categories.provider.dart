@@ -5,6 +5,7 @@ import 'package:flutter_app_notas/services/auth.service.dart';
 
 class CategoriesProvider extends ChangeNotifier {
   final List<Category> _categories = [];
+  final Map<String, String> _idsEmojisMap = {};
   Category? _selectedCategory;
   final CollectionReference firestoreCollection =
       FirebaseFirestore.instance.collection("categories");
@@ -29,6 +30,7 @@ class CategoriesProvider extends ChangeNotifier {
       final Category category = Category.fromMap(data);
       category.cid = doc.id;
       _categories.add(category);
+      _idsEmojisMap[category.cid!] = category.emoji;
     }
     notifyListeners();
   }
@@ -39,12 +41,14 @@ class CategoriesProvider extends ChangeNotifier {
     DocumentReference doc = await firestoreCollection.add(category.toMap());
     category.cid = doc.id;
     _categories.insert(0, category);
+    _idsEmojisMap[category.cid!] = category.emoji;
     notifyListeners();
   }
 
   delete(String categoryId) async {
     await firestoreCollection.doc(categoryId).delete();
     _categories.removeWhere((item) => item.cid == categoryId);
+    _idsEmojisMap.remove(categoryId);
     notifyListeners();
   }
 
@@ -52,6 +56,7 @@ class CategoriesProvider extends ChangeNotifier {
     await firestoreCollection.doc(category.cid).set(category.toMap());
     int index = _categories.indexWhere((item) => item.cid == category.cid);
     _categories[index] = category;
+    _idsEmojisMap[category.cid!] = category.emoji;
     notifyListeners();
   }
 
@@ -71,6 +76,11 @@ class CategoriesProvider extends ChangeNotifier {
     firestoreCollection
         .doc(categoryToReorder.cid)
         .set(categoryToReorder.toMap());
+  }
+
+  searchEmojiById(String? cid) {
+    if (cid == null || !_idsEmojisMap.containsKey(cid)) return '⚪';
+    return _idsEmojisMap[cid];
   }
 
   set selectedCategory(Category? selectedCategory) {

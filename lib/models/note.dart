@@ -40,7 +40,7 @@ class Note {
         title: json["title"],
         description: json["description"],
         isFavourite: json["isFavourite"],
-        date: DateTime.parse(json["date"]),
+        date: json["date"] != null ? DateTime.parse(json["date"]) : null,
         categoryId: json["categoryId"],
         reminderTime: json["reminderTime"],
         status: json["status"],

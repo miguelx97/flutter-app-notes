@@ -4,7 +4,8 @@ import 'package:flutter_app_notas/models/note.dart';
 
 class NoteItem extends StatelessWidget {
   final Note note;
-  const NoteItem({super.key, required this.note});
+  final String categoryEmoji;
+  const NoteItem({super.key, required this.note, required this.categoryEmoji});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class NoteItem extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
                 child: Row(
                   children: [
-                    Text("🏥", style: TextStyle(fontSize: 32)),
+                    Text(categoryEmoji, style: TextStyle(fontSize: 32)),
                     SizedBox(width: 15),
                     Flexible(
                       child: Column(
@@ -32,11 +33,16 @@ class NoteItem extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: TextStyle(fontSize: 20)),
-                          SizedBox(height: 10),
-                          Text(Utils.dateFormat(note.date!),
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.black45))
+                          Visibility(
+                            visible: note.date != null,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Text(Utils.dateFormat(note.date),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      fontSize: 14, color: Colors.black45)),
+                            ),
+                          )
                         ],
                       ),
                     )
@@ -45,7 +51,10 @@ class NoteItem extends StatelessWidget {
               ),
             ),
           ),
-          Icon(Icons.star, color: Colors.amber),
+          Visibility(
+            visible: note.isFavourite,
+            child: Icon(Icons.star, color: Colors.amber),
+          ),
         ],
       ),
     );

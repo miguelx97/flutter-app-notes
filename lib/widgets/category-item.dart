@@ -4,7 +4,12 @@ import 'package:flutter_app_notas/models/category.dart';
 
 class CategoryItem extends StatelessWidget {
   final Category category;
-  const CategoryItem({super.key, required this.category});
+  final bool isSelected;
+  const CategoryItem({
+    super.key,
+    required this.category,
+    this.isSelected = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +18,7 @@ class CategoryItem extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
         elevation: 1,
-        color: ThemeColors.lightBlue,
+        color: isSelected ? ThemeColors.pimary : ThemeColors.lightBlue,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Row(

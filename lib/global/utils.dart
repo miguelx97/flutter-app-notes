@@ -22,8 +22,9 @@ class Utils {
     return MaterialColor(color.value, swatch);
   }
 
-  static dateFormat(DateTime date) {
-    return DateFormat.yMMMMd('es').format(date);
+  static dateFormat(DateTime? date) {
+    if (date == null) return '';
+    return DateFormat.yMMMMd('es').format(date!);
   }
 
   static String dateTimeFormat(DateTime date, TimeOfDay? time) {

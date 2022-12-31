@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/utils.dart';
+import 'package:flutter_app_notas/models/note.dart';
 import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/providers/notes.provider.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
-import 'package:flutter_app_notas/widgets/category-item.dart';
 import 'package:flutter_app_notas/widgets/note-item.dart';
 import 'package:provider/provider.dart';
 
@@ -97,21 +97,25 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final notesProvider = Provider.of<NotesProvider>(context);
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
-    final notes = notesProvider.getAll();
+    final List<Note> notes = notesProvider.getAll();
     final categories = categoriesProvider.getAll();
 
     return Container(
-        child: ListView.builder(
-      itemCount: notes.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return CategoriesPickerSlider();
-        } else {
-          return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: NoteItem(note: notes[index - 1]));
-        }
-      },
+        child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: ReorderableListView.builder(
+        itemCount: notes.length,
+        header: CategoriesPickerSlider(
+          onCategorySelected: () {},
+        ),
+        itemBuilder: (context, index) => NoteItem(
+          note: notes[index],
+          categoryEmoji:
+              categoriesProvider.searchEmojiById(notes[index].categoryId),
+          key: ValueKey(notes[index]),
+        ),
+        onReorder: (int oldIndex, int newIndex) {},
+      ),
     ));
   }
 }
