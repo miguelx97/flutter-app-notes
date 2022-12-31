@@ -7,6 +7,8 @@ import 'package:flutter_app_notas/widgets/category-item.dart';
 import 'package:flutter_app_notas/widgets/note-item.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/category_picker_slider.dart';
+
 class HomeScreen extends StatelessWidget {
   final DateTime now = DateTime.now();
 
@@ -103,19 +105,7 @@ class Body extends StatelessWidget {
       itemCount: notes.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
-          return SizedBox(
-            height: 60,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: ListView.builder(
-                itemCount: categories.length,
-                itemBuilder: (_, index) =>
-                    CategoryItem(category: categories[index]),
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(left: 10, right: 5),
-              ),
-            ),
-          );
+          return CategoriesPickerSlider();
         } else {
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),

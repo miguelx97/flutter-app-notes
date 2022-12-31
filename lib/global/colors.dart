@@ -9,4 +9,6 @@ class ThemeColors {
   static const success = Color(0xff26d386);
   static const tertiary = Color(0xff2674d3);
   static const lightGrey = Color(0xffD7D7D7);
+  static const medium = Color(0xff696969);
+  static const dark = Color(0xff292929);
 }

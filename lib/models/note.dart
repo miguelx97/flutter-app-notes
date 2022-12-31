@@ -7,7 +7,7 @@ import 'dart:convert';
 class Note {
   Note({
     this.nid,
-    required this.title,
+    this.title = '',
     this.description,
     this.isFavourite = false,
     this.date,
@@ -50,7 +50,6 @@ class Note {
       );
 
   Map<String, dynamic> toMap() => {
-        "nid": nid,
         "title": title,
         "description": description,
         "isFavourite": isFavourite,

@@ -1,5 +1,6 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as emojis;
 import 'package:flutter/material.dart';
+import 'package:flutter_app_notas/ui/button_custom.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -9,14 +10,24 @@ import '../global/colors.dart';
 import '../providers/categories.provider.dart';
 
 class CategoryForm extends StatelessWidget {
-  bool isShowSticker = true;
-
   @override
   Widget build(BuildContext context) {
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
     if (categoriesProvider.selectedCategory == null) return Container();
     Category category = categoriesProvider.selectedCategory!;
     bool isNew = category.cid == null || category.cid!.isEmpty;
+
+    submit() {
+      if (category.title.isEmpty || category.emoji.isEmpty) return;
+      if (isNew) {
+        // category.id = const Uuid().v1();
+        categoriesProvider.insert(category);
+      } else {
+        categoriesProvider.update(category);
+      }
+      categoriesProvider.selectedCategory = null;
+    }
+
     return Padding(
       padding: EdgeInsets.only(right: 30, left: 30, bottom: 5, top: 15),
       child: Container(
@@ -67,6 +78,7 @@ class CategoryForm extends StatelessWidget {
                 TextFormField(
                   autocorrect: false,
                   initialValue: category.title,
+                  onFieldSubmitted: (value) => submit(),
                   onChanged: (value) => category.title = value,
                   decoration: const InputDecoration(
                       labelText: 'Nombre de la categoría'),
@@ -76,40 +88,13 @@ class CategoryForm extends StatelessWidget {
                         : null;
                   }),
                 ),
-                SizedBox(height: 10),
-                MaterialButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  color: ThemeColors.pimary,
-                  child: SizedBox(
-                    width: 100,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          isNew ? 'Añadir' : 'Actualizar',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        SizedBox(width: 10),
-                        Icon(
-                          Icons.check,
-                          color: Colors.white,
-                        )
-                      ],
-                    ),
-                  ),
-                  onPressed: () {
-                    if (category.title.isEmpty || category.emoji.isEmpty)
-                      return;
-                    if (isNew) {
-                      // category.id = const Uuid().v1();
-                      categoriesProvider.insert(category);
-                    } else {
-                      categoriesProvider.update(category);
-                    }
-                    categoriesProvider.selectedCategory = null;
-                  },
-                ),
+                SizedBox(height: 15),
+                ButtonCustom(
+                  text: isNew ? 'Añadir' : 'Actualizar',
+                  icon: Icons.check,
+                  size: ButtonCustomSize.small,
+                  onPressed: submit,
+                )
               ],
             ),
           ),

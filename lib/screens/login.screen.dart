@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/colors.dart';
 import 'package:flutter_app_notas/providers/login_form.provider.dart';
+import 'package:flutter_app_notas/ui/button_custom.dart';
 import 'package:flutter_app_notas/widgets/card_container.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +59,7 @@ class Login extends StatelessWidget {
                   loginForm.isLogin
                       ? 'Crear una nueva cuenta'
                       : 'Ya tengo una cuenta',
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 18,
                       color: Colors.black87,
                       fontWeight: FontWeight.w300),
@@ -73,6 +74,12 @@ class Login extends StatelessWidget {
 class _LoginForm extends StatelessWidget {
   final loginForm;
   const _LoginForm({super.key, this.loginForm});
+
+  loginRegister(BuildContext context) {
+    if (!loginForm.isValidForm()) return;
+    FocusScope.of(context).unfocus();
+    loginForm.loginOrRegister();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +107,7 @@ class _LoginForm extends StatelessWidget {
             TextFormField(
               autocorrect: false,
               obscureText: true,
+              onFieldSubmitted: (value) => loginRegister(context),
               onChanged: (value) => loginForm.password = value,
               decoration: const InputDecoration(
                   hintText: '********',
@@ -116,6 +124,7 @@ class _LoginForm extends StatelessWidget {
               child: TextFormField(
                 autocorrect: false,
                 obscureText: true,
+                onFieldSubmitted: (value) => loginRegister(context),
                 decoration: const InputDecoration(
                     hintText: '********',
                     labelText: 'Repetir contraseña',
@@ -128,28 +137,13 @@ class _LoginForm extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             // Text(loginForm.isLoading.toString()),
-            MaterialButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              color: ThemeColors.pimary,
-              disabledColor: Colors.black12,
-              onPressed: (loginForm.isLoading)
-                  ? null
-                  : () async {
-                      if (!loginForm.isValidForm()) return;
-                      FocusScope.of(context).unfocus();
-                      loginForm.loginOrRegister();
-                    },
-              child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 50),
-                  child: const Text(
-                    'Enviar',
-                    style: TextStyle(
-                        color: Colors.white, letterSpacing: 1, fontSize: 16),
-                  )),
-            )
+            ButtonCustom(
+              text: loginForm.isLogin ? 'Entrar' : 'Crear cuenta',
+              icon: Icons.login_outlined,
+              onPressed: () => loginRegister(context),
+            ),
           ],
         ),
       ),

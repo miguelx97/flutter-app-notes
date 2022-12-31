@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app_notas/global/mockups.dart';
 import 'package:flutter_app_notas/models/category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';

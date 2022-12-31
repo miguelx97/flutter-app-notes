@@ -25,4 +25,18 @@ class Utils {
   static dateFormat(DateTime date) {
     return DateFormat.yMMMMd('es').format(date);
   }
+
+  static String dateTimeFormat(DateTime date, TimeOfDay? time) {
+    if (time == null) {
+      return DateFormat('dd / MM / yyyy').format(date);
+    }
+    final combinedDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+    return DateFormat('dd / MM / yyyy  -  HH : mm').format(combinedDateTime);
+  }
 }

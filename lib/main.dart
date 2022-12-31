@@ -42,6 +42,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       scrollBehavior: MyCustomScrollBehavior(),
       title: 'Notas',
+      builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!),
       // debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Utils.customColor(const Color(0xff26CAD3)),
