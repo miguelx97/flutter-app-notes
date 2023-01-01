@@ -24,11 +24,19 @@ class NotesProvider extends ChangeNotifier {
 
   getAll() {
     final String? selectedCategoryId = _filters.category?.cid;
+    final String? search = _filters.search;
     List<Note> filteredNotesList = List.from(_notes);
 
     if (selectedCategoryId != null) {
       filteredNotesList = filteredNotesList
           .where((element) => element.categoryId == selectedCategoryId)
+          .toList();
+    }
+    if (search != null && search.isNotEmpty) {
+      final searchRegex = new RegExp(search, caseSensitive: false);
+      filteredNotesList = filteredNotesList
+          .where((element) => (element.title.contains(searchRegex) ||
+              (element.description ?? '').contains(searchRegex)))
           .toList();
     }
 
@@ -94,6 +102,11 @@ class NotesProvider extends ChangeNotifier {
   set currentStauts(int? status) {
     _currentStatus = status;
     load(status!);
+  }
+
+  set search(String? searchText) {
+    _filters.search = searchText;
+    notifyListeners();
   }
 
   Category? get currentCategory {

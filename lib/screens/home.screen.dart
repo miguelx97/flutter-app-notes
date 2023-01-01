@@ -1,3 +1,4 @@
+import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/colors.dart';
 import 'package:flutter_app_notas/global/utils.dart';
@@ -20,8 +21,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final NotesProvider notesProvider = Provider.of<NotesProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
+      appBar: EasySearchBar(
+        // automaticallyImplyLeading: false,
         title: Text(
           Utils.dateFormat(now),
           style: const TextStyle(
@@ -33,15 +34,10 @@ class HomeScreen extends StatelessWidget {
           //     onPressed: () {},
           //     icon: const Icon(Icons.calendar_today_outlined),
           //     color: Colors.white),
-          IconButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, 'categories', arguments: null),
-              icon: const Icon(Icons.folder_outlined),
-              color: Colors.white),
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.search_outlined),
-              color: Colors.white),
+          // IconButton(
+          //     onPressed: () {},
+          //     icon: const Icon(Icons.search_outlined),
+          //     color: Colors.white),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert, color: Colors.white),
             itemBuilder: (context) => [
@@ -67,8 +63,17 @@ class HomeScreen extends StatelessWidget {
                 default:
               }
             },
-          )
+          ),
+          IconButton(
+              onPressed: () =>
+                  Navigator.pushNamed(context, 'categories', arguments: null),
+              icon: const Icon(Icons.folder_outlined),
+              color: Colors.white),
         ],
+        onSearch: (String search) {
+          notesProvider.search = search;
+        },
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       bottomNavigationBar: Footer(notesProvider: notesProvider),
       floatingActionButton: FloatingActionButton(
@@ -79,6 +84,9 @@ class HomeScreen extends StatelessWidget {
           color: Colors.white,
         ),
         onPressed: () {
+          notesProvider.selectedNote = Note();
+          notesProvider.selectedNote!.categoryId =
+              notesProvider.currentCategory?.cid;
           Navigator.pushNamed(context, 'add-note', arguments: null);
         },
       ),
@@ -153,39 +161,39 @@ class Body extends StatelessWidget {
   }
 }
 
-class FloatingButtons extends StatelessWidget {
-  const FloatingButtons({
-    Key? key,
-  }) : super(key: key);
+// class FloatingButtons extends StatelessWidget {
+//   const FloatingButtons({
+//     Key? key,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-      FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, 'categories', arguments: null);
-        },
-        mini: true,
-        heroTag: 'secondary-floating-button',
-        child: const Icon(
-          Icons.folder_outlined,
-          color: Colors.white,
-        ),
-      ),
-      const SizedBox(height: 10),
-      FloatingActionButton(
-        heroTag: 'main-floating-button',
-        child: const Icon(
-          Icons.add_rounded,
-          size: 35,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Navigator.pushNamed(context, 'add-note', arguments: null);
-        },
-      ),
-    ]);
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+//       FloatingActionButton(
+//         onPressed: () {
+//           Navigator.pushNamed(context, 'categories', arguments: null);
+//         },
+//         mini: true,
+//         heroTag: 'secondary-floating-button',
+//         child: const Icon(
+//           Icons.folder_outlined,
+//           color: Colors.white,
+//         ),
+//       ),
+//       const SizedBox(height: 10),
+//       FloatingActionButton(
+//         heroTag: 'main-floating-button',
+//         child: const Icon(
+//           Icons.add_rounded,
+//           size: 35,
+//           color: Colors.white,
+//         ),
+//         onPressed: () {
+//           Navigator.pushNamed(context, 'add-note', arguments: null);
+//         },
+//       ),
+//     ]);
+//   }
+// }
 
 enum ItemName { deleted, logout }

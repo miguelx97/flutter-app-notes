@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
           child: child!),
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Utils.customColor(const Color(0xff26CAD3)),
           scaffoldBackgroundColor: Utils.customColor(const Color(0xffF3F3F3))),

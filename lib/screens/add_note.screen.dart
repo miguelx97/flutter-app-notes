@@ -95,6 +95,8 @@ class _AddNoteState extends State<AddNote> {
       resetDateTime(reload: false);
 
       setState(() {});
+
+      Navigator.pop(context);
     }
 
     return Scaffold(
