@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_notas/global/colors.dart';
 import 'package:flutter_app_notas/global/utils.dart';
 import 'package:flutter_app_notas/models/note.dart';
+import 'package:flutter_app_notas/models/note_status.enum.dart';
 import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/providers/notes.provider.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
@@ -12,8 +14,11 @@ import '../widgets/category_picker_slider.dart';
 class HomeScreen extends StatelessWidget {
   final DateTime now = DateTime.now();
 
+  HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final NotesProvider notesProvider = Provider.of<NotesProvider>(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -56,21 +61,16 @@ class HomeScreen extends StatelessWidget {
                 case ItemName.logout:
                   AuthService().signOut();
                   break;
+                case ItemName.deleted:
+                  notesProvider.currentStauts = NoteStatus.deleted;
+                  break;
                 default:
               }
             },
           )
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Pendiente',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Hecho'),
-        ],
-      ),
+      bottomNavigationBar: Footer(notesProvider: notesProvider),
       floatingActionButton: FloatingActionButton(
         heroTag: 'main-floating-button',
         child: const Icon(
@@ -83,7 +83,37 @@ class HomeScreen extends StatelessWidget {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Body(),
+      body: Body(notesProvider: notesProvider),
+    );
+  }
+}
+
+class Footer extends StatelessWidget {
+  const Footer({
+    Key? key,
+    required this.notesProvider,
+  }) : super(key: key);
+
+  final NotesProvider notesProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    final int status = notesProvider.currentStauts ?? NoteStatus.pending;
+    return BottomNavigationBar(
+      currentIndex: (status <= 1) ? 0 : 1,
+      onTap: (value) => notesProvider.currentStauts = value + 1,
+      selectedItemColor:
+          (status <= 2) ? ThemeColors.pimary : ThemeColors.medium,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Pendiente',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.check),
+          label: 'Hecho',
+        ),
+      ],
     );
   }
 }
@@ -93,20 +123,23 @@ Row MenuItem({required String label, required IconData icon}) {
 }
 
 class Body extends StatelessWidget {
+  final NotesProvider notesProvider;
+
+  const Body({super.key, required this.notesProvider});
+
   @override
   Widget build(BuildContext context) {
-    final notesProvider = Provider.of<NotesProvider>(context);
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
     final List<Note> notes = notesProvider.getAll();
-    final categories = categoriesProvider.getAll();
 
-    return Container(
-        child: Padding(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: ReorderableListView.builder(
         itemCount: notes.length,
         header: CategoriesPickerSlider(
-          onCategorySelected: () {},
+          onCategorySelected: (category) =>
+              notesProvider.currentCategory = category,
+          idSelectedCategory: notesProvider.currentCategory?.cid,
         ),
         itemBuilder: (context, index) => NoteItem(
           note: notes[index],
@@ -116,7 +149,7 @@ class Body extends StatelessWidget {
         ),
         onReorder: (int oldIndex, int newIndex) {},
       ),
-    ));
+    );
   }
 }
 

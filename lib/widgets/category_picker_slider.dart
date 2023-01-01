@@ -26,7 +26,10 @@ class CategoriesPickerSlider extends StatelessWidget {
         child: ListView.builder(
           itemCount: categories.length,
           itemBuilder: (_, index) => GestureDetector(
-            onTap: () => onCategorySelected(categories[index]),
+            onTap: () => onCategorySelected(
+                categories[index].cid == idSelectedCategory
+                    ? null
+                    : categories[index]),
             child: CategoryItem(
               category: categories[index],
               isSelected: idSelectedCategory == categories[index].cid,

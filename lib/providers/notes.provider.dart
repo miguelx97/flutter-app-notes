@@ -1,31 +1,47 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app_notas/global/mockups.dart';
 import 'package:flutter_app_notas/models/note.dart';
 import 'package:flutter_app_notas/models/note_status.enum.dart';
 
+import '../models/category.dart';
+import '../models/note_filters.dart';
 import '../services/auth.service.dart';
 
 class NotesProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  List<Note> _notes = [];
+  final List<Note> _notes = [];
   Note? _selectedNote = Note();
   final CollectionReference firestoreCollection =
       FirebaseFirestore.instance.collection("notes");
 
+  final NoteFilters _filters = NoteFilters();
+  int? _currentStatus;
+
   NotesProvider() {
     // _notes = Mockups.notes;
-    load();
+    load(NoteStatus.pending);
   }
 
   getAll() {
-    return _notes;
+    final String? selectedCategoryId = _filters.category?.cid;
+    List<Note> filteredNotesList = List.from(_notes);
+
+    if (selectedCategoryId != null) {
+      filteredNotesList = filteredNotesList
+          .where((element) => element.categoryId == selectedCategoryId)
+          .toList();
+    }
+
+    return filteredNotesList;
   }
 
-  load() async {
+  load(int status) async {
+    _notes.clear();
     final String? uid = AuthService().currentUser?.uid;
     final QuerySnapshot notesSnapshot = await firestoreCollection
         .where("uid", isEqualTo: uid)
+        .where("status", isEqualTo: status)
+        .orderBy("isFavourite", descending: true)
         .orderBy("position", descending: true)
         .get();
     for (var doc in notesSnapshot.docs) {
@@ -69,5 +85,23 @@ class NotesProvider extends ChangeNotifier {
 
   Note? get selectedNote {
     return _selectedNote;
+  }
+
+  int? get currentStauts {
+    return _currentStatus;
+  }
+
+  set currentStauts(int? status) {
+    _currentStatus = status;
+    load(status!);
+  }
+
+  Category? get currentCategory {
+    return _filters.category;
+  }
+
+  set currentCategory(Category? category) {
+    _filters.category = category;
+    notifyListeners();
   }
 }
