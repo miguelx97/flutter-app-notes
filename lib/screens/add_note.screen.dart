@@ -96,7 +96,7 @@ class _AddNoteState extends State<AddNote> {
 
       setState(() {});
 
-      Navigator.pop(context);
+      Utils.navigateBack(context);
     }
 
     return Scaffold(

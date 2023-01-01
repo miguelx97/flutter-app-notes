@@ -40,4 +40,13 @@ class Utils {
     );
     return DateFormat('dd / MM / yyyy  -  HH : mm').format(combinedDateTime);
   }
+
+  static void navigateBack(BuildContext context) {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '', arguments: null);
+    }
+  }
 }
