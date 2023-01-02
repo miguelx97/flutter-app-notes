@@ -166,7 +166,7 @@ class Body extends StatelessWidget {
             },
             key: ValueKey(notes[index]),
           ),
-          onReorder: (int oldIndex, int newIndex) {},
+          onReorder: notesProvider.reorder,
         ),
       ),
     );

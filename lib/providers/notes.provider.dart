@@ -75,7 +75,7 @@ class NotesProvider extends ChangeNotifier {
     final now = DateTime.now();
     note.uid = AuthService().currentUser?.uid;
     note.createionDate = now;
-    note.position = now.millisecondsSinceEpoch;
+    note.position = now.millisecondsSinceEpoch.toDouble();
     note.status = NoteStatus.pending;
     DocumentReference doc = await firestoreCollection.add(note.toMap());
     note.nid = doc.id;
@@ -93,6 +93,50 @@ class NotesProvider extends ChangeNotifier {
     await firestoreCollection.doc(note.uid).set(note.toMap());
     int index = _notes.indexWhere((item) => item.nid == note.nid);
     _notes[index] = note;
+    notifyListeners();
+  }
+
+  swipeFavourite(Note note) async {
+    note.isFavourite = !note.isFavourite;
+    int index = _notes.indexWhere((item) => item.nid == note.nid);
+    _notes[index] = note;
+    if (note.isFavourite) {
+      reorder(index, 0);
+    } else {
+      final int numberOfFavourites =
+          _notes.where((note) => note.isFavourite).length + 1;
+      reorder(index, numberOfFavourites);
+    }
+  }
+
+  reorder(int oldIndex, int newIndex) {
+    late Note noteToReorder;
+    if (newIndex == 0) {
+      _notes[oldIndex].position = _notes[0].position! + 1000;
+    } else if (newIndex == _notes.length) {
+      _notes[oldIndex].position = _notes.last.position! - 1000;
+    } else if (newIndex > _notes.length) {
+      return;
+    } else {
+      //este if es porque se buggeaba al poner un item entre un favorito y un
+      //no favorito ya que el favorito podría tener una posición muy baja y aun así estar arriba
+      if (_notes[newIndex - 1].position! > _notes[newIndex].position!) {
+        double media =
+            (_notes[newIndex].position! + _notes[newIndex - 1].position!) / 2;
+
+        _notes[oldIndex].position = media;
+      } else {
+        _notes[oldIndex].position = _notes[newIndex].position! + 1000;
+      }
+    }
+    _notes[oldIndex].isFavourite = _notes[newIndex].isFavourite;
+    noteToReorder = _notes.removeAt(oldIndex);
+    _notes.insert(newIndex < oldIndex ? newIndex : newIndex - 1, noteToReorder);
+    final mapPosition = {
+      'position': noteToReorder.position!,
+      'isFavourite': noteToReorder.isFavourite,
+    };
+    firestoreCollection.doc(noteToReorder.nid).update(mapPosition);
     notifyListeners();
   }
 

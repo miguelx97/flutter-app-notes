@@ -12,7 +12,7 @@ class Category {
   String? cid;
   String title;
   String emoji;
-  int? position;
+  double? position;
   String? uid;
 
   factory Category.fromJson(String str) => Category.fromMap(json.decode(str));

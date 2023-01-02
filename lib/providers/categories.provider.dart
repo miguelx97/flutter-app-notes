@@ -37,7 +37,7 @@ class CategoriesProvider extends ChangeNotifier {
 
   insert(Category category) async {
     category.uid = AuthService().currentUser?.uid;
-    category.position = DateTime.now().millisecondsSinceEpoch;
+    category.position = DateTime.now().millisecondsSinceEpoch.toDouble();
     DocumentReference doc = await firestoreCollection.add(category.toMap());
     category.cid = doc.id;
     _categories.insert(0, category);
@@ -65,20 +65,25 @@ class CategoriesProvider extends ChangeNotifier {
 
   reorder(int oldIndex, int newIndex) {
     late Category categoryToReorder;
-    if (newIndex == _categories.length) {
-      _categories[oldIndex].position = _categories.last.position! - 1;
-      categoryToReorder = _categories.removeAt(oldIndex);
-      _categories.add(categoryToReorder);
+    if (newIndex == 0) {
+      _categories[oldIndex].position = _categories[0].position! + 1000;
+    } else if (newIndex == _categories.length) {
+      _categories[oldIndex].position = _categories.last.position! - 1000;
     } else if (newIndex > _categories.length) {
       return;
     } else {
-      _categories[oldIndex].position = _categories[newIndex].position! + 1;
-      categoryToReorder = _categories.removeAt(oldIndex);
-      _categories.insert(newIndex, categoryToReorder);
+      double media = (_categories[newIndex].position! +
+              _categories[newIndex - 1].position!) /
+          2;
+      _categories[oldIndex].position = media;
     }
-    firestoreCollection
-        .doc(categoryToReorder.cid)
-        .set(categoryToReorder.toMap());
+    categoryToReorder = _categories.removeAt(oldIndex);
+    _categories.insert(
+        newIndex < oldIndex ? newIndex : newIndex - 1, categoryToReorder);
+    final Map<String, double> mapPosition = {
+      'position': categoryToReorder.position!
+    };
+    firestoreCollection.doc(categoryToReorder.cid).update(mapPosition);
   }
 
   Category searchCategoryById(String? cid) {

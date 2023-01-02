@@ -33,11 +33,16 @@ class NoteDetailsScreen extends StatelessWidget {
     final Category noteCategory =
         categoriesProvider.searchCategoryById(note.categoryId);
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Container(
             // alignment: Alignment.topLeft,
-            // color: Colors.lightBlue,
             width: Constants.maxWidth,
             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
             child: Column(
@@ -74,14 +79,12 @@ class NoteDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.go(AddNote.screenUrl),
-        heroTag: 'main-floating-button',
-        child: const Icon(
-          Icons.edit_outlined,
-          size: 35,
-          color: Colors.white,
-        ),
+      floatingActionButton: FloatingButtons(
+        note: note,
+        mainButtonClick: () => context.go(AddNote.screenUrl),
+        secondaryButtonClick: () {
+          notesProvider.swipeFavourite(note);
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
@@ -158,7 +161,43 @@ class TextContent extends StatelessWidget {
                 ? size.width
                 : Constants.maxWidth) -
             150,
-        child: Text(content!,
+        child: Text(content,
             style: textTheme.bodyMedium, textAlign: TextAlign.justify));
+  }
+}
+
+class FloatingButtons extends StatelessWidget {
+  final Note note;
+  final Function mainButtonClick;
+  final Function secondaryButtonClick;
+  const FloatingButtons({
+    Key? key,
+    required this.note,
+    required this.mainButtonClick,
+    required this.secondaryButtonClick,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+      GestureDetector(
+        onTap: () => secondaryButtonClick(),
+        child: Icon(
+          note.isFavourite ? Icons.star : Icons.star_outline,
+          color: Colors.amber,
+          size: 35,
+        ),
+      ),
+      const SizedBox(height: 30),
+      FloatingActionButton(
+        onPressed: () => mainButtonClick(),
+        heroTag: 'main-floating-button',
+        child: const Icon(
+          Icons.edit_outlined,
+          size: 35,
+          color: Colors.white,
+        ),
+      ),
+    ]);
   }
 }

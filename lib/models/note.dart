@@ -29,7 +29,7 @@ class Note {
   String? categoryId;
   int? reminderTime;
   int? status;
-  int? position;
+  double? position;
   DateTime? createionDate;
   String? uid;
   bool? hasTime;
