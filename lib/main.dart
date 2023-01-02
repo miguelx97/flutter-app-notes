@@ -4,6 +4,7 @@ import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/providers/notes.provider.dart';
 import 'package:flutter_app_notas/screens/add_note.screen.dart';
 import 'package:flutter_app_notas/screens/categories-management.screen.dart';
+import 'package:flutter_app_notas/screens/note_details.screen.dart';
 import 'package:flutter_app_notas/widgets/auth_check_redirection.dart';
 import 'global/utils.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -51,9 +52,10 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Utils.customColor(const Color(0xffF3F3F3))),
       initialRoute: '',
       routes: {
-        '': (_) => AuthCheckRedirection(),
-        'add-note': (_) => AddNote(),
-        'categories': (_) => CategoriesManagement()
+        '': (_) => const AuthCheckRedirection(),
+        'add-note': (_) => const AddNote(),
+        'categories': (_) => const CategoriesManagement(),
+        'note-details': (_) => const NoteDetailsScreen(),
       },
     );
   }

@@ -65,8 +65,7 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           IconButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, 'categories', arguments: null),
+              onPressed: () => Navigator.pushNamed(context, 'categories'),
               icon: const Icon(Icons.folder_outlined),
               color: Colors.white),
         ],
@@ -87,7 +86,7 @@ class HomeScreen extends StatelessWidget {
           notesProvider.selectedNote = Note();
           notesProvider.selectedNote!.categoryId =
               notesProvider.currentCategory?.cid;
-          Navigator.pushNamed(context, 'add-note', arguments: null);
+          Navigator.pushNamed(context, 'add-note');
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -153,6 +152,10 @@ class Body extends StatelessWidget {
           note: notes[index],
           categoryEmoji:
               categoriesProvider.searchEmojiById(notes[index].categoryId),
+          onNoteSelected: (Note note) {
+            notesProvider.selectedNote = note;
+            Navigator.pushNamed(context, 'note-details');
+          },
           key: ValueKey(notes[index]),
         ),
         onReorder: (int oldIndex, int newIndex) {},
@@ -160,40 +163,5 @@ class Body extends StatelessWidget {
     );
   }
 }
-
-// class FloatingButtons extends StatelessWidget {
-//   const FloatingButtons({
-//     Key? key,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-//       FloatingActionButton(
-//         onPressed: () {
-//           Navigator.pushNamed(context, 'categories', arguments: null);
-//         },
-//         mini: true,
-//         heroTag: 'secondary-floating-button',
-//         child: const Icon(
-//           Icons.folder_outlined,
-//           color: Colors.white,
-//         ),
-//       ),
-//       const SizedBox(height: 10),
-//       FloatingActionButton(
-//         heroTag: 'main-floating-button',
-//         child: const Icon(
-//           Icons.add_rounded,
-//           size: 35,
-//           color: Colors.white,
-//         ),
-//         onPressed: () {
-//           Navigator.pushNamed(context, 'add-note', arguments: null);
-//         },
-//       ),
-//     ]);
-//   }
-// }
 
 enum ItemName { deleted, logout }

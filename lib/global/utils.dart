@@ -46,7 +46,7 @@ class Utils {
       Navigator.pop(context);
     } else {
       Navigator.pop(context);
-      Navigator.pushNamed(context, '', arguments: null);
+      Navigator.pushNamed(context, '');
     }
   }
 }
