@@ -38,7 +38,7 @@ class ButtonCustom extends StatelessWidget {
     }
     return MaterialButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      color: ThemeColors.pimary,
+      color: ThemeColors.primary,
       disabledColor: Colors.black12,
       padding: padding,
       onPressed: onPressed,

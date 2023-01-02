@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
@@ -24,29 +25,26 @@ class Utils {
 
   static dateFormat(DateTime? date) {
     if (date == null) return '';
-    return DateFormat.yMMMMd('es').format(date!);
+    return DateFormat.yMMMMd('es').format(date);
   }
 
-  static String dateTimeFormat(DateTime date, TimeOfDay? time) {
-    if (time == null) {
+  static String dateTimeFormat(DateTime date, bool? hasTime) {
+    if (hasTime != null && hasTime) {
+      return DateFormat('dd / MM / yyyy  -  HH : mm').format(date);
+    } else {
       return DateFormat('dd / MM / yyyy').format(date);
     }
-    final combinedDateTime = DateTime(
-      date.year,
-      date.month,
-      date.day,
-      time.hour,
-      time.minute,
-    );
-    return DateFormat('dd / MM / yyyy  -  HH : mm').format(combinedDateTime);
   }
 
-  static void navigateBack(BuildContext context) {
-    if (Navigator.canPop(context)) {
-      Navigator.pop(context);
-    } else {
-      Navigator.pop(context);
-      Navigator.pushNamed(context, '');
-    }
+  static String removeSlash(String url) {
+    return url.substring(1);
   }
+
+  // static void navigateBack(BuildContext context) {
+  //   if (context.canPop()) {
+  //     context.pop();
+  //   } else {
+  //     context.go('/');
+  //   }
+  // }
 }

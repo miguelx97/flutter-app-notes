@@ -1,13 +1,18 @@
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/colors.dart';
+import 'package:flutter_app_notas/global/constants.dart';
 import 'package:flutter_app_notas/global/utils.dart';
 import 'package:flutter_app_notas/models/note.dart';
 import 'package:flutter_app_notas/models/note_status.enum.dart';
 import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/providers/notes.provider.dart';
+import 'package:flutter_app_notas/screens/add_note.screen.dart';
+import 'package:flutter_app_notas/screens/categories-management.screen.dart';
+import 'package:flutter_app_notas/screens/note_details.screen.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
 import 'package:flutter_app_notas/widgets/note-item.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/category_picker_slider.dart';
@@ -65,7 +70,7 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           IconButton(
-              onPressed: () => Navigator.pushNamed(context, 'categories'),
+              onPressed: () => context.go(CategoriesManagement.screenUrl),
               icon: const Icon(Icons.folder_outlined),
               color: Colors.white),
         ],
@@ -86,7 +91,7 @@ class HomeScreen extends StatelessWidget {
           notesProvider.selectedNote = Note();
           notesProvider.selectedNote!.categoryId =
               notesProvider.currentCategory?.cid;
-          Navigator.pushNamed(context, 'add-note');
+          context.go(AddNote.screenUrl);
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -110,7 +115,7 @@ class Footer extends StatelessWidget {
       currentIndex: (status <= 1) ? 0 : 1,
       onTap: (value) => notesProvider.currentStauts = value + 1,
       selectedItemColor:
-          (status <= 2) ? ThemeColors.pimary : ThemeColors.medium,
+          (status <= 2) ? ThemeColors.primary : ThemeColors.medium,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -139,26 +144,30 @@ class Body extends StatelessWidget {
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
     final List<Note> notes = notesProvider.getAll();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: ReorderableListView.builder(
-        itemCount: notes.length,
-        header: CategoriesPickerSlider(
-          onCategorySelected: (category) =>
-              notesProvider.currentCategory = category,
-          idSelectedCategory: notesProvider.currentCategory?.cid,
+    return Center(
+      child: Container(
+        width: Constants.maxWidth,
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: ReorderableListView.builder(
+          itemCount: notes.length,
+          header: CategoriesPickerSlider(
+            onCategorySelected: (category) =>
+                notesProvider.currentCategory = category,
+            idSelectedCategory: notesProvider.currentCategory?.cid,
+          ),
+          itemBuilder: (context, index) => NoteItem(
+            note: notes[index],
+            categoryEmoji: categoriesProvider
+                .searchCategoryById(notes[index].categoryId)
+                .emoji,
+            onNoteSelected: (Note note) {
+              notesProvider.selectedNote = note;
+              context.go('${NoteDetailsScreen.screenUrl}/${note.nid}');
+            },
+            key: ValueKey(notes[index]),
+          ),
+          onReorder: (int oldIndex, int newIndex) {},
         ),
-        itemBuilder: (context, index) => NoteItem(
-          note: notes[index],
-          categoryEmoji:
-              categoriesProvider.searchEmojiById(notes[index].categoryId),
-          onNoteSelected: (Note note) {
-            notesProvider.selectedNote = note;
-            Navigator.pushNamed(context, 'note-details');
-          },
-          key: ValueKey(notes[index]),
-        ),
-        onReorder: (int oldIndex, int newIndex) {},
       ),
     );
   }

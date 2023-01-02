@@ -4,8 +4,10 @@ import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/providers/notes.provider.dart';
 import 'package:flutter_app_notas/screens/add_note.screen.dart';
 import 'package:flutter_app_notas/screens/categories-management.screen.dart';
+import 'package:flutter_app_notas/screens/home.screen.dart';
 import 'package:flutter_app_notas/screens/note_details.screen.dart';
 import 'package:flutter_app_notas/widgets/auth_check_redirection.dart';
+import 'package:go_router/go_router.dart';
 import 'global/utils.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,13 +36,47 @@ class AppState extends StatelessWidget {
   }
 }
 
+String Function(String url) rs = Utils.removeSlash;
+
+/// The route configuration.
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return const AuthCheckRedirection();
+      },
+      routes: <RouteBase>[
+        GoRoute(
+          path: rs(AddNote.screenUrl),
+          builder: (BuildContext context, GoRouterState state) {
+            return const AddNote();
+          },
+        ),
+        GoRoute(
+          path: rs(CategoriesManagement.screenUrl),
+          builder: (BuildContext context, GoRouterState state) {
+            return const CategoriesManagement();
+          },
+        ),
+        GoRoute(
+          path: '${rs(NoteDetailsScreen.screenUrl)}/:nid',
+          builder: (BuildContext context, GoRouterState state) {
+            return NoteDetailsScreen(nid: state.params["nid"]!);
+          },
+        ),
+      ],
+    ),
+  ],
+);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       scrollBehavior: MyCustomScrollBehavior(),
       title: 'Notas',
       builder: (context, child) => MediaQuery(
@@ -49,14 +85,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Utils.customColor(const Color(0xff26CAD3)),
-          scaffoldBackgroundColor: Utils.customColor(const Color(0xffF3F3F3))),
-      initialRoute: '',
-      routes: {
-        '': (_) => const AuthCheckRedirection(),
-        'add-note': (_) => const AddNote(),
-        'categories': (_) => const CategoriesManagement(),
-        'note-details': (_) => const NoteDetailsScreen(),
-      },
+          scaffoldBackgroundColor: Utils.customColor(const Color(0xffF3F3F3)),
+          textTheme: const TextTheme(
+              titleLarge: TextStyle(fontSize: 25),
+              bodyMedium: TextStyle(fontSize: 16),
+              titleSmall: TextStyle(fontSize: 14, color: Colors.black54))),
+      routerConfig: _router,
     );
   }
 }

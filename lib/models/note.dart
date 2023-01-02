@@ -17,6 +17,8 @@ class Note {
     this.createionDate,
     this.position,
     this.uid,
+    this.hasTime,
+    this.deletedDate,
   });
 
   String? nid;
@@ -30,24 +32,36 @@ class Note {
   int? position;
   DateTime? createionDate;
   String? uid;
+  bool? hasTime;
+  DateTime? deletedDate;
 
   factory Note.fromJson(String str) => Note.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Note.fromMap(Map<String, dynamic> json) => Note(
-        nid: json["nid"],
-        title: json["title"],
-        description: json["description"],
-        isFavourite: json["isFavourite"],
-        date: json["date"] != null ? DateTime.parse(json["date"]) : null,
-        categoryId: json["categoryId"],
-        reminderTime: json["reminderTime"],
-        status: json["status"],
-        position: json["position"],
-        createionDate: DateTime.parse(json["createionDate"]),
-        uid: json["uid"],
+  factory Note.fromMap(Map<String, dynamic> map) => Note(
+        nid: map["nid"],
+        title: map["title"],
+        description: map["description"],
+        isFavourite: map["isFavourite"],
+        date: map["date"] != null ? DateTime.parse(map["date"]) : null,
+        categoryId: map["categoryId"],
+        reminderTime: map["reminderTime"],
+        status: map["status"],
+        position: map["position"],
+        createionDate: DateTime.parse(map["createionDate"]),
+        uid: map["uid"],
+        hasTime: map["hasTime"],
+        deletedDate: map["deletedDate"] != null
+            ? DateTime.parse(map["deletedDate"])
+            : null,
       );
+
+  factory Note.fromMapWithId(Map<String, dynamic> map, String id) {
+    final note = Note.fromMap(map);
+    note.nid = id;
+    return note;
+  }
 
   Map<String, dynamic> toMap() => {
         "title": title,
@@ -60,6 +74,8 @@ class Note {
         "position": position,
         "createionDate": createionDate?.toIso8601String(),
         "uid": uid,
+        "hasTime": hasTime,
+        "deletedDate": deletedDate?.toIso8601String(),
       };
 }
 

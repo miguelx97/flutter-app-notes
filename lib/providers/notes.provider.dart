@@ -33,7 +33,7 @@ class NotesProvider extends ChangeNotifier {
           .toList();
     }
     if (search != null && search.isNotEmpty) {
-      final searchRegex = new RegExp(search, caseSensitive: false);
+      final searchRegex = RegExp(search, caseSensitive: false);
       filteredNotesList = filteredNotesList
           .where((element) => (element.title.contains(searchRegex) ||
               (element.description ?? '').contains(searchRegex)))
@@ -41,6 +41,16 @@ class NotesProvider extends ChangeNotifier {
     }
 
     return filteredNotesList;
+  }
+
+  Future<void> selectedNoteById(String nid) async {
+    final DocumentSnapshot<Object?> doc =
+        await firestoreCollection.doc(nid).get();
+
+    final Map<String, dynamic> noteMap = doc.data()! as Map<String, dynamic>;
+    final Note note = Note.fromMapWithId(noteMap, doc.id);
+    print('Get note from firebase: ${note.title}');
+    selectedNote = note;
   }
 
   load(int status) async {
@@ -53,11 +63,11 @@ class NotesProvider extends ChangeNotifier {
         .orderBy("position", descending: true)
         .get();
     for (var doc in notesSnapshot.docs) {
-      final Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
-      final Note note = Note.fromMap(data);
-      note.nid = doc.id;
+      final Map<String, dynamic> noteMap = doc.data()! as Map<String, dynamic>;
+      final Note note = Note.fromMapWithId(noteMap, doc.id);
       _notes.add(note);
     }
+    print('Get all notes from firebase: ${_notes.length}');
     notifyListeners();
   }
 

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/colors.dart';
+import 'package:flutter_app_notas/global/constants.dart';
 import 'package:flutter_app_notas/global/utils.dart';
 import 'package:flutter_app_notas/models/reminder_time.dart';
 import 'package:flutter_app_notas/providers/notes.provider.dart';
 import 'package:flutter_app_notas/widgets/category_picker_slider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
@@ -12,6 +14,7 @@ import '../models/note.dart';
 import '../ui/button_custom.dart';
 
 class AddNote extends StatefulWidget {
+  static const screenUrl = '/add-note';
   const AddNote({super.key});
 
   @override
@@ -19,9 +22,6 @@ class AddNote extends StatefulWidget {
 }
 
 class _AddNoteState extends State<AddNote> {
-  DateTime? selectedDate;
-  TimeOfDay? selectedTime;
-
   @override
   Widget build(BuildContext context) {
     final notesProvider = Provider.of<NotesProvider>(context);
@@ -35,6 +35,10 @@ class _AddNoteState extends State<AddNote> {
 
     selectDateTime() async {
       final now = DateTime.now();
+      DateTime? selectedDate = note.date;
+      TimeOfDay? selectedTime =
+          selectedDate != null ? TimeOfDay.fromDateTime(selectedDate) : null;
+
       final DateTime? datePicker = await showDatePicker(
           context: context,
           initialDate: selectedDate ?? now,
@@ -58,12 +62,21 @@ class _AddNoteState extends State<AddNote> {
         return;
       }
 
+      note.date = DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+        selectedTime.hour,
+        selectedTime.minute,
+      );
+      note.hasTime = true;
+
       setState(() {});
     }
 
     resetDateTime({reload = true}) {
-      selectedDate = null;
-      selectedTime = null;
+      note.date = null;
+      note.hasTime = false;
       if (reload) setState(() {});
     }
 
@@ -78,16 +91,6 @@ class _AddNoteState extends State<AddNote> {
 
     saveAndUpdate() {
       FocusScope.of(context).unfocus();
-      note.date = selectedDate;
-      if (selectedTime != null) {
-        note.date = DateTime(
-          note.date!.year,
-          note.date!.month,
-          note.date!.day,
-          selectedTime!.hour,
-          selectedTime!.minute,
-        );
-      }
       notesProvider.insert(note);
 
       notesProvider.selectedNote = Note();
@@ -96,7 +99,7 @@ class _AddNoteState extends State<AddNote> {
 
       setState(() {});
 
-      Utils.navigateBack(context);
+      context.pop();
     }
 
     return Scaffold(
@@ -111,9 +114,9 @@ class _AddNoteState extends State<AddNote> {
             ),
           )),
       body: SingleChildScrollView(
-        child: SizedBox(
-          width: double.infinity,
-          child: Padding(
+        child: Center(
+          child: Container(
+            width: Constants.maxWidth,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Form(
               key: notesProvider.formKey,
@@ -178,17 +181,17 @@ class _AddNoteState extends State<AddNote> {
                                   EdgeInsets.symmetric(
                                       horizontal: 30, vertical: 18))),
                           child: Text(
-                            selectedDate == null
+                            note.date == null
                                 ? 'Selecciona fecha y hora'
                                 : Utils.dateTimeFormat(
-                                    selectedDate!, selectedTime),
+                                    note.date!, note.hasTime),
                             style: const TextStyle(
                                 fontSize: 18, color: ThemeColors.dark),
                           ),
                         ),
                         SizedBox(width: 20),
                         Visibility(
-                          visible: selectedDate != null,
+                          visible: note.date != null,
                           child: IconButton(
                             onPressed: resetDateTime,
                             icon: Transform(
@@ -211,25 +214,12 @@ class _AddNoteState extends State<AddNote> {
                           border: Border.all(color: ThemeColors.lightGrey)),
                       child: Column(
                         children: [
-                          CheckboxListTile(
-                            value:
-                                note.reminderTime == ReminderTime.quarterHour,
-                            onChanged: ((isChecked) => updateReminderTime(
-                                isChecked!, ReminderTime.quarterHour)),
-                            title: const Text('15 minutos antes'),
-                          ),
-                          CheckboxListTile(
-                            value: note.reminderTime == ReminderTime.oneHour,
-                            onChanged: ((isChecked) => updateReminderTime(
-                                isChecked!, ReminderTime.oneHour)),
-                            title: const Text('Una hora antes'),
-                          ),
-                          CheckboxListTile(
-                            value: note.reminderTime == ReminderTime.oneDay,
-                            onChanged: ((isChecked) => updateReminderTime(
-                                isChecked!, ReminderTime.oneDay)),
-                            title: const Text('Un día antes'),
-                          ),
+                          checkBoxReminderTime(note, ReminderTime.quarterHour,
+                              updateReminderTime),
+                          checkBoxReminderTime(
+                              note, ReminderTime.oneHour, updateReminderTime),
+                          checkBoxReminderTime(
+                              note, ReminderTime.oneDay, updateReminderTime),
                         ],
                       ),
                     ),
@@ -248,6 +238,15 @@ class _AddNoteState extends State<AddNote> {
           ),
         ),
       ),
+    );
+  }
+
+  CheckboxListTile checkBoxReminderTime(Note note, int reminderTime,
+      Function(bool isChecked, int minutesBefore) updateReminderTime) {
+    return CheckboxListTile(
+      value: note.reminderTime == reminderTime,
+      onChanged: ((isChecked) => updateReminderTime(isChecked!, reminderTime)),
+      title: Text(ReminderTime.getLabel(reminderTime)),
     );
   }
 }

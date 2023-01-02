@@ -1,6 +1,7 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as emojis;
 import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/ui/button_custom.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -56,7 +57,7 @@ class CategoryForm extends StatelessWidget {
                           onEmojiSelected: (_, emojis.Emoji emoji) {
                             category.emoji = emoji.emoji;
                             categoriesProvider.selectedCategory = category;
-                            Navigator.pop(context);
+                            context.pop();
                           },
                         ),
                       ),

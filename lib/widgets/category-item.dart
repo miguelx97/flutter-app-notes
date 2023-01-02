@@ -18,7 +18,7 @@ class CategoryItem extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
         elevation: 1,
-        color: isSelected ? ThemeColors.pimary : ThemeColors.lightBlue,
+        color: isSelected ? ThemeColors.primary : ThemeColors.lightBlue,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Row(

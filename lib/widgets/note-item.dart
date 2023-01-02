@@ -14,6 +14,7 @@ class NoteItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () => onNoteSelected(note),
       child: Padding(
@@ -27,7 +28,8 @@ class NoteItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20)),
                 elevation: 5,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
                   child: Row(
                     children: [
                       Text(categoryEmoji, style: TextStyle(fontSize: 32)),
@@ -39,7 +41,7 @@ class NoteItem extends StatelessWidget {
                             Text(note.title,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                style: TextStyle(fontSize: 20)),
+                                style: textTheme.titleMedium),
                             Visibility(
                               visible: note.date != null,
                               child: Padding(
