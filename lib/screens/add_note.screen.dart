@@ -28,6 +28,8 @@ class _AddNoteState extends State<AddNote> {
     Note note = notesProvider.selectedNote!;
     bool isNew = note.nid == null || note.nid!.isEmpty;
 
+    print("IS NEW ${isNew}");
+
     swipeFavourite() {
       note.isFavourite = !note.isFavourite;
       setState(() {});
@@ -91,15 +93,17 @@ class _AddNoteState extends State<AddNote> {
 
     saveAndUpdate() {
       FocusScope.of(context).unfocus();
-      notesProvider.insert(note);
-
+      if (isNew) {
+        notesProvider.insert(note);
+      } else {
+        notesProvider.update(note);
+      }
       notesProvider.selectedNote = Note();
       notesProvider.formKey.currentState?.reset();
       resetDateTime(reload: false);
+      context.pop();
 
       setState(() {});
-
-      context.pop();
     }
 
     return Scaffold(

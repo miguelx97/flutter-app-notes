@@ -59,7 +59,7 @@ class NoteDetailsScreen extends StatelessWidget {
                 ),
                 Item(
                   title: 'Fecha / Hora',
-                  content: Utils.dateFormat(note.date),
+                  content: Utils.dateTimeFormat(note.date, note.hasTime),
                   icon: Icons.calendar_month_outlined,
                 ),
                 Item(
