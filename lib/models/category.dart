@@ -23,7 +23,7 @@ class Category {
         cid: json["cid"],
         title: json["title"],
         emoji: json["emoji"],
-        position: json["position"],
+        position: json["position"]?.toDouble(),
         uid: json["uid"],
       );
 
@@ -51,9 +51,18 @@ class Category {
 
 /**
 {
-    "id":"1",
+    "nid":"1",
     "title":"dentista",
-    "emoji":"ir al dentista",
-    "position":1
+    "description":"ir al dentista",
+    "isFavourite":false,
+    "date":"1944-06-06 02:00:00.000",
+    "categoryId":"2",
+    "reminderTime":897,
+    "status":2,
+    "position":1.1,
+    "createionDate":"1944-06-06 02:00:00.000",
+    "uid":"dasdasdasdas",
+    "hasTime":true,
+    "deletedDate":"1944-06-06 02:00:00.000"
 }
 */

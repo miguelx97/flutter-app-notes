@@ -48,7 +48,7 @@ class Note {
         categoryId: map["categoryId"],
         reminderTime: map["reminderTime"],
         status: map["status"],
-        position: map["position"],
+        position: map["position"]?.toDouble(),
         createionDate: DateTime.parse(map["createionDate"]),
         uid: map["uid"],
         hasTime: map["hasTime"],
@@ -92,8 +92,10 @@ class Note {
     "categoryId":"2",
     "reminderTime":897,
     "status":2,
-    "position":1
+    "position":1,
     "createionDate":"1944-06-06 02:00:00.000",
-    "uid":"dasdasdasdas"
+    "uid":"dasdasdasdas",
+    "hasTime":true,
+    "deletedDate":"1944-06-06 02:00:00.000"
 }
  */
