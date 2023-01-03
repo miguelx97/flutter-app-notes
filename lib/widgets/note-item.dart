@@ -8,11 +8,13 @@ class NoteItem extends StatelessWidget {
   final Note note;
   final String categoryEmoji;
   final Function onNoteSelected;
+  final Function(String noteId, int newStatus) onSwipe;
   const NoteItem(
       {super.key,
       required this.note,
       required this.categoryEmoji,
-      required this.onNoteSelected});
+      required this.onNoteSelected,
+      required this.onSwipe});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,10 @@ class NoteItem extends StatelessWidget {
           Swipe(status: note.status!, direction: DismissDirection.startToEnd),
       secondaryBackground:
           Swipe(status: note.status!, direction: DismissDirection.endToStart),
-      onDismissed: (direction) {},
+      onDismissed: (direction) {
+        final SwipeUi swipe = SwipeUi.swipeType(note.status!, direction);
+        onSwipe(note.nid!, swipe.status);
+      },
       child: GestureDetector(
         onTap: () => onNoteSelected(note),
         child: Padding(
@@ -73,7 +78,7 @@ class NoteItem extends StatelessWidget {
               ),
               Visibility(
                 visible: note.isFavourite,
-                child: Icon(Icons.star, color: Colors.amber),
+                child: const Icon(Icons.star, color: Colors.amber),
               ),
             ],
           ),
@@ -91,40 +96,11 @@ class Swipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late Alignment alignment;
-    late SwipeUi swipeUi;
-    final SwipeUi doneSwipe =
-        SwipeUi(icon: Icons.done, color: ThemeColors.success);
-    final SwipeUi pendingSwipe =
-        SwipeUi(icon: Icons.house, color: ThemeColors.primaryDark);
-    final SwipeUi deleteSwipe =
-        SwipeUi(icon: Icons.delete, color: ThemeColors.danger);
-
+    final SwipeUi swipeUi = SwipeUi.swipeType(status, direction);
     if (direction == DismissDirection.startToEnd) {
       alignment = Alignment.centerLeft;
-      switch (status) {
-        case NoteStatus.pending:
-          swipeUi = doneSwipe;
-          break;
-        case NoteStatus.done:
-          swipeUi = deleteSwipe;
-          break;
-        case NoteStatus.deleted:
-          swipeUi = doneSwipe;
-          break;
-      }
     } else if (direction == DismissDirection.endToStart) {
       alignment = Alignment.centerRight;
-      switch (status) {
-        case NoteStatus.pending:
-          swipeUi = deleteSwipe;
-          break;
-        case NoteStatus.done:
-          swipeUi = pendingSwipe;
-          break;
-        case NoteStatus.deleted:
-          swipeUi = pendingSwipe;
-          break;
-      }
     }
     return Container(
       color: swipeUi.color,
@@ -140,7 +116,51 @@ class Swipe extends StatelessWidget {
 }
 
 class SwipeUi {
-  IconData icon;
-  Color color;
-  SwipeUi({required this.icon, required this.color});
+  final IconData icon;
+  final Color color;
+  final int status;
+  SwipeUi({required this.icon, required this.color, required this.status});
+
+  static final SwipeUi doneSwipe = SwipeUi(
+    icon: Icons.done,
+    color: ThemeColors.success,
+    status: NoteStatus.done,
+  );
+  static final SwipeUi pendingSwipe = SwipeUi(
+    icon: Icons.house,
+    color: ThemeColors.primaryDark,
+    status: NoteStatus.pending,
+  );
+  static final SwipeUi deleteSwipe = SwipeUi(
+    icon: Icons.delete,
+    color: ThemeColors.danger,
+    status: NoteStatus.deleted,
+  );
+
+  static SwipeUi swipeType(int status, DismissDirection direction) {
+    if (direction == DismissDirection.startToEnd) {
+      switch (status) {
+        case NoteStatus.pending:
+          return doneSwipe;
+        case NoteStatus.done:
+          return deleteSwipe;
+        case NoteStatus.deleted:
+          return doneSwipe;
+      }
+    } else if (direction == DismissDirection.endToStart) {
+      switch (status) {
+        case NoteStatus.pending:
+          return deleteSwipe;
+        case NoteStatus.done:
+          return pendingSwipe;
+        case NoteStatus.deleted:
+          return pendingSwipe;
+      }
+    }
+    return SwipeUi(
+      icon: Icons.close,
+      color: ThemeColors.lightGrey,
+      status: NoteStatus.pending,
+    );
+  }
 }

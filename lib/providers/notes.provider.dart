@@ -20,6 +20,7 @@ class NotesProvider extends ChangeNotifier {
   NotesProvider() {
     // _notes = Mockups.notes;
     load(NoteStatus.pending);
+    removeOldDeletedNotes();
   }
 
   getAll() {
@@ -96,6 +97,18 @@ class NotesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  updateStatus(String noteId, int newStatus) async {
+    final Map<String, dynamic> mapStatus = {'status': newStatus};
+    if (newStatus == NoteStatus.deleted) {
+      mapStatus['deletedDate'] = FieldValue.serverTimestamp();
+    }
+
+    firestoreCollection.doc(noteId).update(mapStatus);
+    _notes.removeWhere((item) => item.nid == noteId);
+    Future.delayed(const Duration(milliseconds: 50))
+        .whenComplete(notifyListeners);
+  }
+
   swipeFavourite(Note note) async {
     note.isFavourite = !note.isFavourite;
     int index = _notes.indexWhere((item) => item.nid == note.nid);
@@ -138,6 +151,27 @@ class NotesProvider extends ChangeNotifier {
     };
     firestoreCollection.doc(noteToReorder.nid).update(mapPosition);
     notifyListeners();
+  }
+
+  removeOldDeletedNotes() async {
+    final yesterday = DateTime.now().subtract(const Duration(days: 30));
+    final String? uid = AuthService().currentUser?.uid;
+
+    final QuerySnapshot notesSnapshot = await firestoreCollection
+        .where("status", isEqualTo: NoteStatus.deleted)
+        .where("uid", isEqualTo: uid)
+        .where("deletedDate", isLessThan: yesterday)
+        .get();
+
+    final batch = FirebaseFirestore.instance.batch();
+
+    for (var doc in notesSnapshot.docs) {
+      // final Map<String, dynamic> noteMap = doc.data()! as Map<String, dynamic>;
+      // print('DELETE OLD TRASH ${noteMap['title']}');
+      batch.delete(doc.reference);
+    }
+
+    await batch.commit();
   }
 
   set selectedNote(Note? selectedNote) {

@@ -137,6 +137,10 @@ Row MenuItem({required String label, required IconData icon}) {
 class Body extends StatelessWidget {
   final NotesProvider notesProvider;
 
+  udateStatus(String noteId, int newStatus) {
+    notesProvider.updateStatus(noteId, newStatus);
+  }
+
   const Body({super.key, required this.notesProvider});
 
   @override
@@ -163,7 +167,8 @@ class Body extends StatelessWidget {
               notesProvider.selectedNote = note;
               context.go('${NoteDetailsScreen.screenUrl}/${note.nid}');
             },
-            key: ValueKey(notes[index]),
+            onSwipe: udateStatus,
+            key: ValueKey(notes[index].nid),
           ),
           onReorder: notesProvider.reorder,
         ),

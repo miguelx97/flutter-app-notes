@@ -18,7 +18,6 @@ class Note {
     this.position,
     this.uid,
     this.hasTime,
-    this.deletedDate,
   });
 
   String? nid;
@@ -33,7 +32,6 @@ class Note {
   DateTime? createionDate;
   String? uid;
   bool? hasTime;
-  DateTime? deletedDate;
 
   factory Note.fromJson(String str) => Note.fromMap(json.decode(str));
 
@@ -52,9 +50,6 @@ class Note {
         createionDate: DateTime.parse(map["createionDate"]),
         uid: map["uid"],
         hasTime: map["hasTime"],
-        deletedDate: map["deletedDate"] != null
-            ? DateTime.parse(map["deletedDate"])
-            : null,
       );
 
   factory Note.fromMapWithId(Map<String, dynamic> map, String id) {
@@ -75,7 +70,6 @@ class Note {
         "createionDate": createionDate?.toIso8601String(),
         "uid": uid,
         "hasTime": hasTime,
-        "deletedDate": deletedDate?.toIso8601String(),
       };
 }
 
