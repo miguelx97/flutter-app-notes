@@ -147,7 +147,6 @@ class Body extends StatelessWidget {
     return Center(
       child: Container(
         width: Constants.maxWidth,
-        padding: const EdgeInsets.symmetric(horizontal: 15),
         child: ReorderableListView.builder(
           itemCount: notes.length,
           header: CategoriesPickerSlider(
