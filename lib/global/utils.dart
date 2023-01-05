@@ -28,12 +28,19 @@ class Utils {
     return DateFormat.yMMMMd('es').format(date);
   }
 
-  static String dateTimeFormat(DateTime? date, bool? hasTime) {
+  static String dateTimeFormat(DateTime? date,
+      {bool? hasTime, bool short = false}) {
     if (date == null) return '';
-    if (hasTime != null && hasTime) {
-      return '${DateFormat.yMMMMd('es').format(date)} - ${DateFormat.Hm('es').format(date)}';
+    String dateStr = '';
+    if (!short) {
+      dateStr = DateFormat.yMMMMd('es').format(date);
     } else {
-      return DateFormat.yMMMMd('es').format(date);
+      dateStr = DateFormat('dd/MM/yyyy').format(date);
+    }
+    if (hasTime != null && hasTime) {
+      return '$dateStr - ${DateFormat.Hm('es').format(date)}';
+    } else {
+      return dateStr;
     }
   }
 

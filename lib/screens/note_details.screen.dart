@@ -33,51 +33,72 @@ class NoteDetailsScreen extends StatelessWidget {
     final Category noteCategory =
         categoriesProvider.searchCategoryById(note.categoryId);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        iconTheme: const IconThemeData(
-          color: Colors.white, //change your color here
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            // alignment: Alignment.topLeft,
-            width: Constants.maxWidth,
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-            child: Column(
-              children: [
-                Text(note.title, style: textTheme.titleLarge),
-                SizedBox(height: 30),
-                Item(
-                  title: 'Descripción',
-                  content: note.description,
-                  icon: Icons.article_outlined,
-                  isTextArea: true,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 110,
+            floating: false,
+            pinned: true,
+            forceElevated: true,
+            foregroundColor: Colors.white,
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
+              titlePadding: EdgeInsets.all(0),
+              title: Container(
+                width: double.infinity,
+                alignment: Alignment.bottomCenter,
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  note.title,
+                  style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
                 ),
-                Item(
-                  title: 'Categoría',
-                  content: noteCategory.title.isNotEmpty
-                      ? '${noteCategory.emoji} ${noteCategory.title}'
-                      : null,
-                  icon: Icons.apps_rounded,
-                ),
-                Item(
-                  title: 'Fecha / Hora',
-                  content: Utils.dateTimeFormat(note.date, note.hasTime),
-                  icon: Icons.calendar_month_outlined,
-                ),
-                Item(
-                  title: 'Recordatorio',
-                  content: note.reminderTime != null
-                      ? ReminderTime.getLabel(note.reminderTime!)
-                      : null,
-                  icon: Icons.access_alarm,
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+          SliverList(
+              delegate: SliverChildListDelegate([
+            SizedBox(height: 10),
+            Item(
+              title: 'Descripción',
+              content: note.description,
+              icon: Icons.article_outlined,
+              isTextArea: true,
+            ),
+            Item(
+              title: 'Categoría',
+              content: noteCategory.title.isNotEmpty
+                  ? '${noteCategory.emoji} ${noteCategory.title}'
+                  : null,
+              icon: Icons.apps_rounded,
+            ),
+            Item(
+              title: 'Fecha / Hora',
+              content: Utils.dateTimeFormat(note.date, hasTime: note.hasTime),
+              icon: Icons.calendar_month_outlined,
+            ),
+            Item(
+              title: 'Recordatorio',
+              content: note.reminderTime != null
+                  ? ReminderTime.getLabel(note.reminderTime!)
+                  : null,
+              icon: Icons.access_alarm,
+            ),
+          ]))
+        ],
+        // child: Center(
+        //   child: Container(
+        //     // alignment: Alignment.topLeft,
+        //     width: Constants.maxWidth,
+        //     padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+        //     child: Column(
+        //       children: [
+        //         Text(note.title, style: textTheme.titleLarge),
+        //         SizedBox(height: 30),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ),
       floatingActionButton: FloatingButtons(
         note: note,

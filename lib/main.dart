@@ -4,9 +4,9 @@ import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/providers/notes.provider.dart';
 import 'package:flutter_app_notas/screens/add_note.screen.dart';
 import 'package:flutter_app_notas/screens/categories-management.screen.dart';
-import 'package:flutter_app_notas/screens/home.screen.dart';
 import 'package:flutter_app_notas/screens/note_details.screen.dart';
 import 'package:flutter_app_notas/widgets/auth_check_redirection.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'global/utils.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -79,9 +79,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       scrollBehavior: MyCustomScrollBehavior(),
       title: 'Notas',
-      builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!),
+      builder: EasyLoading.init(
+          builder: (context, child) => MediaQuery(
+              data:
+                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+              child: child!)),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Utils.customColor(const Color(0xff26CAD3)),

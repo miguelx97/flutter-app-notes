@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/constants.dart';
 import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/widgets/category-form.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
@@ -30,6 +31,36 @@ class CategoriesManagement extends StatelessWidget {
       categoriesProvider.selectedCategory = Category.fromObject(category);
     }
 
+    deleteCategory(Category category) {
+      // set up the buttons
+      Widget cancelButton =
+          TextButton(child: Text("Cancelar"), onPressed: () => context.pop());
+      Widget continueButton = TextButton(
+        child: Text("Eliminar"),
+        onPressed: () {
+          context.pop();
+          categoriesProvider.delete(category.cid!);
+        },
+      );
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: Text("Eliminar categoría"),
+        content:
+            Text("¿Estás seguro de que deseas eliminar '${category.title}'?"),
+        actions: [
+          cancelButton,
+          continueButton,
+        ],
+      );
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
@@ -52,7 +83,7 @@ class CategoriesManagement extends StatelessWidget {
                 return CategoryManagementItem(
                   key: ValueKey(categories[index]),
                   category: categories[index],
-                  delete: categoriesProvider.delete,
+                  delete: deleteCategory,
                   update: updateCategory,
                 );
               },

@@ -39,7 +39,7 @@ class CategoryManagementItem extends StatelessWidget {
                       icon: const Icon(Icons.edit_outlined),
                       color: ThemeColors.tertiary),
                   IconButton(
-                      onPressed: () => delete(category.cid),
+                      onPressed: () => delete(category),
                       icon: const Icon(Icons.delete_outline),
                       color: ThemeColors.danger),
                   const SizedBox(width: 10)

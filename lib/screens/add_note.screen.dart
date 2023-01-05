@@ -28,8 +28,6 @@ class _AddNoteState extends State<AddNote> {
     Note note = notesProvider.selectedNote!;
     bool isNew = note.nid == null || note.nid!.isEmpty;
 
-    print("IS NEW ${isNew}");
-
     swipeFavourite() {
       note.isFavourite = !note.isFavourite;
       setState(() {});
@@ -44,7 +42,7 @@ class _AddNoteState extends State<AddNote> {
       final DateTime? datePicker = await showDatePicker(
           context: context,
           initialDate: selectedDate ?? now,
-          firstDate: now,
+          firstDate: DateTime(2020),
           lastDate: now.add(const Duration(days: 365)));
 
       if (datePicker == null) return;
@@ -60,6 +58,7 @@ class _AddNoteState extends State<AddNote> {
 
       if (selectedTime == null) {
         note.date = selectedDate;
+        note.hasTime = false;
         setState(() {});
         return;
       }
@@ -91,19 +90,20 @@ class _AddNoteState extends State<AddNote> {
       setState(() {});
     }
 
-    saveAndUpdate() {
+    saveAndUpdate() async {
       FocusScope.of(context).unfocus();
       if (isNew) {
-        notesProvider.insert(note);
+        await notesProvider.insert(note);
       } else {
-        notesProvider.update(note);
+        await notesProvider.update(note);
       }
       notesProvider.selectedNote = Note();
       notesProvider.formKey.currentState?.reset();
       resetDateTime(reload: false);
-      context.pop();
 
-      setState(() {});
+      setState(() {
+        context.pop();
+      });
     }
 
     return Scaffold(
@@ -187,8 +187,8 @@ class _AddNoteState extends State<AddNote> {
                           child: Text(
                             note.date == null
                                 ? 'Selecciona fecha y hora'
-                                : Utils.dateTimeFormat(
-                                    note.date!, note.hasTime),
+                                : Utils.dateTimeFormat(note.date!,
+                                    hasTime: note.hasTime, short: note.hasTime),
                             style: const TextStyle(
                                 fontSize: 18, color: ThemeColors.dark),
                           ),
@@ -208,24 +208,35 @@ class _AddNoteState extends State<AddNote> {
                       ],
                     ),
                   ),
-                  SectionTitle('Notificación'),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: ThemeColors.lightGrey)),
-                      child: Column(
-                        children: [
-                          checkBoxReminderTime(note, ReminderTime.quarterHour,
-                              updateReminderTime),
-                          checkBoxReminderTime(
-                              note, ReminderTime.oneHour, updateReminderTime),
-                          checkBoxReminderTime(
-                              note, ReminderTime.oneDay, updateReminderTime),
-                        ],
-                      ),
+                  Visibility(
+                    visible: note.hasTime,
+                    child: Column(
+                      children: [
+                        SectionTitle('Notificación'),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 10),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border:
+                                    Border.all(color: ThemeColors.lightGrey)),
+                            child: Column(
+                              children: [
+                                checkBoxReminderTime(
+                                    note,
+                                    ReminderTime.quarterHour,
+                                    updateReminderTime),
+                                checkBoxReminderTime(note, ReminderTime.oneHour,
+                                    updateReminderTime),
+                                checkBoxReminderTime(note, ReminderTime.oneDay,
+                                    updateReminderTime),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 20),

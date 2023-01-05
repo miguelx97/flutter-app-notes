@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_app_notas/models/category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class CategoriesProvider extends ChangeNotifier {
   final List<Category> _categories = [];
@@ -36,12 +37,19 @@ class CategoriesProvider extends ChangeNotifier {
   }
 
   insert(Category category) async {
-    category.uid = AuthService().currentUser?.uid;
-    category.position = DateTime.now().millisecondsSinceEpoch.toDouble();
-    DocumentReference doc = await firestoreCollection.add(category.toMap());
-    category.cid = doc.id;
-    _categories.insert(0, category);
+    EasyLoading.show(status: 'Creando categoría...');
+    try {
+      category.uid = AuthService().currentUser?.uid;
+      category.position = DateTime.now().millisecondsSinceEpoch.toDouble();
+      DocumentReference doc = await firestoreCollection.add(category.toMap());
+      category.cid = doc.id;
+      _categories.insert(0, category);
+      // EasyLoading.showSuccess('Categoría creada');
+    } on Exception catch (ex) {
+      EasyLoading.showError('Error al crear la categoría');
+    }
     addCategoryMap(category);
+    EasyLoading.dismiss();
     notifyListeners();
   }
 
@@ -53,10 +61,17 @@ class CategoriesProvider extends ChangeNotifier {
   }
 
   update(Category category) async {
-    await firestoreCollection.doc(category.cid).set(category.toMap());
-    int index = _categories.indexWhere((item) => item.cid == category.cid);
-    _categories[index] = category;
-    addCategoryMap(category);
+    EasyLoading.show(status: 'Modificando categoría...');
+    try {
+      await firestoreCollection.doc(category.cid).set(category.toMap());
+      int index = _categories.indexWhere((item) => item.cid == category.cid);
+      _categories[index] = category;
+      addCategoryMap(category);
+      // EasyLoading.showSuccess('Categoría modificada');
+    } on Exception catch (ex) {
+      EasyLoading.showError('Error al modificar la categoría');
+    }
+    EasyLoading.dismiss();
     notifyListeners();
   }
 
@@ -83,7 +98,11 @@ class CategoriesProvider extends ChangeNotifier {
     final Map<String, double> mapPosition = {
       'position': categoryToReorder.position!
     };
-    firestoreCollection.doc(categoryToReorder.cid).update(mapPosition);
+    firestoreCollection
+        .doc(categoryToReorder.cid)
+        .update(mapPosition)
+        .catchError(
+            (_) => EasyLoading.showError('Error al reordenar la categoría'));
   }
 
   Category searchCategoryById(String? cid) {

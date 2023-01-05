@@ -61,8 +61,8 @@ class NoteItem extends StatelessWidget {
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 10),
                                   child: Text(
-                                      Utils.dateTimeFormat(
-                                          note.date, note.hasTime),
+                                      Utils.dateTimeFormat(note.date,
+                                          hasTime: note.hasTime),
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                           fontSize: 14, color: Colors.black45)),

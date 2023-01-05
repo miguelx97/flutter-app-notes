@@ -4,7 +4,6 @@ import 'package:flutter_app_notas/ui/button_custom.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import '../models/category.dart';
 
 import '../global/colors.dart';
@@ -18,15 +17,14 @@ class CategoryForm extends StatelessWidget {
     Category category = categoriesProvider.selectedCategory!;
     bool isNew = category.cid == null || category.cid!.isEmpty;
 
-    submit() {
+    submit() async {
       if (category.title.isEmpty || category.emoji.isEmpty) return;
-      if (isNew) {
-        // category.id = const Uuid().v1();
-        categoriesProvider.insert(category);
-      } else {
-        categoriesProvider.update(category);
-      }
       categoriesProvider.selectedCategory = null;
+      if (isNew) {
+        await categoriesProvider.insert(category);
+      } else {
+        await categoriesProvider.update(category);
+      }
     }
 
     return Padding(

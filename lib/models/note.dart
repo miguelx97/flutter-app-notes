@@ -14,10 +14,9 @@ class Note {
     this.categoryId,
     this.reminderTime,
     this.status,
-    this.createionDate,
     this.position,
     this.uid,
-    this.hasTime,
+    this.hasTime = false,
   });
 
   String? nid;
@@ -29,9 +28,8 @@ class Note {
   int? reminderTime;
   int? status;
   double? position;
-  DateTime? createionDate;
   String? uid;
-  bool? hasTime;
+  bool hasTime;
 
   factory Note.fromJson(String str) => Note.fromMap(json.decode(str));
 
@@ -47,9 +45,8 @@ class Note {
         reminderTime: map["reminderTime"],
         status: map["status"],
         position: map["position"]?.toDouble(),
-        createionDate: DateTime.parse(map["createionDate"]),
         uid: map["uid"],
-        hasTime: map["hasTime"],
+        hasTime: map["hasTime"] ?? false,
       );
 
   factory Note.fromMapWithId(Map<String, dynamic> map, String id) {
@@ -67,7 +64,6 @@ class Note {
         "reminderTime": reminderTime,
         "status": status,
         "position": position,
-        "createionDate": createionDate?.toIso8601String(),
         "uid": uid,
         "hasTime": hasTime,
       };
@@ -87,9 +83,7 @@ class Note {
     "reminderTime":897,
     "status":2,
     "position":1,
-    "createionDate":"1944-06-06 02:00:00.000",
     "uid":"dasdasdasdas",
     "hasTime":true,
-    "deletedDate":"1944-06-06 02:00:00.000"
 }
  */
