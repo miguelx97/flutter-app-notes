@@ -41,6 +41,9 @@ class _AddNoteState extends State<AddNote> {
 
       final DateTime? datePicker = await showDatePicker(
           context: context,
+          confirmText: 'Aceptar',
+          cancelText: 'Cancelar',
+          helpText: 'Selecciona fecha',
           initialDate: selectedDate ?? now,
           firstDate: DateTime(2020),
           lastDate: now.add(const Duration(days: 365)));

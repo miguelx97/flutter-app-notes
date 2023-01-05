@@ -49,6 +49,20 @@ class Note {
         hasTime: map["hasTime"] ?? false,
       );
 
+  factory Note.clone(Note note) => Note(
+        nid: note.nid,
+        title: note.title,
+        description: note.description,
+        isFavourite: note.isFavourite,
+        date: note.date,
+        categoryId: note.categoryId,
+        reminderTime: note.reminderTime,
+        status: note.status,
+        position: note.position,
+        uid: note.uid,
+        hasTime: note.hasTime,
+      );
+
   factory Note.fromMapWithId(Map<String, dynamic> map, String id) {
     final note = Note.fromMap(map);
     note.nid = id;

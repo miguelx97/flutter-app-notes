@@ -84,6 +84,7 @@ class NotesProvider extends ChangeNotifier {
   insert(Note note) async {
     EasyLoading.show(status: 'Guardando nota...');
     try {
+      note = Note.clone(note);
       final now = DateTime.now();
       note.uid = AuthService().currentUser?.uid;
       note.position = now.millisecondsSinceEpoch.toDouble();
@@ -110,6 +111,7 @@ class NotesProvider extends ChangeNotifier {
   update(Note note) async {
     EasyLoading.show(status: 'Actualizando nota...');
     try {
+      note = Note.clone(note);
       await firestoreCollection.doc(note.nid).set(note.toMap());
       int index = _notes.indexWhere((item) => item.nid == note.nid);
       _notes[index] = note;
