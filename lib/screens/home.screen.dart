@@ -11,6 +11,7 @@ import 'package:flutter_app_notas/screens/add_note.screen.dart';
 import 'package:flutter_app_notas/screens/categories-management.screen.dart';
 import 'package:flutter_app_notas/screens/note_details.screen.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
+import 'package:flutter_app_notas/services/notification.services.dart';
 import 'package:flutter_app_notas/widgets/note-item.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -137,8 +138,8 @@ Row MenuItem({required String label, required IconData icon}) {
 class Body extends StatelessWidget {
   final NotesProvider notesProvider;
 
-  udateStatus(String noteId, int newStatus) {
-    notesProvider.updateStatus(noteId, newStatus);
+  udateStatus(Note note, int newStatus) {
+    notesProvider.updateStatus(note, newStatus);
   }
 
   const Body({super.key, required this.notesProvider});

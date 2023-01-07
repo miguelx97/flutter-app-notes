@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app_notas/models/note.dart';
 import 'package:flutter_app_notas/models/note_status.enum.dart';
+import 'package:flutter_app_notas/services/notification.services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../models/category.dart';
@@ -89,11 +90,11 @@ class NotesProvider extends ChangeNotifier {
       note.uid = AuthService().currentUser?.uid;
       note.position = now.millisecondsSinceEpoch.toDouble();
       note.status = NoteStatus.pending;
-      final noteMap = note.toMap();
-      noteMap['deletedDate'] = FieldValue.serverTimestamp();
-      DocumentReference doc = await firestoreCollection.add(noteMap);
+      note.createionDate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      DocumentReference doc = await firestoreCollection.add(note.toMap());
       note.nid = doc.id;
       _notes.add(note);
+      await setNoteNotificacion(note);
       // EasyLoading.showSuccess('Nota guardada');
     } on Exception catch (ex) {
       EasyLoading.showError('Error al guardar la nota');
@@ -115,6 +116,8 @@ class NotesProvider extends ChangeNotifier {
       await firestoreCollection.doc(note.nid).set(note.toMap());
       int index = _notes.indexWhere((item) => item.nid == note.nid);
       _notes[index] = note;
+      await deleteNoteNotification(note);
+      await setNoteNotificacion(note);
       // EasyLoading.showSuccess('Nota actualizada');
     } on Exception catch (ex) {
       EasyLoading.showError('Error al actualizar la nota');
@@ -123,17 +126,18 @@ class NotesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateStatus(String noteId, int newStatus) async {
+  updateStatus(Note note, int newStatus) async {
     final Map<String, dynamic> mapStatus = {'status': newStatus};
     if (newStatus == NoteStatus.deleted) {
       mapStatus['deletedDate'] = FieldValue.serverTimestamp();
+      await deleteNoteNotification(note);
     }
 
     firestoreCollection
-        .doc(noteId)
+        .doc(note.nid)
         .update(mapStatus)
         .catchError((_) => EasyLoading.showError('Error al mover la nota'));
-    _notes.removeWhere((item) => item.nid == noteId);
+    _notes.removeWhere((item) => item.nid == note.nid);
     Future.delayed(const Duration(milliseconds: 50))
         .whenComplete(notifyListeners);
   }

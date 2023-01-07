@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "884876839916",
+    "project_id": "app-taskii",
+    "storage_bucket": "app-taskii.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884876839916:android:aa6c0a89f7ab4e4f828ec9",
+        "android_client_info": {
+          "package_name": "miguel.martin.taskii"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884876839916-0qeadllso4hme5l5qof097utodhdsn07.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "miguel.martin.taskii",
+            "certificate_hash": "6dd8122ee32cb58e712c3e1e11aa22f187a96500"
+          }
+        },
+        {
+          "client_id": "884876839916-u7r3juertcqrfogim6b61ftijo7noe4r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWWQmp497nE6ab9dCJ34BmYZCEFjzloKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884876839916-u7r3juertcqrfogim6b61ftijo7noe4r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -88,7 +88,7 @@ class _AddNoteState extends State<AddNote> {
       if (isChecked == true) {
         note.reminderTime = minutesBefore;
       } else {
-        note.reminderTime = null;
+        note.reminderTime = 0;
       }
       setState(() {});
     }

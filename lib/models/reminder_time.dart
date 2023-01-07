@@ -5,12 +5,24 @@ class ReminderTime {
 
   static String getLabel(int reminderTime) {
     switch (reminderTime) {
-      case ReminderTime.oneDay:
+      case ReminderTime.quarterHour:
         return '15 minutos antes';
       case ReminderTime.oneHour:
         return 'Una hora antes';
-      case ReminderTime.quarterHour:
+      case ReminderTime.oneDay:
         return 'Un día antes';
+    }
+    return '';
+  }
+
+  static String name(int reminderTime) {
+    switch (reminderTime) {
+      case ReminderTime.quarterHour:
+        return '15 minutos';
+      case ReminderTime.oneHour:
+        return 'una hora';
+      case ReminderTime.oneDay:
+        return 'un día';
     }
     return '';
   }

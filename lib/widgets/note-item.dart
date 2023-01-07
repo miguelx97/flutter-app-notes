@@ -8,7 +8,7 @@ class NoteItem extends StatelessWidget {
   final Note note;
   final String categoryEmoji;
   final Function onNoteSelected;
-  final Function(String noteId, int newStatus) onSwipe;
+  final Function(Note note, int newStatus) onSwipe;
   const NoteItem(
       {super.key,
       required this.note,
@@ -27,7 +27,7 @@ class NoteItem extends StatelessWidget {
           Swipe(status: note.status!, direction: DismissDirection.endToStart),
       onDismissed: (direction) {
         final SwipeUi swipe = SwipeUi.swipeType(note.status!, direction);
-        onSwipe(note.nid!, swipe.status);
+        onSwipe(note, swipe.status);
       },
       child: GestureDetector(
         onTap: () => onNoteSelected(note),

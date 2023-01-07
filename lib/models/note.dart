@@ -12,8 +12,9 @@ class Note {
     this.isFavourite = false,
     this.date,
     this.categoryId,
-    this.reminderTime,
+    this.reminderTime = 0,
     this.status,
+    this.createionDate,
     this.position,
     this.uid,
     this.hasTime = false,
@@ -25,8 +26,9 @@ class Note {
   bool isFavourite;
   DateTime? date;
   String? categoryId;
-  int? reminderTime;
+  int reminderTime;
   int? status;
+  int? createionDate;
   double? position;
   String? uid;
   bool hasTime;
@@ -42,8 +44,9 @@ class Note {
         isFavourite: map["isFavourite"],
         date: map["date"] != null ? DateTime.parse(map["date"]) : null,
         categoryId: map["categoryId"],
-        reminderTime: map["reminderTime"],
+        reminderTime: map["reminderTime"] ?? 0,
         status: map["status"],
+        createionDate: map["createionDate"],
         position: map["position"]?.toDouble(),
         uid: map["uid"],
         hasTime: map["hasTime"] ?? false,
@@ -77,6 +80,7 @@ class Note {
         "categoryId": categoryId,
         "reminderTime": reminderTime,
         "status": status,
+        "createionDate": createionDate,
         "position": position,
         "uid": uid,
         "hasTime": hasTime,

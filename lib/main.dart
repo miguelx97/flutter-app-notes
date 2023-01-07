@@ -5,6 +5,7 @@ import 'package:flutter_app_notas/providers/notes.provider.dart';
 import 'package:flutter_app_notas/screens/add_note.screen.dart';
 import 'package:flutter_app_notas/screens/categories-management.screen.dart';
 import 'package:flutter_app_notas/screens/note_details.screen.dart';
+import 'package:flutter_app_notas/services/notification.services.dart';
 import 'package:flutter_app_notas/widgets/auth_check_redirection.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
@@ -20,6 +21,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   initializeDateFormatting();
+  initNotifications();
   runApp(AppState());
 }
 
