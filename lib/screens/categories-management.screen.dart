@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/constants.dart';
 import 'package:flutter_app_notas/providers/categories.provider.dart';
+import 'package:flutter_app_notas/providers/notes.provider.dart';
 import 'package:flutter_app_notas/widgets/category-form.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class CategoriesManagement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
+    final notesProvider = Provider.of<NotesProvider>(context);
     final categories = categoriesProvider.getAll();
     bool hasSelectedCategory = categoriesProvider.selectedCategory != null;
 
@@ -33,7 +35,7 @@ class CategoriesManagement extends StatelessWidget {
     }
 
     updateCategory(Category category) {
-      categoriesProvider.selectedCategory = Category.fromObject(category);
+      categoriesProvider.selectedCategory = category;
     }
 
     deleteCategory(Category category) {
@@ -66,6 +68,11 @@ class CategoriesManagement extends StatelessWidget {
       );
     }
 
+    goToCategory(Category category) {
+      notesProvider.currentCategory = category;
+      context.pop();
+    }
+
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -90,6 +97,7 @@ class CategoriesManagement extends StatelessWidget {
                   category: categories[index],
                   delete: deleteCategory,
                   update: updateCategory,
+                  categorySelect: goToCategory,
                 );
               },
               scrollDirection: Axis.vertical,

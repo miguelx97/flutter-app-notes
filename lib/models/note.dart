@@ -72,6 +72,20 @@ class Note {
     return note;
   }
 
+  factory Note.fromObject(Note oldNote) => Note(
+        nid: oldNote.nid,
+        title: oldNote.title,
+        description: oldNote.description,
+        isFavourite: oldNote.isFavourite,
+        date: oldNote.date,
+        categoryId: oldNote.categoryId,
+        reminderTime: oldNote.reminderTime,
+        status: oldNote.status,
+        position: oldNote.position,
+        uid: oldNote.uid,
+        hasTime: oldNote.hasTime,
+      );
+
   Map<String, dynamic> toMap() => {
         "title": title,
         "description": description,

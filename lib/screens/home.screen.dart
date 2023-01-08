@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/colors.dart';
 import 'package:flutter_app_notas/global/constants.dart';
 import 'package:flutter_app_notas/global/ui.dart';
-import 'package:flutter_app_notas/global/utils.dart';
 import 'package:flutter_app_notas/models/note.dart';
 import 'package:flutter_app_notas/models/note_status.enum.dart';
 import 'package:flutter_app_notas/providers/categories.provider.dart';
@@ -37,14 +36,6 @@ class HomeScreen extends StatelessWidget {
           style: textTheme.headlineMedium,
         ),
         actions: [
-          // IconButton(
-          //     onPressed: () {},
-          //     icon: const Icon(Icons.calendar_today_outlined),
-          //     color: Colors.white),
-          // IconButton(
-          //     onPressed: () {},
-          //     icon: const Icon(Icons.search_outlined),
-          //     color: Colors.white),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             itemBuilder: (context) => [
@@ -154,7 +145,9 @@ class Body extends StatelessWidget {
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
     final List<Note> notes = notesProvider.getAll();
 
-    if (notes.isEmpty && categoriesProvider.getAll().isEmpty) {
+    if (notes.isEmpty &&
+        categoriesProvider.getAll().isEmpty &&
+        notesProvider.loadedNotesFromFb) {
       return Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

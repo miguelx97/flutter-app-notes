@@ -19,6 +19,7 @@ class NotesProvider extends ChangeNotifier {
 
   final NoteFilters _filters = NoteFilters();
   int? _currentStatus;
+  bool loadedNotesFromFb = false;
 
   NotesProvider() {
     // _notes = Mockups.notes;
@@ -75,6 +76,7 @@ class NotesProvider extends ChangeNotifier {
         final Note note = Note.fromMapWithId(noteMap, doc.id);
         _notes.add(note);
       }
+      loadedNotesFromFb = true;
     } on Exception catch (ex) {
       EasyLoading.showError('Error al cargar las notas');
     }
@@ -106,16 +108,22 @@ class NotesProvider extends ChangeNotifier {
 
   Future<void> insert(Note note) async {
     note = Note.clone(note);
-    final now = DateTime.now();
     note.uid = AuthService().currentUser?.uid;
-    note.position = now.millisecondsSinceEpoch.toDouble();
+    note.position = topPosition();
     note.status = NoteStatus.pending;
     note.createionDate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     DocumentReference doc = await firestoreCollection.add(note.toMap());
     note.nid = doc.id;
-    _notes.add(note);
+    if (currentStauts == NoteStatus.pending) {
+      _notes.add(note);
+      sortNotes();
+    } else {
+      currentStauts = NoteStatus.pending;
+    }
     await setNoteNotificacion(note);
   }
+
+  topPosition() => DateTime.now().millisecondsSinceEpoch.toDouble();
 
   // delete(String noteId) async {
   //   await firestoreCollection.doc(noteId).delete();
@@ -150,36 +158,42 @@ class NotesProvider extends ChangeNotifier {
 
   swipeFavourite(Note note) async {
     note.isFavourite = !note.isFavourite;
+    note.position = topPosition();
     int index = _notes.indexWhere((item) => item.nid == note.nid);
     _notes[index] = note;
-    if (note.isFavourite) {
-      reorder(index, 0);
-    } else {
-      final int numberOfFavourites =
-          _notes.where((note) => note.isFavourite).length + 1;
-      reorder(index, numberOfFavourites);
-    }
+    final mapFavourite = {
+      'isFavourite': note.isFavourite,
+      'position': note.position!,
+    };
+    firestoreCollection
+        .doc(note.nid)
+        .update(mapFavourite)
+        .catchError((_) => EasyLoading.showError('Error al editar la nota'));
+    sortNotes();
+  }
+
+  sortNotes() {
+    _notes.sort((Note a, Note b) => (a.isFavourite == b.isFavourite)
+        ? b.position!.compareTo(a.position!)
+        : a.isFavourite
+            ? -1
+            : 1);
+    notifyListeners();
   }
 
   reorder(int oldIndex, int newIndex) {
     late Note noteToReorder;
-    if (newIndex == 0) {
-      _notes[oldIndex].position = _notes[0].position! + 1000;
+    if (newIndex == 0 || _notes[newIndex - 1].isFavourite) {
+      _notes[oldIndex].position = topPosition();
     } else if (newIndex == _notes.length) {
       _notes[oldIndex].position = _notes.last.position! - 1000;
     } else if (newIndex > _notes.length) {
       return;
     } else {
-      //este if es porque se buggeaba al poner un item entre un favorito y un
-      //no favorito ya que el favorito podría tener una posición muy baja y aun así estar arriba
-      if (_notes[newIndex - 1].position! > _notes[newIndex].position!) {
-        double media =
-            (_notes[newIndex].position! + _notes[newIndex - 1].position!) / 2;
+      double media =
+          (_notes[newIndex].position! + _notes[newIndex - 1].position!) / 2;
 
-        _notes[oldIndex].position = media;
-      } else {
-        _notes[oldIndex].position = _notes[newIndex].position! + 1000;
-      }
+      _notes[oldIndex].position = media;
     }
     if (newIndex < _notes.length) {
       _notes[oldIndex].isFavourite = _notes[newIndex].isFavourite;
@@ -221,7 +235,7 @@ class NotesProvider extends ChangeNotifier {
   }
 
   set selectedNote(Note? selectedNote) {
-    _selectedNote = selectedNote;
+    _selectedNote = selectedNote != null ? Note.fromObject(selectedNote) : null;
     notifyListeners();
   }
 

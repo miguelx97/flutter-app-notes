@@ -115,7 +115,8 @@ class CategoriesProvider extends ChangeNotifier {
   }
 
   set selectedCategory(Category? selectedCategory) {
-    _selectedCategory = selectedCategory;
+    _selectedCategory =
+        selectedCategory != null ? Category.fromObject(selectedCategory) : null;
     notifyListeners();
   }
 
