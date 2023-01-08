@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../global/ui.dart';
+
 class CategoriesProvider extends ChangeNotifier {
   final List<Category> _categories = [];
   final Map<String, Category> _categoriesMap = {};
@@ -46,7 +48,7 @@ class CategoriesProvider extends ChangeNotifier {
       _categories.insert(0, category);
       // EasyLoading.showSuccess('Categoría creada');
     } on Exception catch (ex) {
-      EasyLoading.showError('Error al crear la categoría');
+      showError(ex, defaultMessage: 'Error al crear la categoría');
     }
     addCategoryMap(category);
     EasyLoading.dismiss();
@@ -69,7 +71,7 @@ class CategoriesProvider extends ChangeNotifier {
       addCategoryMap(category);
       // EasyLoading.showSuccess('Categoría modificada');
     } on Exception catch (ex) {
-      EasyLoading.showError('Error al modificar la categoría');
+      showError(ex, defaultMessage: 'Error al modificar la categoría');
     }
     EasyLoading.dismiss();
     notifyListeners();

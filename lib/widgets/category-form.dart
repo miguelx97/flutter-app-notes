@@ -1,5 +1,6 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as emojis;
 import 'package:flutter/material.dart';
+import 'package:flutter_app_notas/global/ui.dart';
 import 'package:flutter_app_notas/ui/button_custom.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -18,12 +19,18 @@ class CategoryForm extends StatelessWidget {
     bool isNew = category.cid == null || category.cid!.isEmpty;
 
     submit() async {
-      if (category.title.isEmpty || category.emoji.isEmpty) return;
-      categoriesProvider.selectedCategory = null;
-      if (isNew) {
-        await categoriesProvider.insert(category);
-      } else {
-        await categoriesProvider.update(category);
+      try {
+        if (category.title.isEmpty || category.emoji.isEmpty) {
+          throw Exception('Rellene los campos');
+        }
+        categoriesProvider.selectedCategory = null;
+        if (isNew) {
+          await categoriesProvider.insert(category);
+        } else {
+          await categoriesProvider.update(category);
+        }
+      } catch (e) {
+        showError(e);
       }
     }
 

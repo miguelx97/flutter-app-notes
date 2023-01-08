@@ -5,6 +5,7 @@ import 'package:flutter_app_notas/models/note_status.enum.dart';
 import 'package:flutter_app_notas/services/notification.services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../global/ui.dart';
 import '../models/category.dart';
 import '../models/note_filters.dart';
 import '../services/auth.service.dart';
@@ -82,25 +83,38 @@ class NotesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  insert(Note note) async {
-    EasyLoading.show(status: 'Guardando nota...');
+  Future<void> saveAndUpdate(Note note) async {
+    bool isNew = note.nid == null || note.nid!.isEmpty;
+    EasyLoading.show(status: '${isNew ? 'Guardando' : 'Actualizando'} nota...');
     try {
-      note = Note.clone(note);
-      final now = DateTime.now();
-      note.uid = AuthService().currentUser?.uid;
-      note.position = now.millisecondsSinceEpoch.toDouble();
-      note.status = NoteStatus.pending;
-      note.createionDate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      DocumentReference doc = await firestoreCollection.add(note.toMap());
-      note.nid = doc.id;
-      _notes.add(note);
-      await setNoteNotificacion(note);
-      // EasyLoading.showSuccess('Nota guardada');
+      if (note.title.isEmpty) throw Exception('Debes poner un título');
+      if (isNew) {
+        await insert(note);
+      } else {
+        await update(note);
+      }
     } on Exception catch (ex) {
-      EasyLoading.showError('Error al guardar la nota');
+      showError(ex,
+          defaultMessage:
+              'Error al ${isNew ? 'Guardar' : 'Actualizar'} la nota');
+      rethrow;
+    } finally {
+      EasyLoading.dismiss();
+      notifyListeners();
     }
-    EasyLoading.dismiss();
-    notifyListeners();
+  }
+
+  Future<void> insert(Note note) async {
+    note = Note.clone(note);
+    final now = DateTime.now();
+    note.uid = AuthService().currentUser?.uid;
+    note.position = now.millisecondsSinceEpoch.toDouble();
+    note.status = NoteStatus.pending;
+    note.createionDate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    DocumentReference doc = await firestoreCollection.add(note.toMap());
+    note.nid = doc.id;
+    _notes.add(note);
+    await setNoteNotificacion(note);
   }
 
   // delete(String noteId) async {
@@ -109,21 +123,13 @@ class NotesProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  update(Note note) async {
-    EasyLoading.show(status: 'Actualizando nota...');
-    try {
-      note = Note.clone(note);
-      await firestoreCollection.doc(note.nid).set(note.toMap());
-      int index = _notes.indexWhere((item) => item.nid == note.nid);
-      _notes[index] = note;
-      await deleteNoteNotification(note);
-      await setNoteNotificacion(note);
-      // EasyLoading.showSuccess('Nota actualizada');
-    } on Exception catch (ex) {
-      EasyLoading.showError('Error al actualizar la nota');
-    }
-    EasyLoading.dismiss();
-    notifyListeners();
+  Future<void> update(Note note) async {
+    note = Note.clone(note);
+    await firestoreCollection.doc(note.nid).set(note.toMap());
+    int index = _notes.indexWhere((item) => item.nid == note.nid);
+    _notes[index] = note;
+    await deleteNoteNotification(note);
+    await setNoteNotificacion(note);
   }
 
   updateStatus(Note note, int newStatus) async {
@@ -175,9 +181,12 @@ class NotesProvider extends ChangeNotifier {
         _notes[oldIndex].position = _notes[newIndex].position! + 1000;
       }
     }
-    _notes[oldIndex].isFavourite = _notes[newIndex].isFavourite;
+    if (newIndex < _notes.length) {
+      _notes[oldIndex].isFavourite = _notes[newIndex].isFavourite;
+    }
     noteToReorder = _notes.removeAt(oldIndex);
-    _notes.insert(newIndex < oldIndex ? newIndex : newIndex - 1, noteToReorder);
+    _notes.insert(
+        newIndex <= oldIndex ? newIndex : newIndex - 1, noteToReorder);
     final mapPosition = {
       'position': noteToReorder.position!,
       'isFavourite': noteToReorder.isFavourite,
@@ -190,7 +199,7 @@ class NotesProvider extends ChangeNotifier {
   }
 
   removeOldDeletedNotes() async {
-    final yesterday = DateTime.now().subtract(const Duration(days: 30));
+    final yesterday = DateTime.now().subtract(const Duration(days: 7));
     final String? uid = AuthService().currentUser?.uid;
 
     final QuerySnapshot notesSnapshot = await firestoreCollection

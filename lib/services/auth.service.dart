@@ -21,7 +21,7 @@ class AuthService {
         case 'too-many-requests':
           throw Exception('Intente entrar en unos minutos');
         default:
-          throw Exception(e.code);
+          rethrow;
       }
     }
   }
@@ -41,7 +41,7 @@ class AuthService {
         case 'too-many-requests':
           throw Exception('Intente entrar en unos minutos');
         default:
-          throw Exception(e.code);
+          rethrow;
       }
     }
   }

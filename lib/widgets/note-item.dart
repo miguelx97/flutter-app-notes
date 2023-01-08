@@ -32,7 +32,7 @@ class NoteItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () => onNoteSelected(note),
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 10, right: 15, left: 15),
+          padding: const EdgeInsets.only(bottom: 3, right: 15, left: 15),
           child: Stack(
             children: [
               Padding(
@@ -40,7 +40,7 @@ class NoteItem extends StatelessWidget {
                 child: Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  elevation: 5,
+                  elevation: 4,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 13, horizontal: 20),

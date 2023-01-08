@@ -2,6 +2,7 @@ import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_notas/global/colors.dart';
 import 'package:flutter_app_notas/global/constants.dart';
+import 'package:flutter_app_notas/global/ui.dart';
 import 'package:flutter_app_notas/global/utils.dart';
 import 'package:flutter_app_notas/models/note.dart';
 import 'package:flutter_app_notas/models/note_status.enum.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_app_notas/screens/add_note.screen.dart';
 import 'package:flutter_app_notas/screens/categories-management.screen.dart';
 import 'package:flutter_app_notas/screens/note_details.screen.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
-import 'package:flutter_app_notas/services/notification.services.dart';
 import 'package:flutter_app_notas/widgets/note-item.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -165,6 +165,10 @@ class Body extends StatelessWidget {
                 .searchCategoryById(notes[index].categoryId)
                 .emoji,
             onNoteSelected: (Note note) {
+              if (note.status == NoteStatus.deleted) {
+                showError('No puedes modificar notas eliminadas');
+                return;
+              }
               notesProvider.selectedNote = note;
               context.go('${NoteDetailsScreen.screenUrl}/${note.nid}');
             },

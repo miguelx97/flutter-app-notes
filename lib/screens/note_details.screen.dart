@@ -20,7 +20,6 @@ class NoteDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
     final NotesProvider notesProvider = Provider.of<NotesProvider>(context);
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
     final Note note = notesProvider.selectedNote!;
@@ -79,8 +78,8 @@ class NoteDetailsScreen extends StatelessWidget {
             ),
             Item(
               title: 'Recordatorio',
-              content: note.reminderTime != null
-                  ? ReminderTime.getLabel(note.reminderTime!)
+              content: note.reminderTime > 0
+                  ? ReminderTime.getLabel(note.reminderTime)
                   : null,
               icon: Icons.access_alarm,
             ),

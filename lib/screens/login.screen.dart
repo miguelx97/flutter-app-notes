@@ -78,10 +78,11 @@ class Login extends StatelessWidget {
 }
 
 class _LoginForm extends StatelessWidget {
-  final loginForm;
-  const _LoginForm({super.key, this.loginForm});
+  final LoginFormProvider loginForm;
+  const _LoginForm({super.key, required this.loginForm});
 
   loginRegister(BuildContext context) {
+    loginForm.attempt = true;
     if (!loginForm.isValidForm()) return;
     FocusScope.of(context).unfocus();
     loginForm.loginOrRegister();
@@ -91,7 +92,9 @@ class _LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Form(
       key: loginForm.formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
+      autovalidateMode: !loginForm.attempt
+          ? AutovalidateMode.disabled
+          : AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
           TextFormField(

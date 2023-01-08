@@ -95,11 +95,7 @@ class _AddNoteState extends State<AddNote> {
 
     saveAndUpdate() async {
       FocusScope.of(context).unfocus();
-      if (isNew) {
-        await notesProvider.insert(note);
-      } else {
-        await notesProvider.update(note);
-      }
+      await notesProvider.saveAndUpdate(note);
       notesProvider.selectedNote = Note();
       notesProvider.formKey.currentState?.reset();
       resetDateTime(reload: false);

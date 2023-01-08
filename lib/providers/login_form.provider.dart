@@ -9,9 +9,8 @@ class LoginFormProvider extends ChangeNotifier {
   String email = '';
   String password = '';
   String password2 = '';
-
-  bool isLoading = false;
   bool isLogin = true;
+  bool _attempt = false;
 
   swipeLoginAmdRegister() {
     isLogin = !isLogin;
@@ -21,7 +20,7 @@ class LoginFormProvider extends ChangeNotifier {
   bool isValidForm() => formKey.currentState?.validate() ?? false;
 
   Future<void> loginOrRegister() async {
-    EasyLoading.show(status: 'Entrando...');
+    EasyLoading.show(status: 'Entrando...', dismissOnTap: true);
     try {
       if (isLogin) {
         await _login();
@@ -40,5 +39,14 @@ class LoginFormProvider extends ChangeNotifier {
 
   Future<void> _register() {
     return AuthService().signUp(email: email, password: password);
+  }
+
+  set attempt(bool attempt) {
+    _attempt = attempt;
+    notifyListeners();
+  }
+
+  bool get attempt {
+    return _attempt;
   }
 }
