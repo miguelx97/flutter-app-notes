@@ -11,7 +11,6 @@ import 'dart:math';
 
 import '../models/category.dart';
 import '../models/note.dart';
-import '../ui/button_custom.dart';
 
 class AddNote extends StatefulWidget {
   static const screenUrl = '/add-note';
@@ -128,6 +127,7 @@ class _AddNoteState extends State<AddNote> {
                 children: [
                   TextFormField(
                     initialValue: note.title,
+                    textCapitalization: TextCapitalization.sentences,
                     onChanged: (value) => note.title = value,
                     decoration: InputDecoration(
                       labelText: 'Título',
@@ -149,6 +149,7 @@ class _AddNoteState extends State<AddNote> {
                   ),
                   TextFormField(
                     keyboardType: TextInputType.multiline,
+                    textCapitalization: TextCapitalization.sentences,
                     maxLines: 3,
                     maxLength: 400,
                     initialValue: note.description,

@@ -23,6 +23,7 @@ class CategoryForm extends StatelessWidget {
         if (category.title.isEmpty || category.emoji.isEmpty) {
           throw Exception('Rellene los campos');
         }
+        category.title = category.title.trim();
         categoriesProvider.selectedCategory = null;
         if (isNew) {
           await categoriesProvider.insert(category);
@@ -85,6 +86,7 @@ class CategoryForm extends StatelessWidget {
                 ),
                 TextFormField(
                   autocorrect: false,
+                  textCapitalization: TextCapitalization.sentences,
                   initialValue: category.title,
                   onFieldSubmitted: (value) => submit(),
                   onChanged: (value) => category.title = value,

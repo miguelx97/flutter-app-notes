@@ -90,6 +90,8 @@ class NotesProvider extends ChangeNotifier {
     EasyLoading.show(status: '${isNew ? 'Guardando' : 'Actualizando'} nota...');
     try {
       if (note.title.isEmpty) throw Exception('Debes poner un título');
+      note.title = note.title.trim();
+      if (note.description != null) note.description = note.description!.trim();
       if (isNew) {
         await insert(note);
       } else {
