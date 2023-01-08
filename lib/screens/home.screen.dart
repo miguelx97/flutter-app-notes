@@ -13,7 +13,9 @@ import 'package:flutter_app_notas/screens/categories-management.screen.dart';
 import 'package:flutter_app_notas/screens/note_details.screen.dart';
 import 'package:flutter_app_notas/services/auth.service.dart';
 import 'package:flutter_app_notas/widgets/note-item.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/category_picker_slider.dart';
@@ -26,14 +28,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final NotesProvider notesProvider = Provider.of<NotesProvider>(context);
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: EasySearchBar(
         // automaticallyImplyLeading: false,
         title: Text(
-          Utils.dateFormat(now),
-          style: const TextStyle(
-            color: Colors.white,
-          ),
+          DateFormat.yMMMd('es').format(now),
+          style: textTheme.headlineMedium,
         ),
         actions: [
           // IconButton(
@@ -45,7 +46,7 @@ class HomeScreen extends StatelessWidget {
           //     icon: const Icon(Icons.search_outlined),
           //     color: Colors.white),
           PopupMenuButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
+            icon: const Icon(Icons.more_vert),
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: ItemName.deleted,
@@ -132,7 +133,11 @@ class Footer extends StatelessWidget {
 }
 
 Row MenuItem({required String label, required IconData icon}) {
-  return Row(children: [Icon(icon), SizedBox(width: 5), Text(label)]);
+  return Row(children: [
+    Icon(icon, color: ThemeColors.primary),
+    SizedBox(width: 5),
+    Text(label),
+  ]);
 }
 
 class Body extends StatelessWidget {
@@ -149,8 +154,25 @@ class Body extends StatelessWidget {
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
     final List<Note> notes = notesProvider.getAll();
 
+    if (notes.isEmpty && categoriesProvider.getAll().isEmpty) {
+      return Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
+              onTap: () => context.go(AddNote.screenUrl),
+              child:
+                  SvgPicture.asset('assets/images/add_note.svg', width: 170)),
+          const SizedBox(height: 20),
+          const Text('Escribe tu primera nota',
+              style: TextStyle(fontSize: 16, color: ThemeColors.medium)),
+          const SizedBox(height: 100)
+        ],
+      ));
+    }
+
     return Center(
-      child: Container(
+      child: SizedBox(
         width: Constants.maxWidth,
         child: ReorderableListView.builder(
           itemCount: notes.length,

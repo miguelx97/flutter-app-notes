@@ -31,74 +31,67 @@ class NoteDetailsScreen extends StatelessWidget {
     }
     final Category noteCategory =
         categoriesProvider.searchCategoryById(note.categoryId);
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 110,
-            floating: false,
-            pinned: true,
-            forceElevated: true,
-            foregroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              titlePadding: EdgeInsets.all(0),
-              title: Container(
-                width: double.infinity,
-                alignment: Alignment.bottomCenter,
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  note.title,
-                  style: TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          SliverList(
-              delegate: SliverChildListDelegate([
-            SizedBox(height: 10),
-            Item(
-              title: 'Descripción',
-              content: note.description,
-              icon: Icons.article_outlined,
-              isTextArea: true,
-            ),
-            Item(
-              title: 'Categoría',
-              content: noteCategory.title.isNotEmpty
-                  ? '${noteCategory.emoji} ${noteCategory.title}'
-                  : null,
-              icon: Icons.apps_rounded,
-            ),
-            Item(
-              title: 'Fecha / Hora',
-              content: Utils.dateTimeFormat(note.date, hasTime: note.hasTime),
-              icon: Icons.calendar_month_outlined,
-            ),
-            Item(
-              title: 'Recordatorio',
-              content: note.reminderTime > 0
-                  ? ReminderTime.getLabel(note.reminderTime)
-                  : null,
-              icon: Icons.access_alarm,
-            ),
-          ]))
-        ],
-        // child: Center(
-        //   child: Container(
-        //     // alignment: Alignment.topLeft,
-        //     width: Constants.maxWidth,
-        //     padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-        //     child: Column(
-        //       children: [
-        //         Text(note.title, style: textTheme.titleLarge),
-        //         SizedBox(height: 30),
-        //       ],
-        //     ),
-        //   ),
-        // ),
+      appBar: AppBar(
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
       ),
+      body: SingleChildScrollView(
+          child: Column(children: [
+        Container(
+          padding: EdgeInsets.only(bottom: 10),
+          width: double.infinity,
+          alignment: Alignment.topCenter,
+          decoration: const BoxDecoration(
+            color: ThemeColors.primary,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, -1), // changes position of shadow
+              ),
+            ],
+          ),
+          child: Text(note.title,
+              style: const TextStyle(
+                  fontSize: 40,
+                  fontFamily: 'Kalam',
+                  color: Colors.white,
+                  letterSpacing: 1),
+              textAlign: TextAlign.center),
+        ),
+        SizedBox(height: 10),
+        Item(
+          title: 'Descripción',
+          content: note.description,
+          icon: Icons.article_outlined,
+          isTextArea: true,
+        ),
+        Item(
+          title: 'Categoría',
+          content: noteCategory.title.isNotEmpty
+              ? '${noteCategory.emoji} ${noteCategory.title}'
+              : null,
+          icon: Icons.apps_rounded,
+        ),
+        Item(
+          title: 'Fecha / Hora',
+          content: Utils.dateTimeFormat(note.date, hasTime: note.hasTime),
+          icon: Icons.calendar_month_outlined,
+        ),
+        Item(
+          title: 'Recordatorio',
+          content: note.reminderTime > 0
+              ? ReminderTime.getLabel(note.reminderTime)
+              : null,
+          icon: Icons.access_alarm,
+        ),
+      ])),
       floatingActionButton: FloatingButtons(
         note: note,
         mainButtonClick: () => context.go(AddNote.screenUrl),

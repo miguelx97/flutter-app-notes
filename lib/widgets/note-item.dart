@@ -64,8 +64,7 @@ class NoteItem extends StatelessWidget {
                                       Utils.dateTimeFormat(note.date,
                                           hasTime: note.hasTime),
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontSize: 14, color: Colors.black45)),
+                                      style: textTheme.bodySmall),
                                 ),
                               )
                             ],

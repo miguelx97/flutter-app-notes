@@ -18,7 +18,7 @@ class CategoriesProvider extends ChangeNotifier {
     load();
   }
 
-  getAll() {
+  List<Category> getAll() {
     return _categories;
   }
 

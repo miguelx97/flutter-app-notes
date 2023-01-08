@@ -14,7 +14,7 @@ class Note {
     this.categoryId,
     this.reminderTime = 0,
     this.status,
-    this.createionDate,
+    this.createionDate = 0,
     this.position,
     this.uid,
     this.hasTime = false,
@@ -28,7 +28,7 @@ class Note {
   String? categoryId;
   int reminderTime;
   int? status;
-  int? createionDate;
+  int createionDate;
   double? position;
   String? uid;
   bool hasTime;
@@ -46,7 +46,7 @@ class Note {
         categoryId: map["categoryId"],
         reminderTime: map["reminderTime"] ?? 0,
         status: map["status"],
-        createionDate: map["createionDate"],
+        createionDate: map["createionDate"] ?? 0,
         position: map["position"]?.toDouble(),
         uid: map["uid"],
         hasTime: map["hasTime"] ?? false,

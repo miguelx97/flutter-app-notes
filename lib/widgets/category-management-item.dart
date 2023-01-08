@@ -15,6 +15,7 @@ class CategoryManagementItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Card(
@@ -29,7 +30,7 @@ class CategoryManagementItem extends StatelessWidget {
                 children: [
                   Text(category.emoji),
                   const SizedBox(width: 10),
-                  Text(category.title),
+                  Text(category.title, style: textTheme.titleMedium),
                 ],
               ),
               Row(

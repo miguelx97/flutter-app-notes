@@ -75,7 +75,7 @@ Future<void> setNoteNotificacion(Note note) async {
     note.title,
     Utils.dateTimeFormat(note.date, hasTime: note.hasTime),
     scheduledNotificationDateTime,
-    note.createionDate!,
+    note.createionDate,
     notificationDetails,
   );
 
@@ -88,14 +88,14 @@ Future<void> setNoteNotificacion(Note note) async {
     note.title,
     "Evento para dentro de ${ReminderTime.name(note.reminderTime)}.",
     scheduledNotificationDateTime,
-    note.createionDate! + 1,
+    note.createionDate + 1,
     notificationDetails,
   );
 }
 
 Future<void> deleteNoteNotification(Note note) async {
-  await deleteNotification(note.createionDate!);
-  if (note.reminderTime > 0) await deleteNotification(note.createionDate! + 1);
+  await deleteNotification(note.createionDate);
+  if (note.reminderTime > 0) await deleteNotification(note.createionDate + 1);
 }
 
 Future<void> _wellcomeNotificacion() async {

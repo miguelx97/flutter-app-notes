@@ -13,6 +13,7 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: EdgeInsets.only(right: 5),
       child: Card(
@@ -30,7 +31,7 @@ class CategoryItem extends StatelessWidget {
               const SizedBox(width: 6),
               Text(
                 category.title,
-                style: TextStyle(fontSize: 16),
+                style: textTheme.labelSmall,
               ),
             ],
           ),

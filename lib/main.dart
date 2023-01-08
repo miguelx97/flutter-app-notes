@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_notas/global/colors.dart';
 import 'package:flutter_app_notas/global/scroll.dart';
 import 'package:flutter_app_notas/providers/categories.provider.dart';
 import 'package:flutter_app_notas/providers/notes.provider.dart';
@@ -88,12 +89,31 @@ class MyApp extends StatelessWidget {
               child: child!)),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primarySwatch: Utils.customColor(const Color(0xff26CAD3)),
-          scaffoldBackgroundColor: Utils.customColor(const Color(0xffF3F3F3)),
-          textTheme: const TextTheme(
-              titleLarge: TextStyle(fontSize: 25),
-              bodyMedium: TextStyle(fontSize: 16),
-              titleSmall: TextStyle(fontSize: 14, color: Colors.black54))),
+        primarySwatch: Utils.customColor(const Color(0xff26CAD3)),
+        scaffoldBackgroundColor: Utils.customColor(const Color(0xffF3F3F3)),
+        textTheme: const TextTheme(
+          titleMedium: TextStyle(
+              fontSize: 20,
+              fontFamily: 'Nunito',
+              color: ThemeColors.dark,
+              fontWeight: FontWeight.w300),
+          titleSmall: TextStyle(
+              fontSize: 16,
+              fontFamily: 'Nunito',
+              color: ThemeColors.medium,
+              fontWeight: FontWeight.w300),
+          labelSmall: TextStyle(
+              fontSize: 18, fontFamily: 'Nunito', color: ThemeColors.dark),
+          headlineMedium: TextStyle(
+              fontSize: 23,
+              fontFamily: 'Kalam',
+              color: Colors.white,
+              letterSpacing: 1),
+          bodySmall: TextStyle(fontSize: 14, color: ThemeColors.medium),
+          titleLarge: TextStyle(color: Colors.white, fontFamily: 'Nunito'),
+          bodyMedium: TextStyle(fontSize: 16),
+        ),
+      ),
       routerConfig: _router,
     );
   }

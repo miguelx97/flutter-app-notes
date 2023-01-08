@@ -47,8 +47,10 @@ class CategoryForm extends StatelessWidget {
             child: Column(
               children: [
                 Text(isNew ? 'Nueva Categoría' : 'Actualizar Categoría',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Nunito',
+                        fontWeight: FontWeight.bold)),
                 SizedBox(height: 10),
                 MaterialButton(
                   onPressed: () {

@@ -105,16 +105,16 @@ class _AddNoteState extends State<AddNote> {
       });
     }
 
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
           iconTheme: const IconThemeData(
             color: Colors.white, //change your color here
           ),
-          title: const Text(
+          title: Text(
             'Añadir nota',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+            style: textTheme.headlineMedium,
           )),
       body: SingleChildScrollView(
         child: Center(
@@ -131,6 +131,7 @@ class _AddNoteState extends State<AddNote> {
                     onChanged: (value) => note.title = value,
                     decoration: InputDecoration(
                       labelText: 'Título',
+                      labelStyle: textTheme.titleSmall,
                       suffixIcon: IconButton(
                         icon: Icon(
                             note.isFavourite ? Icons.star : Icons.star_outline,
@@ -152,8 +153,9 @@ class _AddNoteState extends State<AddNote> {
                     maxLength: 400,
                     initialValue: note.description,
                     onChanged: (value) => note.description = value,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Descripción',
+                      labelStyle: textTheme.titleSmall,
                       contentPadding: EdgeInsets.only(left: 10),
                     ),
                   ),
@@ -210,6 +212,7 @@ class _AddNoteState extends State<AddNote> {
                   Visibility(
                     visible: note.hasTime,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SectionTitle('Notificación'),
                         Padding(
@@ -274,11 +277,12 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: EdgeInsets.only(left: 15, top: 20),
       child: Text(
         title,
-        style: const TextStyle(fontSize: 16, color: ThemeColors.medium),
+        style: textTheme.titleSmall,
       ),
     );
   }

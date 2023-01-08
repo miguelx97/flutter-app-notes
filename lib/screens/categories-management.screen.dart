@@ -27,6 +27,11 @@ class CategoriesManagement extends StatelessWidget {
       }
     }
 
+    if (categories.isEmpty && categoriesProvider.selectedCategory == null) {
+      Future.delayed(const Duration(milliseconds: 200))
+          .whenComplete(showHideForm);
+    }
+
     updateCategory(Category category) {
       categoriesProvider.selectedCategory = Category.fromObject(category);
     }
@@ -61,16 +66,16 @@ class CategoriesManagement extends StatelessWidget {
       );
     }
 
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white, //change your color here
         ),
-        title: const Text(
+        title: Text(
           "Categorías",
-          style: TextStyle(
-            color: Colors.white,
-          ),
+          style: textTheme.headlineMedium,
         ),
       ),
       body: Center(
