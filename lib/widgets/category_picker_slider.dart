@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/models/category.dart';
+import 'package:taskii/models/category.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/categories.provider.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/colors.dart';
-import 'package:flutter_app_notas/global/constants.dart';
-import 'package:flutter_app_notas/global/utils.dart';
-import 'package:flutter_app_notas/models/reminder_time.dart';
-import 'package:flutter_app_notas/providers/notes.provider.dart';
-import 'package:flutter_app_notas/widgets/category_picker_slider.dart';
+import 'package:taskii/global/colors.dart';
+import 'package:taskii/global/constants.dart';
+import 'package:taskii/global/utils.dart';
+import 'package:taskii/models/reminder_time.dart';
+import 'package:taskii/providers/notes.provider.dart';
+import 'package:taskii/widgets/category_picker_slider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
@@ -241,20 +241,30 @@ class _AddNoteState extends State<AddNote> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Center(
-                    child: ButtonCustom(
-                      text: isNew ? 'Añadir' : 'Actualizar',
-                      icon: Icons.check,
-                      onPressed: saveAndUpdate,
-                    ),
-                  )
+                  SizedBox(height: 50),
+                  // Center(
+                  //   child: ButtonCustom(
+                  //     text: isNew ? 'Añadir' : 'Actualizar',
+                  //     icon: Icons.check,
+                  //     onPressed: saveAndUpdate,
+                  //   ),
+                  // )
                 ],
               ),
             ),
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: saveAndUpdate,
+        heroTag: 'main-floating-button',
+        child: const Icon(
+          Icons.check,
+          size: 35,
+          color: Colors.white,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 

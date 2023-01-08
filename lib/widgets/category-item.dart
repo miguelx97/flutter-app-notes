@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/colors.dart';
-import 'package:flutter_app_notas/models/category.dart';
+import 'package:taskii/global/colors.dart';
+import 'package:taskii/models/category.dart';
 
 class CategoryItem extends StatelessWidget {
   final Category category;

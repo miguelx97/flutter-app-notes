@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/colors.dart';
-import 'package:flutter_app_notas/global/constants.dart';
-import 'package:flutter_app_notas/providers/login_form.provider.dart';
-import 'package:flutter_app_notas/ui/button_custom.dart';
-import 'package:flutter_app_notas/widgets/card_container.dart';
+import 'package:taskii/global/colors.dart';
+import 'package:taskii/global/constants.dart';
+import 'package:taskii/providers/login_form.provider.dart';
+import 'package:taskii/ui/button_custom.dart';
+import 'package:taskii/widgets/card_container.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/auth_background.dart';

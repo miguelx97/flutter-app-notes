@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app_notas/models/note.dart';
-import 'package:flutter_app_notas/models/note_status.enum.dart';
-import 'package:flutter_app_notas/services/notification.services.dart';
+import 'package:taskii/models/note.dart';
+import 'package:taskii/models/note_status.enum.dart';
+import 'package:taskii/services/notification.services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../global/ui.dart';

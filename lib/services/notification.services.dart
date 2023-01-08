@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_app_notas/global/utils.dart';
-import 'package:flutter_app_notas/models/note.dart';
-import 'package:flutter_app_notas/models/reminder_time.dart';
+import 'package:taskii/global/utils.dart';
+import 'package:taskii/models/note.dart';
+import 'package:taskii/models/reminder_time.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;

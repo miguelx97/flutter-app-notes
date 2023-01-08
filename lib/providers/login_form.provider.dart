@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/ui.dart';
-import 'package:flutter_app_notas/services/auth.service.dart';
+import 'package:taskii/global/ui.dart';
+import 'package:taskii/services/auth.service.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class LoginFormProvider extends ChangeNotifier {
