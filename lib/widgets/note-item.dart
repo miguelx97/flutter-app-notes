@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/colors.dart';
-import 'package:flutter_app_notas/global/utils.dart';
-import 'package:flutter_app_notas/models/note.dart';
-import 'package:flutter_app_notas/models/note_status.enum.dart';
+import 'package:taskii/global/colors.dart';
+import 'package:taskii/global/utils.dart';
+import 'package:taskii/models/note.dart';
+import 'package:taskii/models/note_status.enum.dart';
 
 class NoteItem extends StatelessWidget {
   final Note note;

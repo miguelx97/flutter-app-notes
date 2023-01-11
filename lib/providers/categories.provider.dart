@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app_notas/models/category.dart';
+import 'package:taskii/models/category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_app_notas/services/auth.service.dart';
+import 'package:taskii/services/auth.service.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../global/ui.dart';

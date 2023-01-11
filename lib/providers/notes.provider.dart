@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app_notas/models/note.dart';
-import 'package:flutter_app_notas/models/note_status.enum.dart';
-import 'package:flutter_app_notas/services/notification.services.dart';
+import 'package:taskii/models/note.dart';
+import 'package:taskii/models/note_status.enum.dart';
+import 'package:taskii/services/notification.services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../global/ui.dart';
@@ -90,6 +90,8 @@ class NotesProvider extends ChangeNotifier {
     EasyLoading.show(status: '${isNew ? 'Guardando' : 'Actualizando'} nota...');
     try {
       if (note.title.isEmpty) throw Exception('Debes poner un título');
+      note.title = note.title.trim();
+      if (note.description != null) note.description = note.description!.trim();
       if (isNew) {
         await insert(note);
       } else {

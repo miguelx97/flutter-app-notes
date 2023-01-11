@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/constants.dart';
-import 'package:flutter_app_notas/providers/categories.provider.dart';
-import 'package:flutter_app_notas/providers/notes.provider.dart';
-import 'package:flutter_app_notas/widgets/category-form.dart';
+import 'package:taskii/global/constants.dart';
+import 'package:taskii/providers/categories.provider.dart';
+import 'package:taskii/providers/notes.provider.dart';
+import 'package:taskii/widgets/category-form.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';

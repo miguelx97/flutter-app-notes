@@ -1,7 +1,7 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as emojis;
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/ui.dart';
-import 'package:flutter_app_notas/ui/button_custom.dart';
+import 'package:taskii/global/ui.dart';
+import 'package:taskii/ui/button_custom.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +23,7 @@ class CategoryForm extends StatelessWidget {
         if (category.title.isEmpty || category.emoji.isEmpty) {
           throw Exception('Rellene los campos');
         }
+        category.title = category.title.trim();
         categoriesProvider.selectedCategory = null;
         if (isNew) {
           await categoriesProvider.insert(category);
@@ -85,6 +86,7 @@ class CategoryForm extends StatelessWidget {
                 ),
                 TextFormField(
                   autocorrect: false,
+                  textCapitalization: TextCapitalization.sentences,
                   initialValue: category.title,
                   onFieldSubmitted: (value) => submit(),
                   onChanged: (value) => category.title = value,

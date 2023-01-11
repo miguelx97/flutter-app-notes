@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_notas/global/colors.dart';
-import 'package:flutter_app_notas/global/constants.dart';
-import 'package:flutter_app_notas/models/category.dart';
-import 'package:flutter_app_notas/models/reminder_time.dart';
-import 'package:flutter_app_notas/screens/add_note.screen.dart';
+import 'package:taskii/global/colors.dart';
+import 'package:taskii/global/constants.dart';
+import 'package:taskii/models/category.dart';
+import 'package:taskii/models/reminder_time.dart';
+import 'package:taskii/screens/add_note.screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -122,6 +122,7 @@ class Item extends StatelessWidget {
     if ((content ?? '').isNotEmpty) {
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+        width: Constants.maxWidth,
         decoration: const BoxDecoration(
           border: Border(
             bottom: BorderSide(width: 1.5, color: ThemeColors.lightGrey),
