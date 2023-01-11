@@ -1,11 +1,11 @@
 {
     "name": "taskii",
-    "short_name": "taskii",
+    "short_name": "Taskii",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Organizador de tareas fácil y rápido.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
