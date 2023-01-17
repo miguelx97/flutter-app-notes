@@ -89,8 +89,8 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('en', ''), // English, no country code
-        Locale('es', ''), // Spanish, no country code
+        Locale('en'),
+        Locale('es'),
       ],
       builder: EasyLoading.init(
           builder: (context, child) => MediaQuery(

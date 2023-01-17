@@ -21,6 +21,14 @@ class AddNote extends StatefulWidget {
 }
 
 class _AddNoteState extends State<AddNote> {
+  TextEditingController addSubtaskController = TextEditingController();
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    addSubtaskController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final notesProvider = Provider.of<NotesProvider>(context);
@@ -77,6 +85,18 @@ class _AddNoteState extends State<AddNote> {
       setState(() {});
     }
 
+    addSubtask() {
+      note.subTasks.insert(0, SubTask(title: addSubtaskController.text));
+      addSubtaskController.clear();
+
+      setState(() {});
+    }
+
+    deleteSubtask(SubTask subtask) {
+      note.subTasks.remove(subtask);
+      setState(() {});
+    }
+
     resetDateTime({reload = true}) {
       note.date = null;
       note.hasTime = false;
@@ -122,6 +142,7 @@ class _AddNoteState extends State<AddNote> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Form(
               key: notesProvider.formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -160,6 +181,31 @@ class _AddNoteState extends State<AddNote> {
                       contentPadding: EdgeInsets.only(left: 10),
                     ),
                   ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    textCapitalization: TextCapitalization.sentences,
+                    controller: addSubtaskController,
+                    decoration: InputDecoration(
+                      labelText: 'Añadir subtarea',
+                      labelStyle: textTheme.titleSmall,
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.add_circle_outline_outlined,
+                            color: ThemeColors.primary),
+                        onPressed: addSubtask,
+                      ),
+                      contentPadding: EdgeInsets.only(left: 10),
+                    ),
+                  ),
+                  ListView.builder(
+                    padding: EdgeInsets.only(left: 10),
+                    shrinkWrap: true,
+                    itemCount: note.subTasks.length,
+                    itemBuilder: (_, index) => SubtaskItem(
+                      subtask: note.subTasks[index]!,
+                      onDelete: deleteSubtask,
+                    ),
+                  ),
+                  SizedBox(height: 20),
                   SectionTitle('Categorías'),
                   CategoriesPickerSlider(
                     idSelectedCategory: note.categoryId,
@@ -298,6 +344,35 @@ class SectionTitle extends StatelessWidget {
       child: Text(
         title,
         style: textTheme.titleSmall,
+      ),
+    );
+  }
+}
+
+class SubtaskItem extends StatelessWidget {
+  final SubTask subtask;
+  final Function onDelete;
+  const SubtaskItem({super.key, required this.subtask, required this.onDelete});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 45,
+      decoration: BoxDecoration(
+        //                    <-- BoxDecoration
+        border: Border(bottom: BorderSide(color: ThemeColors.lightGrey)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(subtask.title),
+          IconButton(
+              onPressed: () => onDelete(subtask),
+              icon: Icon(
+                Icons.remove_circle_outline_outlined,
+                color: ThemeColors.danger,
+              ))
+        ],
       ),
     );
   }

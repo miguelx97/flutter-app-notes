@@ -66,25 +66,25 @@ class NoteDetailsScreen extends StatelessWidget {
               textAlign: TextAlign.center),
         ),
         SizedBox(height: 10),
-        Item(
+        _Item(
           title: 'Descripción',
           content: note.description,
           icon: Icons.article_outlined,
           isTextArea: true,
         ),
-        Item(
+        _Item(
           title: 'Categoría',
           content: noteCategory.title.isNotEmpty
               ? '${noteCategory.emoji} ${noteCategory.title}'
               : null,
           icon: Icons.apps_rounded,
         ),
-        Item(
+        _Item(
           title: 'Fecha / Hora',
           content: Utils.dateTimeFormat(note.date, hasTime: note.hasTime),
           icon: Icons.calendar_month_outlined,
         ),
-        Item(
+        _Item(
           title: 'Recordatorio',
           content: note.reminderTime > 0
               ? ReminderTime.getLabel(note.reminderTime)
@@ -104,12 +104,12 @@ class NoteDetailsScreen extends StatelessWidget {
   }
 }
 
-class Item extends StatelessWidget {
+class _Item extends StatelessWidget {
   final String title;
   final String? content;
   final IconData icon;
   final bool isTextArea;
-  const Item(
+  const _Item(
       {super.key,
       required this.title,
       required this.content,

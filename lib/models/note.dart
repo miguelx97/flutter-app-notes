@@ -18,7 +18,7 @@ class Note {
     this.position,
     this.uid,
     this.hasTime = false,
-    this.subTasks,
+    this.subTasks = const [],
   });
 
   String? nid;
@@ -33,7 +33,7 @@ class Note {
   double? position;
   String? uid;
   bool hasTime;
-  List<SubTask?>? subTasks;
+  List<SubTask?> subTasks;
 
   factory Note.fromJson(String str) => Note.fromMap(json.decode(str));
 
@@ -59,18 +59,19 @@ class Note {
       );
 
   factory Note.clone(Note note) => Note(
-        nid: note.nid,
-        title: note.title,
-        description: note.description,
-        isFavourite: note.isFavourite,
-        date: note.date,
-        categoryId: note.categoryId,
-        reminderTime: note.reminderTime,
-        status: note.status,
-        position: note.position,
-        uid: note.uid,
-        hasTime: note.hasTime,
-      );
+      nid: note.nid,
+      title: note.title,
+      description: note.description,
+      isFavourite: note.isFavourite,
+      date: note.date,
+      categoryId: note.categoryId,
+      reminderTime: note.reminderTime,
+      status: note.status,
+      position: note.position,
+      uid: note.uid,
+      hasTime: note.hasTime,
+      subTasks:
+          note.subTasks.map((subTask) => SubTask.clone(subTask!)).toList());
 
   factory Note.fromMapWithId(Map<String, dynamic> map, String id) {
     final note = Note.fromMap(map);
@@ -98,16 +99,21 @@ class Note {
 
 class SubTask {
   SubTask({
-    this.title,
-    this.checked,
+    this.title = '',
+    this.checked = false,
   });
 
-  String? title;
-  bool? checked;
+  String title;
+  bool checked;
 
   factory SubTask.fromJson(Map<String, dynamic> json) => SubTask(
         title: json["title"],
         checked: json["checked"],
+      );
+
+  factory SubTask.clone(SubTask subTask) => SubTask(
+        title: subTask.title,
+        checked: subTask.checked,
       );
 
   Map<String, dynamic> toJson() => {
