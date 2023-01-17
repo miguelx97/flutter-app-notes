@@ -18,6 +18,7 @@ class Note {
     this.position,
     this.uid,
     this.hasTime = false,
+    this.subTasks,
   });
 
   String? nid;
@@ -32,6 +33,7 @@ class Note {
   double? position;
   String? uid;
   bool hasTime;
+  List<SubTask?>? subTasks;
 
   factory Note.fromJson(String str) => Note.fromMap(json.decode(str));
 
@@ -50,6 +52,10 @@ class Note {
         position: map["position"]?.toDouble(),
         uid: map["uid"],
         hasTime: map["hasTime"] ?? false,
+        subTasks: map["subTasks"] == null
+            ? []
+            : List<SubTask?>.from(
+                map["subTasks"]!.map((x) => SubTask.fromJson(x))),
       );
 
   factory Note.clone(Note note) => Note(
@@ -72,20 +78,6 @@ class Note {
     return note;
   }
 
-  factory Note.fromObject(Note oldNote) => Note(
-        nid: oldNote.nid,
-        title: oldNote.title,
-        description: oldNote.description,
-        isFavourite: oldNote.isFavourite,
-        date: oldNote.date,
-        categoryId: oldNote.categoryId,
-        reminderTime: oldNote.reminderTime,
-        status: oldNote.status,
-        position: oldNote.position,
-        uid: oldNote.uid,
-        hasTime: oldNote.hasTime,
-      );
-
   Map<String, dynamic> toMap() => {
         "title": title,
         "description": description,
@@ -98,10 +90,31 @@ class Note {
         "position": position,
         "uid": uid,
         "hasTime": hasTime,
+        "subTasks": subTasks == null
+            ? []
+            : List<dynamic>.from(subTasks!.map((x) => x!.toJson())),
       };
 }
 
+class SubTask {
+  SubTask({
+    this.title,
+    this.checked,
+  });
 
+  String? title;
+  bool? checked;
+
+  factory SubTask.fromJson(Map<String, dynamic> json) => SubTask(
+        title: json["title"],
+        checked: json["checked"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "title": title,
+        "checked": checked,
+      };
+}
 
 
 /**
@@ -114,8 +127,10 @@ class Note {
     "categoryId":"2",
     "reminderTime":897,
     "status":2,
+    "createionDate":"1944-06-06 02:00:00.000",
     "position":1,
     "uid":"dasdasdasdas",
     "hasTime":true,
+    "subTasks":[{"title":"t1","checked":true},{"title":"t2","checked":false}]
 }
  */

@@ -240,7 +240,7 @@ class NotesProvider extends ChangeNotifier {
   }
 
   set selectedNote(Note? selectedNote) {
-    _selectedNote = selectedNote != null ? Note.fromObject(selectedNote) : null;
+    _selectedNote = selectedNote != null ? Note.clone(selectedNote) : null;
     notifyListeners();
   }
 

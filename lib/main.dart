@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskii/global/colors.dart';
-import 'package:taskii/global/scroll.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:taskii/providers/categories.provider.dart';
 import 'package:taskii/providers/notes.provider.dart';
 import 'package:taskii/screens/add_note.screen.dart';
@@ -8,20 +7,21 @@ import 'package:taskii/screens/categories-management.screen.dart';
 import 'package:taskii/screens/note_details.screen.dart';
 import 'package:taskii/services/notification.services.dart';
 import 'package:taskii/widgets/auth_check_redirection.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'global/colors.dart';
+import 'global/scroll.dart';
 import 'global/utils.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  initializeDateFormatting();
   initNotifications();
   runApp(AppState());
 }
@@ -82,6 +82,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       scrollBehavior: MyCustomScrollBehavior(),
       title: 'Taskii',
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''), // English, no country code
+        Locale('es', ''), // Spanish, no country code
+      ],
       builder: EasyLoading.init(
           builder: (context, child) => MediaQuery(
               data:
