@@ -144,9 +144,12 @@ class NotesProvider extends ChangeNotifier {
 
   updateStatus(Note note, int newStatus) async {
     final Map<String, dynamic> mapStatus = {'status': newStatus};
-    if (newStatus == NoteStatus.deleted) {
+    if (newStatus == NoteStatus.deleted || newStatus == NoteStatus.done) {
       mapStatus['deletedDate'] = FieldValue.serverTimestamp();
       await deleteNoteNotification(note);
+    } else if (newStatus == NoteStatus.pending) {
+      mapStatus['deletedDate'] = null;
+      await setNoteNotificacion(note);
     }
 
     firestoreCollection

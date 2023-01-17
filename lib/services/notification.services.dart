@@ -64,6 +64,7 @@ NotificationDetails _getNotificationDetails() {
 
 Future<void> setNoteNotificacion(Note note) async {
   if (note.date == null || !note.hasTime || note.reminderTime == 0) return;
+  if (note.date!.compareTo(DateTime.now()) < 0) return;
 
   NotificationDetails notificationDetails = _getNotificationDetails();
 
@@ -113,6 +114,8 @@ Future<void> _setNotificacion(
   int id,
   NotificationDetails notificationDetails,
 ) async {
+  logEvent("add_notification",
+      metadata: {'id': id, 'title': title, 'date': date.toString()});
   await flutterLocalNotificationsPlugin.zonedSchedule(
     id,
     title,
