@@ -43,11 +43,11 @@ class NoteItem extends StatelessWidget {
                   elevation: 4,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 13, horizontal: 20),
+                        vertical: 13, horizontal: 14),
                     child: Row(
                       children: [
                         Text(categoryEmoji, style: TextStyle(fontSize: 32)),
-                        SizedBox(width: 15),
+                        SizedBox(width: 12),
                         Flexible(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +59,7 @@ class NoteItem extends StatelessWidget {
                               Visibility(
                                 visible: note.date != null,
                                 child: Padding(
-                                  padding: EdgeInsets.only(top: 10),
+                                  padding: EdgeInsets.only(top: 8),
                                   child: Text(
                                       Utils.dateTimeFormat(note.date,
                                           hasTime: note.hasTime),

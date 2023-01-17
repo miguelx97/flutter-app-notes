@@ -6,6 +6,7 @@ import 'package:taskii/models/note.dart';
 import 'package:taskii/models/reminder_time.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:taskii/services/analytics.service.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -62,7 +63,7 @@ NotificationDetails _getNotificationDetails() {
 }
 
 Future<void> setNoteNotificacion(Note note) async {
-  if (note.date == null) return;
+  if (note.date == null || !note.hasTime || note.reminderTime == 0) return;
 
   NotificationDetails notificationDetails = _getNotificationDetails();
 
@@ -79,7 +80,7 @@ Future<void> setNoteNotificacion(Note note) async {
     notificationDetails,
   );
 
-  if (!note.hasTime || note.reminderTime == 0) return;
+  if (note.reminderTime <= ReminderTime.justOnTime) return;
 
   scheduledNotificationDateTime = scheduledNotificationDateTime
       .subtract(Duration(minutes: note.reminderTime));
@@ -126,5 +127,6 @@ Future<void> _setNotificacion(
 }
 
 Future<void> deleteNotification(int id) async {
-  await flutterLocalNotificationsPlugin.cancel(0);
+  logEvent("delete_notification", metadata: {'id': id});
+  await flutterLocalNotificationsPlugin.cancel(id);
 }

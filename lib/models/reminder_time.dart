@@ -2,6 +2,7 @@ class ReminderTime {
   static const int oneDay = 1440;
   static const int oneHour = 60;
   static const int quarterHour = 15;
+  static const int justOnTime = 1;
 
   static String getLabel(int reminderTime) {
     switch (reminderTime) {
@@ -11,8 +12,11 @@ class ReminderTime {
         return 'Una hora antes';
       case ReminderTime.oneDay:
         return 'Un día antes';
+      case ReminderTime.justOnTime:
+        return 'Al momento';
+      default:
+        return '';
     }
-    return '';
   }
 
   static String name(int reminderTime) {
@@ -23,7 +27,8 @@ class ReminderTime {
         return 'una hora';
       case ReminderTime.oneDay:
         return 'un día';
+      default:
+        return '';
     }
-    return '';
   }
 }

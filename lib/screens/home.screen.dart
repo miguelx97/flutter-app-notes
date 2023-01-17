@@ -10,6 +10,7 @@ import 'package:taskii/providers/notes.provider.dart';
 import 'package:taskii/screens/add_note.screen.dart';
 import 'package:taskii/screens/categories-management.screen.dart';
 import 'package:taskii/screens/note_details.screen.dart';
+import 'package:taskii/services/analytics.service.dart';
 import 'package:taskii/services/auth.service.dart';
 import 'package:taskii/widgets/note-item.dart';
 import 'package:flutter_svg/svg.dart';
@@ -28,6 +29,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final NotesProvider notesProvider = Provider.of<NotesProvider>(context);
     final TextTheme textTheme = Theme.of(context).textTheme;
+    initAnalytics(AuthService().currentUser);
     return Scaffold(
       appBar: EasySearchBar(
         // automaticallyImplyLeading: false,
@@ -80,7 +82,7 @@ class HomeScreen extends StatelessWidget {
           size: 35,
           color: Colors.white,
         ),
-        onPressed: () {
+        onPressed: () async {
           notesProvider.selectedNote = Note();
           notesProvider.selectedNote!.categoryId =
               notesProvider.currentCategory?.cid;

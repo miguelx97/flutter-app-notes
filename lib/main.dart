@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Utils.customColor(const Color(0xffF3F3F3)),
         textTheme: const TextTheme(
           titleMedium: TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               fontFamily: 'Nunito',
               color: ThemeColors.dark,
               fontWeight: FontWeight.w300),
@@ -109,7 +109,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Kalam',
               color: Colors.white,
               letterSpacing: 1),
-          bodySmall: TextStyle(fontSize: 14, color: ThemeColors.medium),
+          bodySmall: TextStyle(fontSize: 13, color: ThemeColors.medium),
           titleLarge: TextStyle(color: Colors.white, fontFamily: 'Nunito'),
           bodyMedium: TextStyle(fontSize: 16),
         ),

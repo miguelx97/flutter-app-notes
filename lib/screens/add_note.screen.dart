@@ -229,6 +229,10 @@ class _AddNoteState extends State<AddNote> {
                               children: [
                                 checkBoxReminderTime(
                                     note,
+                                    ReminderTime.justOnTime,
+                                    updateReminderTime),
+                                checkBoxReminderTime(
+                                    note,
                                     ReminderTime.quarterHour,
                                     updateReminderTime),
                                 checkBoxReminderTime(note, ReminderTime.oneHour,
