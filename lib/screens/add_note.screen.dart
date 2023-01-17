@@ -33,7 +33,6 @@ class _AddNoteState extends State<AddNote> {
   Widget build(BuildContext context) {
     final notesProvider = Provider.of<NotesProvider>(context);
     Note note = notesProvider.selectedNote!;
-    bool isNew = note.nid == null || note.nid!.isEmpty;
 
     swipeFavourite() {
       note.isFavourite = !note.isFavourite;
@@ -86,14 +85,14 @@ class _AddNoteState extends State<AddNote> {
     }
 
     addSubtask() {
-      note.subTasks.insert(0, SubTask(title: addSubtaskController.text));
+      note.subtasks.insert(0, SubTask(title: addSubtaskController.text));
       addSubtaskController.clear();
 
       setState(() {});
     }
 
     deleteSubtask(SubTask subtask) {
-      note.subTasks.remove(subtask);
+      note.subtasks.remove(subtask);
       setState(() {});
     }
 
@@ -199,9 +198,9 @@ class _AddNoteState extends State<AddNote> {
                   ListView.builder(
                     padding: EdgeInsets.only(left: 10),
                     shrinkWrap: true,
-                    itemCount: note.subTasks.length,
+                    itemCount: note.subtasks.length,
                     itemBuilder: (_, index) => SubtaskItem(
-                      subtask: note.subTasks[index]!,
+                      subtask: note.subtasks[index]!,
                       onDelete: deleteSubtask,
                     ),
                   ),

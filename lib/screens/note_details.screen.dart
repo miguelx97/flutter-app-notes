@@ -31,7 +31,19 @@ class NoteDetailsScreen extends StatelessWidget {
     }
     final Category noteCategory =
         categoriesProvider.searchCategoryById(note.categoryId);
-    final TextTheme textTheme = Theme.of(context).textTheme;
+
+    updateSubtask(bool? checked, int subtaskIndex) {
+      note.subtasks[subtaskIndex]!.checked = checked!;
+      notesProvider.updateSubtask(note);
+    }
+
+    checkOrUncheckEverithing(bool checkedAll) {
+      note.subtasks = note.subtasks.map((subtask) {
+        subtask!.checked = checkedAll;
+        return subtask;
+      }).toList();
+      notesProvider.updateSubtask(note);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -66,25 +78,31 @@ class NoteDetailsScreen extends StatelessWidget {
               textAlign: TextAlign.center),
         ),
         SizedBox(height: 10),
-        _Item(
+        _TextAreaItem(
           title: 'Descripción',
           content: note.description,
           icon: Icons.article_outlined,
-          isTextArea: true,
         ),
-        _Item(
+        _SubtasksItem(
+          title: 'Lista de tareas',
+          subtasks: note.subtasks,
+          icon: Icons.task_outlined,
+          onSubtaskChecked: updateSubtask,
+          checkOrUncheckEverithing: checkOrUncheckEverithing,
+        ),
+        _SimpleItem(
           title: 'Categoría',
           content: noteCategory.title.isNotEmpty
               ? '${noteCategory.emoji} ${noteCategory.title}'
               : null,
           icon: Icons.apps_rounded,
         ),
-        _Item(
+        _SimpleItem(
           title: 'Fecha / Hora',
           content: Utils.dateTimeFormat(note.date, hasTime: note.hasTime),
           icon: Icons.calendar_month_outlined,
         ),
-        _Item(
+        _SimpleItem(
           title: 'Recordatorio',
           content: note.reminderTime > 0
               ? ReminderTime.getLabel(note.reminderTime)
@@ -104,79 +122,162 @@ class NoteDetailsScreen extends StatelessWidget {
   }
 }
 
-class _Item extends StatelessWidget {
+class _SimpleItem extends StatelessWidget {
   final String title;
   final String? content;
   final IconData icon;
-  final bool isTextArea;
-  const _Item(
-      {super.key,
-      required this.title,
-      required this.content,
-      required this.icon,
-      this.isTextArea = false});
+  const _SimpleItem({
+    required this.title,
+    this.content,
+    required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    if ((content ?? '').isNotEmpty) {
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-        width: Constants.maxWidth,
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(width: 1.5, color: ThemeColors.lightGrey),
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, size: 34),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: textTheme.titleSmall),
-                const SizedBox(height: 5),
-                TextContent(
-                  content: content!,
-                  textTheme: textTheme,
-                  isTextArea: isTextArea,
-                )
-              ],
-            ),
-          ],
-        ),
-      );
-    } else {
+    if (content == null || content!.isEmpty)
       return Container();
+    else {
+      return _Item(title: title, icon: icon, child: Text(content!));
     }
   }
 }
 
-class TextContent extends StatelessWidget {
-  const TextContent({
-    Key? key,
-    required this.content,
-    required this.textTheme,
-    required this.isTextArea,
-  }) : super(key: key);
-
-  final String content;
-  final TextTheme textTheme;
-  final bool isTextArea;
+class _TextAreaItem extends StatelessWidget {
+  final String title;
+  final String? content;
+  final IconData icon;
+  const _TextAreaItem({
+    required this.title,
+    this.content,
+    required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (!isTextArea) return Text(content);
-    final size = MediaQuery.of(context).size;
-    return SizedBox(
-        width: (size.width < Constants.maxWidth
-                ? size.width
-                : Constants.maxWidth) -
-            150,
-        child: Text(content,
-            style: textTheme.bodyMedium, textAlign: TextAlign.justify));
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    if (content == null || content!.isEmpty)
+      return Container();
+    else {
+      final size = MediaQuery.of(context).size;
+      Widget textArea = SizedBox(
+          width: (size.width < Constants.maxWidth
+                  ? size.width
+                  : Constants.maxWidth) -
+              150,
+          child: Text(content!,
+              style: textTheme.bodyMedium, textAlign: TextAlign.justify));
+      return _Item(title: title, icon: icon, child: textArea);
+    }
+  }
+}
+
+class _SubtasksItem extends StatelessWidget {
+  final String title;
+  final List<SubTask?> subtasks;
+  final IconData icon;
+  final Function(bool?, int subtaskItem) onSubtaskChecked;
+  final Function(bool checked) checkOrUncheckEverithing;
+  const _SubtasksItem({
+    required this.title,
+    required this.subtasks,
+    required this.icon,
+    required this.onSubtaskChecked,
+    required this.checkOrUncheckEverithing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    int countChecked = subtasks.where((item) => item!.checked).length;
+    if (subtasks.isEmpty)
+      return Container();
+    else {
+      final size = MediaQuery.of(context).size;
+      Widget subtasksList = Container(
+        width: size.width - 80,
+        child: Column(
+          children: [
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: subtasks.length,
+              itemBuilder: (context, index) => SubtaskItem(
+                subtasks[index]!,
+                index,
+                onSubtaskChecked,
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () => checkOrUncheckEverithing(countChecked == 0),
+                child: Text(countChecked > 0 ? 'Limpiar' : 'Completar'),
+                style: TextButton.styleFrom(
+                    visualDensity: VisualDensity(horizontal: 0, vertical: -2)),
+              ),
+            )
+          ],
+        ),
+      );
+      return _Item(title: title, icon: icon, child: subtasksList);
+    }
+  }
+}
+
+class SubtaskItem extends StatelessWidget {
+  final SubTask subtask;
+  final int index;
+  final Function(bool?, int subtaskItem) onSubtaskChecked;
+  const SubtaskItem(this.subtask, this.index, this.onSubtaskChecked);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 45,
+      child: CheckboxListTile(
+        value: subtask.checked,
+        title: Text(subtask.title),
+        onChanged: (value) => onSubtaskChecked(value, index),
+      ),
+    );
+  }
+}
+
+class _Item extends StatelessWidget {
+  final String title;
+  final Widget child;
+  final IconData icon;
+  const _Item({
+    required this.title,
+    required this.child,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+      width: Constants.maxWidth,
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 1.5, color: ThemeColors.lightGrey),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 34),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: textTheme.titleSmall),
+              const SizedBox(height: 5),
+              child
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 

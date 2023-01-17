@@ -18,7 +18,7 @@ class Note {
     this.position,
     this.uid,
     this.hasTime = false,
-    this.subTasks = const [],
+    this.subtasks = const [],
   });
 
   String? nid;
@@ -33,7 +33,7 @@ class Note {
   double? position;
   String? uid;
   bool hasTime;
-  List<SubTask?> subTasks;
+  List<SubTask?> subtasks;
 
   factory Note.fromJson(String str) => Note.fromMap(json.decode(str));
 
@@ -52,7 +52,7 @@ class Note {
         position: map["position"]?.toDouble(),
         uid: map["uid"],
         hasTime: map["hasTime"] ?? false,
-        subTasks: map["subTasks"] == null
+        subtasks: map["subTasks"] == null
             ? []
             : List<SubTask?>.from(
                 map["subTasks"]!.map((x) => SubTask.fromJson(x))),
@@ -70,8 +70,8 @@ class Note {
       position: note.position,
       uid: note.uid,
       hasTime: note.hasTime,
-      subTasks:
-          note.subTasks.map((subTask) => SubTask.clone(subTask!)).toList());
+      subtasks:
+          note.subtasks.map((subTask) => SubTask.clone(subTask!)).toList());
 
   factory Note.fromMapWithId(Map<String, dynamic> map, String id) {
     final note = Note.fromMap(map);
@@ -91,9 +91,7 @@ class Note {
         "position": position,
         "uid": uid,
         "hasTime": hasTime,
-        "subTasks": subTasks == null
-            ? []
-            : List<dynamic>.from(subTasks!.map((x) => x!.toJson())),
+        "subTasks": List<dynamic>.from(subtasks.map((x) => x!.toJson())),
       };
 }
 

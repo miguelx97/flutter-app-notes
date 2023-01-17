@@ -239,6 +239,15 @@ class NotesProvider extends ChangeNotifier {
         EasyLoading.showError('Error al eliminar las notas de la papelera'));
   }
 
+  updateSubtask(Note note) {
+    final mapSubtasks = {
+      "subTasks": List<dynamic>.from(note.subtasks.map((x) => x!.toJson()))
+    };
+    firestoreCollection.doc(note.nid).update(mapSubtasks).catchError((_) =>
+        EasyLoading.showError('Error al editar las subtareas de la nota'));
+    notifyListeners();
+  }
+
   set selectedNote(Note? selectedNote) {
     _selectedNote = selectedNote != null ? Note.clone(selectedNote) : null;
     notifyListeners();
