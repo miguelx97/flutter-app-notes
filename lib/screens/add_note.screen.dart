@@ -208,6 +208,7 @@ class _AddNoteState extends State<AddNote> {
                   SectionTitle('Categorías'),
                   CategoriesPickerSlider(
                     idSelectedCategory: note.categoryId,
+                    emptyCategoriesMessage: true,
                     onCategorySelected: (Category? category) {
                       note.categoryId = category?.cid;
                       setState(() {});

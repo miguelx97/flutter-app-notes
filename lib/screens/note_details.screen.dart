@@ -119,7 +119,7 @@ class NoteDetailsScreen extends StatelessWidget {
       ])),
       floatingActionButton: FloatingButtons(
         note: note,
-        mainButtonClick: () => context.go(AddNote.screenUrl),
+        mainButtonClick: () => context.push(AddNote.screenUrl),
         secondaryButtonClick: () {
           notesProvider.swipeFavourite(note);
         },
