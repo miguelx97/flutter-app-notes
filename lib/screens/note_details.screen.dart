@@ -33,7 +33,14 @@ class NoteDetailsScreen extends StatelessWidget {
         categoriesProvider.searchCategoryById(note.categoryId);
 
     updateSubtask(bool? checked, int subtaskIndex) {
-      note.subtasks[subtaskIndex]!.checked = checked!;
+      final subtask = note.subtasks.removeAt(subtaskIndex);
+      subtask!.checked = checked!;
+      if (checked) {
+        int countChecked = note.subtasks.where((item) => !item!.checked).length;
+        note.subtasks.insert(countChecked, subtask);
+      } else {
+        note.subtasks.insert(0, subtask);
+      }
       notesProvider.updateSubtask(note);
     }
 
@@ -234,7 +241,14 @@ class SubtaskItem extends StatelessWidget {
       height: 45,
       child: CheckboxListTile(
         value: subtask.checked,
-        title: Text(subtask.title),
+        title: Text(
+          subtask.title,
+          style: TextStyle(
+              decoration: subtask.checked
+                  ? TextDecoration.lineThrough
+                  : TextDecoration.none),
+        ),
+        activeColor: ThemeColors.medium,
         onChanged: (value) => onSubtaskChecked(value, index),
       ),
     );

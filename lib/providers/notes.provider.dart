@@ -243,6 +243,8 @@ class NotesProvider extends ChangeNotifier {
     final mapSubtasks = {
       "subTasks": List<dynamic>.from(note.subtasks.map((x) => x!.toJson()))
     };
+    int index = _notes.indexWhere((item) => item.nid == note.nid);
+    _notes[index] = note;
     firestoreCollection.doc(note.nid).update(mapSubtasks).catchError((_) =>
         EasyLoading.showError('Error al editar las subtareas de la nota'));
     notifyListeners();
