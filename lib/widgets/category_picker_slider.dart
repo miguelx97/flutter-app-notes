@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:taskii/models/category.dart';
 import 'package:provider/provider.dart';
 import 'package:taskii/screens/categories-management.screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../providers/categories.provider.dart';
 import 'category-item.dart';
@@ -26,7 +27,8 @@ class CategoriesPickerSlider extends StatelessWidget {
     if (categories.isEmpty) {
       if (emptyCategoriesMessage) {
         return TextButton(
-          child: Text('Crear categoría'.toUpperCase()),
+          child:
+              Text(AppLocalizations.of(context)!.categoryCreate.toUpperCase()),
           onPressed: () => context.push(CategoriesManagement.screenUrl),
           style: TextButton.styleFrom(
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),

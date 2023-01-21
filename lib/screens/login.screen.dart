@@ -62,8 +62,8 @@ class Login extends StatelessWidget {
                 onPressed: () => loginForm.swipeLoginAmdRegister(),
                 child: Text(
                   loginForm.isLogin
-                      ? 'Crear una nueva cuenta'
-                      : 'Ya tengo una cuenta',
+                      ? AppLocalizations.of(context)!.loginGoSignup
+                      : AppLocalizations.of(context)!.loginGoSignin,
                   style: const TextStyle(
                       fontSize: 18,
                       color: Colors.black87,
@@ -100,15 +100,17 @@ class _LoginForm extends StatelessWidget {
             autocorrect: false,
             keyboardType: TextInputType.emailAddress,
             onChanged: (value) => loginForm.email = value,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
                 hintText: 'micorreo@mail.com',
-                labelText: 'Correo electrónico',
+                labelText: AppLocalizations.of(context)!.loginEmail,
                 prefixIcon: Icon(Icons.email_outlined)),
             validator: ((value) {
               String pattern =
                   r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
               RegExp regExp = RegExp(pattern);
-              return regExp.hasMatch(value ?? '') ? null : 'Correo inválido';
+              return regExp.hasMatch(value ?? '')
+                  ? null
+                  : AppLocalizations.of(context)!.errorUserInvalidEmail;
             }),
           ),
           TextFormField(
@@ -116,13 +118,13 @@ class _LoginForm extends StatelessWidget {
             obscureText: true,
             onFieldSubmitted: (value) => loginRegister(context),
             onChanged: (value) => loginForm.password = value,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
                 hintText: '********',
-                labelText: 'Contraseña',
+                labelText: AppLocalizations.of(context)!.loginPassword,
                 prefixIcon: Icon(Icons.password_outlined)),
             validator: ((value) {
               return (value ?? '').length < 6
-                  ? 'La contraseña debe tener 6 caracteres'
+                  ? AppLocalizations.of(context)!.errorUserPasswordMinCharacters
                   : null;
             }),
           ),
@@ -132,13 +134,13 @@ class _LoginForm extends StatelessWidget {
               autocorrect: false,
               obscureText: true,
               onFieldSubmitted: (value) => loginRegister(context),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   hintText: '********',
-                  labelText: 'Repetir contraseña',
+                  labelText: AppLocalizations.of(context)!.loginRepeatPassword,
                   prefixIcon: Icon(Icons.password_outlined)),
               validator: ((value) {
                 return (value != loginForm.password)
-                    ? 'Las contraseñas no coinciden'
+                    ? AppLocalizations.of(context)!.errorUserPasswordsNoMatch
                     : null;
               }),
             ),
@@ -147,7 +149,9 @@ class _LoginForm extends StatelessWidget {
           const SizedBox(height: 40),
           // Text(loginForm.isLoading.toString()),
           ButtonCustom(
-            text: loginForm.isLogin ? 'Entrar' : 'Crear cuenta',
+            text: loginForm.isLogin
+                ? AppLocalizations.of(context)!.loginEnter
+                : AppLocalizations.of(context)!.loginCreateAccount,
             icon: Icons.login_outlined,
             onPressed: () => loginRegister(context),
           ),

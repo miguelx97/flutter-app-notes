@@ -6,6 +6,7 @@ import 'package:taskii/models/reminder_time.dart';
 import 'package:taskii/screens/add_note.screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../global/utils.dart';
 import '../models/note.dart';
@@ -86,31 +87,31 @@ class NoteDetailsScreen extends StatelessWidget {
         ),
         SizedBox(height: 10),
         _TextAreaItem(
-          title: 'Descripción',
+          title: AppLocalizations.of(context)!.noteDescription,
           content: note.description,
           icon: Icons.article_outlined,
         ),
         _SubtasksItem(
-          title: 'Lista de tareas',
+          title: AppLocalizations.of(context)!.noteSubtasksList,
           subtasks: note.subtasks,
           icon: Icons.task_outlined,
           onSubtaskChecked: updateSubtask,
           checkOrUncheckEverithing: checkOrUncheckEverithing,
         ),
         _SimpleItem(
-          title: 'Categoría',
+          title: AppLocalizations.of(context)!.noteCategory,
           content: noteCategory.title.isNotEmpty
               ? '${noteCategory.emoji} ${noteCategory.title}'
               : null,
           icon: Icons.apps_rounded,
         ),
         _SimpleItem(
-          title: 'Fecha / Hora',
+          title: AppLocalizations.of(context)!.noteDateTime,
           content: Utils.dateTimeFormat(note.date, hasTime: note.hasTime),
           icon: Icons.calendar_month_outlined,
         ),
         _SimpleItem(
-          title: 'Recordatorio',
+          title: AppLocalizations.of(context)!.noteNotification,
           content: note.reminderTime > 0
               ? ReminderTime.getLabel(note.reminderTime)
               : null,
@@ -216,7 +217,9 @@ class _SubtasksItem extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () => checkOrUncheckEverithing(countChecked == 0),
-                child: Text(countChecked > 0 ? 'Limpiar' : 'Completar'),
+                child: Text(countChecked > 0
+                    ? AppLocalizations.of(context)!.clean
+                    : AppLocalizations.of(context)!.complete),
                 style: TextButton.styleFrom(
                     visualDensity: VisualDensity(horizontal: 0, vertical: -2)),
               ),

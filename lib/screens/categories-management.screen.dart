@@ -5,6 +5,7 @@ import 'package:taskii/providers/notes.provider.dart';
 import 'package:taskii/widgets/category-form.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:math';
 
 import '../models/category.dart';
@@ -40,10 +41,11 @@ class CategoriesManagement extends StatelessWidget {
 
     deleteCategory(Category category) {
       // set up the buttons
-      Widget cancelButton =
-          TextButton(child: Text("Cancelar"), onPressed: () => context.pop());
+      Widget cancelButton = TextButton(
+          child: Text(AppLocalizations.of(context)!.cancel),
+          onPressed: () => context.pop());
       Widget continueButton = TextButton(
-        child: Text("Eliminar"),
+        child: Text(AppLocalizations.of(context)!.delete),
         onPressed: () {
           context.pop();
           categoriesProvider.delete(category.cid!);
@@ -51,9 +53,9 @@ class CategoriesManagement extends StatelessWidget {
       );
       // set up the AlertDialog
       AlertDialog alert = AlertDialog(
-        title: Text("Eliminar categoría"),
-        content:
-            Text("¿Estás seguro de que deseas eliminar '${category.title}'?"),
+        title: Text(AppLocalizations.of(context)!.categoryDelete),
+        content: Text(AppLocalizations.of(context)!
+            .categoryDeleteConfirmation(category.title)),
         actions: [
           cancelButton,
           continueButton,
@@ -81,7 +83,7 @@ class CategoriesManagement extends StatelessWidget {
           color: Colors.white, //change your color here
         ),
         title: Text(
-          "Categorías",
+          AppLocalizations.of(context)!.categoryCategories,
           style: textTheme.headlineMedium,
         ),
       ),

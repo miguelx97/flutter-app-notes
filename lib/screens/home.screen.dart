@@ -17,6 +17,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widgets/category_picker_slider.dart';
 
@@ -43,13 +44,15 @@ class HomeScreen extends StatelessWidget {
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: ItemName.deleted,
-                child:
-                    MenuItem(label: "Eliminados", icon: Icons.delete_outline),
+                child: MenuItem(
+                    label: AppLocalizations.of(context)!.homeDeleted,
+                    icon: Icons.delete_outline),
               ),
               PopupMenuItem(
                 value: ItemName.logout,
                 child: MenuItem(
-                    label: "Cerrar sesión", icon: Icons.logout_outlined),
+                    label: AppLocalizations.of(context)!.homeLogout,
+                    icon: Icons.logout_outlined),
               ),
             ],
             onSelected: (value) {
@@ -111,14 +114,14 @@ class Footer extends StatelessWidget {
       onTap: (value) => notesProvider.currentStauts = value + 1,
       selectedItemColor:
           (status <= 2) ? ThemeColors.primary : ThemeColors.medium,
-      items: const [
+      items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Pendiente',
+          label: AppLocalizations.of(context)!.homePending,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.check),
-          label: 'Hecho',
+          label: AppLocalizations.of(context)!.homeDone,
         ),
       ],
     );
@@ -159,7 +162,7 @@ class Body extends StatelessWidget {
               child:
                   SvgPicture.asset('assets/images/add_note.svg', width: 170)),
           const SizedBox(height: 20),
-          const Text('Escribe tu primera nota',
+          Text(AppLocalizations.of(context)!.homeFirstNote,
               style: TextStyle(fontSize: 16, color: ThemeColors.medium)),
           const SizedBox(height: 100)
         ],
@@ -183,7 +186,8 @@ class Body extends StatelessWidget {
                 .emoji,
             onNoteSelected: (Note note) {
               if (note.status == NoteStatus.deleted) {
-                showError('No puedes modificar notas eliminadas');
+                showError(
+                    AppLocalizations.of(context)!.errorNoteNoUpdateDeleted);
                 return;
               }
               notesProvider.selectedNote = note;

@@ -7,6 +7,7 @@ import 'package:taskii/providers/notes.provider.dart';
 import 'package:taskii/widgets/category_picker_slider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:math';
 
 import '../models/category.dart';
@@ -61,8 +62,7 @@ class _AddNoteState extends State<AddNote> {
         context: context,
         initialTime: selectedTime ?? TimeOfDay.now(),
         // helpText: 'Escoge la hora',
-        confirmText: 'Aceptar',
-        cancelText: 'Solo Fecha',
+        cancelText: AppLocalizations.of(context)!.noteOnlyDate,
       );
 
       if (selectedTime == null) {
@@ -132,7 +132,7 @@ class _AddNoteState extends State<AddNote> {
             color: Colors.white, //change your color here
           ),
           title: Text(
-            'Añadir nota',
+            AppLocalizations.of(context)!.noteAdd,
             style: textTheme.headlineMedium,
           )),
       body: SingleChildScrollView(
@@ -151,7 +151,7 @@ class _AddNoteState extends State<AddNote> {
                     textCapitalization: TextCapitalization.sentences,
                     onChanged: (value) => note.title = value,
                     decoration: InputDecoration(
-                      labelText: 'Título',
+                      labelText: AppLocalizations.of(context)!.noteTitle,
                       labelStyle: textTheme.titleSmall,
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -164,7 +164,7 @@ class _AddNoteState extends State<AddNote> {
                     maxLength: 100,
                     validator: ((value) {
                       return (value == null || value.isEmpty)
-                          ? 'Introduce un título'
+                          ? AppLocalizations.of(context)!.noteInsertTitle
                           : null;
                     }),
                   ),
@@ -176,7 +176,7 @@ class _AddNoteState extends State<AddNote> {
                     initialValue: note.description,
                     onChanged: (value) => note.description = value,
                     decoration: InputDecoration(
-                      labelText: 'Descripción',
+                      labelText: AppLocalizations.of(context)!.noteDescription,
                       labelStyle: textTheme.titleSmall,
                       contentPadding: EdgeInsets.only(left: 10),
                     ),
@@ -186,7 +186,7 @@ class _AddNoteState extends State<AddNote> {
                     textCapitalization: TextCapitalization.sentences,
                     controller: addSubtaskController,
                     decoration: InputDecoration(
-                      labelText: 'Añadir subtarea',
+                      labelText: AppLocalizations.of(context)!.noteAddSubtask,
                       labelStyle: textTheme.titleSmall,
                       suffixIcon: IconButton(
                         icon: Icon(Icons.add_circle_outline_outlined,
@@ -206,7 +206,7 @@ class _AddNoteState extends State<AddNote> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  SectionTitle('Categorías'),
+                  SectionTitle(AppLocalizations.of(context)!.noteCategories),
                   CategoriesPickerSlider(
                     idSelectedCategory: note.categoryId,
                     emptyCategoriesMessage: true,
@@ -215,7 +215,7 @@ class _AddNoteState extends State<AddNote> {
                       setState(() {});
                     },
                   ),
-                  SectionTitle('Fecha y hora'),
+                  SectionTitle(AppLocalizations.of(context)!.noteDateTime),
                   Padding(
                     padding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
                     child: Row(
@@ -235,7 +235,8 @@ class _AddNoteState extends State<AddNote> {
                                       horizontal: 30, vertical: 18))),
                           child: Text(
                             note.date == null
-                                ? 'Selecciona fecha y hora'
+                                ? AppLocalizations.of(context)!
+                                    .noteSelectDateTime
                                 : Utils.dateTimeFormat(note.date!,
                                     hasTime: note.hasTime, short: note.hasTime),
                             style: const TextStyle(
@@ -262,7 +263,8 @@ class _AddNoteState extends State<AddNote> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SectionTitle('Notificación'),
+                        SectionTitle(
+                            AppLocalizations.of(context)!.noteNotification),
                         Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 15, vertical: 10),
