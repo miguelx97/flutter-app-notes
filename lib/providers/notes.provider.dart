@@ -152,10 +152,8 @@ class NotesProvider extends ChangeNotifier {
       await setNoteNotificacion(note);
     }
 
-    firestoreCollection
-        .doc(note.nid)
-        .update(mapStatus)
-        .catchError((_) => EasyLoading.showError('Error al mover la nota'));
+    firestoreCollection.doc(note.nid).update(mapStatus).catchError(
+        (_) => EasyLoading.showError('Error al cambiar el estado de la nota'));
     _notes.removeWhere((item) => item.nid == note.nid);
     Future.delayed(const Duration(milliseconds: 50))
         .whenComplete(notifyListeners);
@@ -213,7 +211,7 @@ class NotesProvider extends ChangeNotifier {
     firestoreCollection
         .doc(noteToReorder.nid)
         .update(mapPosition)
-        .catchError((_) => EasyLoading.showError('Error al editar la nota'));
+        .catchError((_) => EasyLoading.showError('Error al reordenar la nota'));
     notifyListeners();
   }
 

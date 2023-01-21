@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:taskii/global/colors.dart';
 import 'package:taskii/global/constants.dart';
 import 'package:taskii/providers/login_form.provider.dart';
 import 'package:taskii/ui/button_custom.dart';
 import 'package:taskii/widgets/card_container.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/auth_background.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -41,8 +40,8 @@ class Login extends StatelessWidget {
                             const SizedBox(height: 10),
                             Text(
                                 loginForm.isLogin
-                                    ? 'Iniciar Sesión'
-                                    : 'Nueva Cuenta',
+                                    ? AppLocalizations.of(context)!.loginSignin
+                                    : AppLocalizations.of(context)!.loginSignup,
                                 style: Theme.of(context).textTheme.headline5),
                             const SizedBox(height: 30),
                             _LoginForm(loginForm: loginForm),

@@ -85,6 +85,7 @@ class _AddNoteState extends State<AddNote> {
     }
 
     addSubtask() {
+      if (addSubtaskController.text.isEmpty) return;
       note.subtasks.insert(0, SubTask(title: addSubtaskController.text));
       addSubtaskController.clear();
 

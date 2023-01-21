@@ -56,9 +56,13 @@ class CategoriesProvider extends ChangeNotifier {
   }
 
   delete(String categoryId) async {
-    await firestoreCollection.doc(categoryId).delete();
-    _categories.removeWhere((item) => item.cid == categoryId);
-    _categoriesMap.remove(categoryId);
+    try {
+      await firestoreCollection.doc(categoryId).delete();
+      _categories.removeWhere((item) => item.cid == categoryId);
+      _categoriesMap.remove(categoryId);
+    } on Exception catch (ex) {
+      showError(ex, defaultMessage: 'Error al eliminar la categoría');
+    }
     notifyListeners();
   }
 
