@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('en'),
+        // Locale('en'),
         Locale('es'),
       ],
       builder: EasyLoading.init(

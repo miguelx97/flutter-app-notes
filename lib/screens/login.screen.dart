@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => LoginFormProvider(),
+      create: (_) => LoginFormProvider(AppLocalizations.of(context)!),
       child: Login(),
     );
   }
@@ -84,7 +84,7 @@ class _LoginForm extends StatelessWidget {
     loginForm.attempt = true;
     if (!loginForm.isValidForm()) return;
     FocusScope.of(context).unfocus();
-    loginForm.loginOrRegister();
+    loginForm.loginOrRegister(AppLocalizations.of(context)!);
   }
 
   @override

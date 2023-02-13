@@ -10,6 +10,7 @@
     "loginGoSignin": "Ya tengo una cuenta",
     "loginCreateAccount": "Crear cuenta",
     "homePending": "Pendiente",
+    "loginSuccess": "Bienvenido",
     "homeDone": "Hecho",
     "homeDeleted": "Eliminados",
     "homeLogout": "Salir",

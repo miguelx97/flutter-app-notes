@@ -29,6 +29,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final NotesProvider notesProvider = Provider.of<NotesProvider>(context);
+    final categoriesProvider = Provider.of<CategoriesProvider>(context);
     final TextTheme textTheme = Theme.of(context).textTheme;
     initAnalytics(AuthService().currentUser);
     return Scaffold(
@@ -59,6 +60,8 @@ class HomeScreen extends StatelessWidget {
               switch (value) {
                 case ItemName.logout:
                   AuthService().signOut();
+                  notesProvider.clear();
+                  categoriesProvider.clear();
                   break;
                 case ItemName.deleted:
                   notesProvider.currentStauts = NoteStatus.deleted;
@@ -93,7 +96,8 @@ class HomeScreen extends StatelessWidget {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Body(notesProvider: notesProvider),
+      body: Body(
+          notesProvider: notesProvider, categoriesProvider: categoriesProvider),
     );
   }
 }
@@ -138,16 +142,19 @@ Row MenuItem({required String label, required IconData icon}) {
 
 class Body extends StatelessWidget {
   final NotesProvider notesProvider;
+  final CategoriesProvider categoriesProvider;
 
   udateStatus(Note note, int newStatus) {
     notesProvider.updateStatus(note, newStatus);
   }
 
-  const Body({super.key, required this.notesProvider});
+  const Body(
+      {super.key,
+      required this.notesProvider,
+      required this.categoriesProvider});
 
   @override
   Widget build(BuildContext context) {
-    final categoriesProvider = Provider.of<CategoriesProvider>(context);
     final List<Note> notes = notesProvider.getAll();
 
     if (notes.isEmpty &&

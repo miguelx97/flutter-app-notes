@@ -63,7 +63,7 @@ class NoteDetailsScreen extends StatelessWidget {
       body: SingleChildScrollView(
           child: Column(children: [
         Container(
-          padding: EdgeInsets.only(bottom: 10),
+          padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
           width: double.infinity,
           alignment: Alignment.topCenter,
           decoration: const BoxDecoration(
@@ -172,8 +172,7 @@ class _TextAreaItem extends StatelessWidget {
                   ? size.width
                   : Constants.maxWidth) -
               150,
-          child: Text(content!,
-              style: textTheme.bodyMedium, textAlign: TextAlign.justify));
+          child: Text(content!, style: textTheme.bodyMedium));
       return _Item(title: title, icon: icon, child: textArea);
     }
   }

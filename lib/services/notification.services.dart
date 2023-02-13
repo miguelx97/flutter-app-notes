@@ -114,8 +114,8 @@ Future<void> _setNotificacion(
   int id,
   NotificationDetails notificationDetails,
 ) async {
-  logEvent("add_notification",
-      metadata: {'id': id, 'title': title, 'date': date.toString()});
+  // logEvent("add_notification",
+  //     metadata: {'id': id, 'title': title, 'date': date.toString()});
   await flutterLocalNotificationsPlugin.zonedSchedule(
     id,
     title,
@@ -130,6 +130,6 @@ Future<void> _setNotificacion(
 }
 
 Future<void> deleteNotification(int id) async {
-  logEvent("delete_notification", metadata: {'id': id});
+  // logEvent("delete_notification", metadata: {'id': id});
   await flutterLocalNotificationsPlugin.cancel(id);
 }

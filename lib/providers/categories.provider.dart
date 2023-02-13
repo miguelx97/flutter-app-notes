@@ -18,6 +18,12 @@ class CategoriesProvider extends ChangeNotifier {
     load();
   }
 
+  clear() {
+    _categories.clear();
+    _selectedCategory = null;
+    _categoriesMap.clear();
+  }
+
   List<Category> getAll() {
     return _categories;
   }

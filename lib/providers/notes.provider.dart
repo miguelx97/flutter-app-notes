@@ -27,6 +27,13 @@ class NotesProvider extends ChangeNotifier {
     removeOldDeletedNotes();
   }
 
+  clear() {
+    _notes.clear();
+    _selectedNote = Note();
+    _currentStatus = null;
+    loadedNotesFromFb = false;
+  }
+
   getAll() {
     final String? selectedCategoryId = _filters.category?.cid;
     final String? search = _filters.search;
