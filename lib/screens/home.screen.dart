@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                 value: ItemName.syncronize,
                 child: MenuItem(
                     label: AppLocalizations.of(context)!.syncronize,
-                    icon: Icons.refresh),
+                    icon: Icons.sync),
               ),
               PopupMenuItem(
                 value: ItemName.logout,
