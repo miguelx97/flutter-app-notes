@@ -23,7 +23,7 @@ class NotesProvider extends ChangeNotifier {
 
   NotesProvider() {
     // _notes = Mockups.notes;
-    load(NoteStatus.pending);
+    load(status: NoteStatus.pending);
     removeOldDeletedNotes();
   }
 
@@ -34,7 +34,7 @@ class NotesProvider extends ChangeNotifier {
     loadedNotesFromFb = false;
   }
 
-  getAll() {
+  List<Note> getAll() {
     final String? selectedCategoryId = _filters.category?.cid;
     final String? search = _filters.search;
     List<Note> filteredNotesList = List.from(_notes);
@@ -65,7 +65,8 @@ class NotesProvider extends ChangeNotifier {
     selectedNote = note;
   }
 
-  load(int status) async {
+  load({int? status}) async {
+    if (status == null) status = currentStauts ?? NoteStatus.pending;
     _notes.clear();
     notifyListeners();
     final String? uid = AuthService().currentUser?.uid;
@@ -193,6 +194,16 @@ class NotesProvider extends ChangeNotifier {
 
   reorder(int oldIndex, int newIndex) {
     late Note noteToReorder;
+
+    if (_filters.category != null || _filters.search != null) {
+      final List<Note> filteredNotes = getAll();
+      oldIndex =
+          _notes.indexWhere((note) => note.nid == filteredNotes[oldIndex].nid);
+      newIndex = (newIndex < filteredNotes.length)
+          ? _notes.indexWhere((note) => note.nid == filteredNotes[newIndex].nid)
+          : _notes.length;
+    }
+
     if (newIndex == 0 || _notes[newIndex - 1].isFavourite) {
       _notes[oldIndex].position = topPosition();
     } else if (newIndex == _notes.length) {
@@ -205,8 +216,12 @@ class NotesProvider extends ChangeNotifier {
 
       _notes[oldIndex].position = media;
     }
-    if (newIndex < _notes.length) {
-      _notes[oldIndex].isFavourite = _notes[newIndex].isFavourite;
+    if (newIndex < _notes.length &&
+        _notes[newIndex].isFavourite &&
+        _notes[newIndex - 1].isFavourite) {
+      _notes[oldIndex].isFavourite = true;
+    } else if (!_notes[newIndex - 1].isFavourite) {
+      _notes[oldIndex].isFavourite = false;
     }
     noteToReorder = _notes.removeAt(oldIndex);
     _notes.insert(
@@ -270,7 +285,7 @@ class NotesProvider extends ChangeNotifier {
 
   set currentStauts(int? status) {
     _currentStatus = status;
-    load(status!);
+    load(status: status);
   }
 
   set search(String? searchText) {

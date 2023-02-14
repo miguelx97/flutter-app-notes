@@ -12,6 +12,7 @@
     "homePending": "Pending",
     "loginSuccess": "Welcome",
     "homeDone": "Done",
+    "syncronize": "Syncronize",
     "homeDeleted": "Deleted",
     "homeLogout": "Sign Out",
     "homeFirstNote": "Add your first note",

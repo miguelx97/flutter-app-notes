@@ -50,6 +50,12 @@ class HomeScreen extends StatelessWidget {
                     icon: Icons.delete_outline),
               ),
               PopupMenuItem(
+                value: ItemName.syncronize,
+                child: MenuItem(
+                    label: AppLocalizations.of(context)!.syncronize,
+                    icon: Icons.refresh),
+              ),
+              PopupMenuItem(
                 value: ItemName.logout,
                 child: MenuItem(
                     label: AppLocalizations.of(context)!.homeLogout,
@@ -62,6 +68,9 @@ class HomeScreen extends StatelessWidget {
                   AuthService().signOut();
                   notesProvider.clear();
                   categoriesProvider.clear();
+                  break;
+                case ItemName.syncronize:
+                  notesProvider.load();
                   break;
                 case ItemName.deleted:
                   notesProvider.currentStauts = NoteStatus.deleted;
@@ -210,4 +219,4 @@ class Body extends StatelessWidget {
   }
 }
 
-enum ItemName { deleted, logout }
+enum ItemName { deleted, logout, syncronize }

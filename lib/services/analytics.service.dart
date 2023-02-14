@@ -13,5 +13,6 @@ Future<void> initAnalytics(User? user) async {
 }
 
 Future<void> logEvent(String tag, {Map<String, Object?>? metadata}) {
+  print('$tag: ${metadata.toString()}');
   return _analytics!.logEvent(name: tag, parameters: metadata);
 }
