@@ -8,6 +8,7 @@ import 'package:taskii/models/note_status.enum.dart';
 import 'package:taskii/providers/categories.provider.dart';
 import 'package:taskii/providers/notes.provider.dart';
 import 'package:taskii/screens/add_note.screen.dart';
+import 'package:taskii/screens/calendar.screen.dart';
 import 'package:taskii/screens/categories-management.screen.dart';
 import 'package:taskii/screens/note_details.screen.dart';
 import 'package:taskii/services/analytics.service.dart';
@@ -82,6 +83,10 @@ class HomeScreen extends StatelessWidget {
           IconButton(
               onPressed: () => context.go(CategoriesManagement.screenUrl),
               icon: const Icon(Icons.folder_outlined),
+              color: Colors.white),
+          IconButton(
+              onPressed: () => context.go(CalendarScreen.screenUrl),
+              icon: const Icon(Icons.calendar_month_outlined),
               color: Colors.white),
         ],
         onSearch: (String search) {

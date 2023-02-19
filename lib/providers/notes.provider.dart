@@ -301,4 +301,6 @@ class NotesProvider extends ChangeNotifier {
     _filters.category = category;
     notifyListeners();
   }
+
+  void clearFilters() => _filters.clear();
 }

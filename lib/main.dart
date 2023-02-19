@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:taskii/providers/categories.provider.dart';
 import 'package:taskii/providers/notes.provider.dart';
 import 'package:taskii/screens/add_note.screen.dart';
+import 'package:taskii/screens/calendar.screen.dart';
 import 'package:taskii/screens/categories-management.screen.dart';
 import 'package:taskii/screens/note_details.screen.dart';
 import 'package:taskii/services/notification.services.dart';
@@ -66,6 +67,12 @@ final GoRouter _router = GoRouter(
           path: '${rs(NoteDetailsScreen.screenUrl)}/:nid',
           builder: (BuildContext context, GoRouterState state) {
             return NoteDetailsScreen(nid: state.params["nid"]!);
+          },
+        ),
+        GoRoute(
+          path: rs(CalendarScreen.screenUrl),
+          builder: (BuildContext context, GoRouterState state) {
+            return CalendarScreen();
           },
         ),
       ],
