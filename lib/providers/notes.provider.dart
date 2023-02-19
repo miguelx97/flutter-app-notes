@@ -216,9 +216,9 @@ class NotesProvider extends ChangeNotifier {
 
       _notes[oldIndex].position = media;
     }
-    if (newIndex < _notes.length &&
-        _notes[newIndex].isFavourite &&
-        _notes[newIndex - 1].isFavourite) {
+    if (newIndex < _notes.length && _notes[newIndex].isFavourite
+        // && _notes[newIndex - 1].isFavourite
+        ) {
       _notes[oldIndex].isFavourite = true;
     } else if (!_notes[newIndex - 1].isFavourite) {
       _notes[oldIndex].isFavourite = false;
