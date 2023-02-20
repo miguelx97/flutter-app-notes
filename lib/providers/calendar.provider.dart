@@ -9,13 +9,13 @@ class CalendarProvider extends ChangeNotifier {
   List<Note> getNotesForDay(DateTime? day) {
     if (day == null) day = _selectedDate;
 
-    final DateTime date = _getDateFromDatetime(day);
+    final DateTime date = getDateFromDatetime(day);
     return _notesByDay[date] ?? [];
   }
 
   void notesToEvents(Note note) {
     if (note.date != null) {
-      final DateTime date = _getDateFromDatetime(note.date!);
+      final DateTime date = getDateFromDatetime(note.date!);
       if (_notesByDay[date] == null) {
         _notesByDay[date] = [];
       }
@@ -26,11 +26,15 @@ class CalendarProvider extends ChangeNotifier {
   clearEvents() => _notesByDay.clear();
 
   setSelectedDate(DateTime selectedDay, DateTime focusedDay) {
-    _selectedDate = _getDateFromDatetime(selectedDay);
+    _selectedDate = getDateFromDatetime(focusedDay);
     notifyListeners();
   }
 
-  _getDateFromDatetime(DateTime date) {
+  get selectedDay {
+    return _selectedDate;
+  }
+
+  getDateFromDatetime(DateTime date) {
     return DateTime(date.year, date.month, date.day);
   }
 }

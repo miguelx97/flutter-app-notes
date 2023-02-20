@@ -51,25 +51,47 @@ class NotesCalendar extends StatelessWidget {
           style: textTheme.headlineMedium,
         ),
       ),
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(children: [
-          TableCalendar(
-            firstDay: now.subtract(Duration(days: 60)),
-            lastDay: now.add(Duration(days: 730)),
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            focusedDay: now,
-            locale: 'es_ES',
-            eventLoader: calendarProvider.getNotesForDay,
-            onDaySelected: calendarProvider.setSelectedDate,
-            calendarStyle: CalendarStyle(
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            child: TableCalendar(
+              firstDay: now.subtract(Duration(days: 60)),
+              lastDay: now.add(Duration(days: 730)),
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              focusedDay: calendarProvider.selectedDay,
+              selectedDayPredicate: (day) {
+                return calendarProvider.getDateFromDatetime(day) ==
+                    calendarProvider.selectedDay;
+              },
+              locale: 'es_ES',
+              eventLoader: calendarProvider.getNotesForDay,
+              onDaySelected: calendarProvider.setSelectedDate,
+              calendarStyle: CalendarStyle(
                 markerDecoration: BoxDecoration(
-              color: ThemeColors.primary,
-              shape: BoxShape.circle,
-            )),
+                  color: ThemeColors.primary,
+                  shape: BoxShape.circle,
+                ),
+                selectedDecoration: BoxDecoration(
+                  border: Border.all(color: ThemeColors.primary),
+                  shape: BoxShape.circle,
+                ),
+                selectedTextStyle: TextStyle(color: ThemeColors.dark),
+                todayDecoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: ThemeColors.primary,
+                ),
+              ),
+              headerStyle:
+                  HeaderStyle(formatButtonVisible: false, titleCentered: true),
+            ),
           ),
-          ListNotesByDay(
-            calendarProvider: calendarProvider,
-            categoriesProvider: categoriesProvider,
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: ListNotesByDay(
+              calendarProvider: calendarProvider,
+              categoriesProvider: categoriesProvider,
+            ),
           )
         ]),
       ),
@@ -90,18 +112,17 @@ class ListNotesByDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Note> notes = calendarProvider.getNotesForDay(null);
-    return SizedBox(
-      height: 200,
-      child: ListView.builder(
-          itemCount: notes.length,
-          itemBuilder: (context, index) => NoteItem(
-              note: notes[index],
-              categoryEmoji: categoriesProvider
-                  .searchCategoryById(notes[index].categoryId)
-                  .emoji,
-              onNoteSelected: () => context
-                  .go('${NoteDetailsScreen.screenUrl}/${notes[index].nid}'),
-              onSwipe: (Note note, int newStatus) {})),
-    );
+    return ListView.builder(
+        itemCount: notes.length,
+        physics: ClampingScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) => NoteItem(
+            note: notes[index],
+            categoryEmoji: categoriesProvider
+                .searchCategoryById(notes[index].categoryId)
+                .emoji,
+            onNoteSelected: () => context
+                .go('${NoteDetailsScreen.screenUrl}/${notes[index].nid}'),
+            onSwipe: (Note note, int newStatus) {}));
   }
 }
