@@ -171,23 +171,25 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Note> notes = notesProvider.getAll();
 
+    // IF EMPTY NOTES
     if (notes.isEmpty &&
         categoriesProvider.getAll().isEmpty &&
         notesProvider.loadedNotesFromFb) {
       return Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-              onTap: () => context.go(AddNote.screenUrl),
-              child:
-                  SvgPicture.asset('assets/images/add_note.svg', width: 170)),
-          const SizedBox(height: 20),
-          Text(AppLocalizations.of(context)!.homeFirstNote,
-              style: TextStyle(fontSize: 16, color: ThemeColors.medium)),
-          const SizedBox(height: 100)
-        ],
-      ));
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+                onTap: () => context.go(AddNote.screenUrl),
+                child:
+                    SvgPicture.asset('assets/images/add_note.svg', width: 170)),
+            const SizedBox(height: 20),
+            Text(AppLocalizations.of(context)!.homeFirstNote,
+                style: TextStyle(fontSize: 16, color: ThemeColors.medium)),
+            const SizedBox(height: 100)
+          ],
+        ),
+      );
     }
 
     return Center(
