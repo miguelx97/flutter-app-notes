@@ -1,26 +1,22 @@
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:taskii/global/colors.dart';
-import 'package:taskii/global/constants.dart';
-import 'package:taskii/global/ui.dart';
 import 'package:taskii/models/note.dart';
 import 'package:taskii/models/note_status.enum.dart';
+import 'package:taskii/models/view_type.enum.dart';
 import 'package:taskii/providers/categories.provider.dart';
 import 'package:taskii/providers/notes.provider.dart';
 import 'package:taskii/screens/add_note.screen.dart';
-import 'package:taskii/screens/calendar.screen.dart';
+import 'package:taskii/screens/calendar_view.dart';
 import 'package:taskii/screens/categories-management.screen.dart';
-import 'package:taskii/screens/note_details.screen.dart';
+import 'package:taskii/screens/list_cards_view.dart';
 import 'package:taskii/services/analytics.service.dart';
 import 'package:taskii/services/auth.service.dart';
-import 'package:taskii/widgets/note-item.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../widgets/category_picker_slider.dart';
 
 class HomeScreen extends StatelessWidget {
   final DateTime now = DateTime.now();
@@ -85,8 +81,12 @@ class HomeScreen extends StatelessWidget {
               icon: const Icon(Icons.folder_outlined),
               color: Colors.white),
           IconButton(
-              onPressed: () => context.go(CalendarScreen.screenUrl),
-              icon: const Icon(Icons.calendar_month_outlined),
+              onPressed: () {
+                notesProvider.switchCurrentView();
+              },
+              icon: Icon((notesProvider.currentView == ViewType.list)
+                  ? Icons.calendar_month_outlined
+                  : Icons.format_list_bulleted),
               color: Colors.white),
         ],
         onSearch: (String search) {
@@ -158,10 +158,6 @@ class Body extends StatelessWidget {
   final NotesProvider notesProvider;
   final CategoriesProvider categoriesProvider;
 
-  udateStatus(Note note, int newStatus) {
-    notesProvider.updateStatus(note, newStatus);
-  }
-
   const Body(
       {super.key,
       required this.notesProvider,
@@ -192,37 +188,15 @@ class Body extends StatelessWidget {
       );
     }
 
-    return Center(
-      child: SizedBox(
-        width: Constants.maxWidth,
-        child: ReorderableListView.builder(
-          itemCount: notes.length,
-          header: CategoriesPickerSlider(
-            onCategorySelected: (category) =>
-                notesProvider.currentCategory = category,
-            idSelectedCategory: notesProvider.currentCategory?.cid,
-          ),
-          itemBuilder: (context, index) => NoteItem(
-            note: notes[index],
-            categoryEmoji: categoriesProvider
-                .searchCategoryById(notes[index].categoryId)
-                .emoji,
-            onNoteSelected: (Note note) {
-              if (note.status == NoteStatus.deleted) {
-                showError(
-                    AppLocalizations.of(context)!.errorNoteNoUpdateDeleted);
-                return;
-              }
-              notesProvider.selectedNote = note;
-              context.go('${NoteDetailsScreen.screenUrl}/${note.nid}');
-            },
-            onSwipe: udateStatus,
-            key: ValueKey(notes[index].nid),
-          ),
-          onReorder: notesProvider.reorder,
-        ),
-      ),
-    );
+    if (notesProvider.currentView == ViewType.list)
+      return ListCardsView(
+        notes: notes,
+        updateStatus: notesProvider.updateStatus,
+        notesProvider: notesProvider,
+        categoriesProvider: categoriesProvider,
+      );
+    else
+      return CalendarView();
   }
 }
 

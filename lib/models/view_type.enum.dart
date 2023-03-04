@@ -1,0 +1,1 @@
+enum ViewType { list, calendar }

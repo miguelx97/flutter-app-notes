@@ -3,7 +3,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:taskii/providers/categories.provider.dart';
 import 'package:taskii/providers/notes.provider.dart';
 import 'package:taskii/screens/add_note.screen.dart';
-import 'package:taskii/screens/calendar.screen.dart';
 import 'package:taskii/screens/categories-management.screen.dart';
 import 'package:taskii/screens/note_details.screen.dart';
 import 'package:taskii/services/notification.services.dart';
@@ -69,12 +68,12 @@ final GoRouter _router = GoRouter(
             return NoteDetailsScreen(nid: state.params["nid"]!);
           },
         ),
-        GoRoute(
-          path: rs(CalendarScreen.screenUrl),
-          builder: (BuildContext context, GoRouterState state) {
-            return CalendarScreen();
-          },
-        ),
+        // GoRoute(
+        //   path: rs(CalendarScreen.screenUrl),
+        //   builder: (BuildContext context, GoRouterState state) {
+        //     return CalendarScreen();
+        //   },
+        // ),
       ],
     ),
   ],
@@ -107,7 +106,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Utils.customColor(const Color(0xff26CAD3)),
-        scaffoldBackgroundColor: Utils.customColor(const Color(0xffF3F3F3)),
+        scaffoldBackgroundColor: Utils.customColor(const Color(0xffF4F4F4)),
         textTheme: const TextTheme(
           titleMedium: TextStyle(
               fontSize: 18,

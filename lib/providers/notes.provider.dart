@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:taskii/models/note.dart';
 import 'package:taskii/models/note_status.enum.dart';
+import 'package:taskii/models/view_type.enum.dart';
 import 'package:taskii/services/notification.services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -20,6 +21,7 @@ class NotesProvider extends ChangeNotifier {
   final NoteFilters _filters = NoteFilters();
   int? _currentStatus;
   bool loadedNotesFromFb = false;
+  ViewType _currentView = ViewType.list;
 
   NotesProvider() {
     // _notes = Mockups.notes;
@@ -299,6 +301,18 @@ class NotesProvider extends ChangeNotifier {
 
   set currentCategory(Category? category) {
     _filters.category = category;
+    notifyListeners();
+  }
+
+  ViewType get currentView {
+    return _currentView;
+  }
+
+  switchCurrentView() {
+    if (_currentView == ViewType.list)
+      _currentView = ViewType.calendar;
+    else
+      _currentView = ViewType.list;
     notifyListeners();
   }
 
